@@ -193,13 +193,24 @@ A ideia deste algoritmo é enumerar praticamente todos os percursos, utilizando 
 
 A este tipo de abordagem dá-se o nome de algoritmo de retrocesso, porque ao podar um determinado conjunto de soluções da árvore, regressamos a um ponto prévio para o qual ainda há possibilidades a estudar.
 
-Apesar de o número total de estratégias ser~$N!$, com o descartar precoce de algumas é possível reduzir o tempo de computação da solução. No entanto, ao guardar todas as estratégias numa árvore, a complexidade espacial será também da ordem de~$N!$. É possível melhorar isto utilizando outro algoritmo de força bruta sem utilizar uma árvore. A ideia é para cada~$i$ entre~$1$ e~$N!$ gerar a~$i$-ésima sequência, calcular o tempo de percurso dessa sequência e manter guardada apenas a melhor sequência encontrada até então. Com esta abordagem, o custo temporal será mesmo~$O(N!)$, pois não existe a possibilidade de poda de soluções, no entanto, o custo espacial é~$O(N)$, porque não mantemos registo de todas as sequências, apenas uma.
+Apesar de o número total de estratégias ser~$N!$, com o descartar precoce de algumas é possível reduzir o tempo de computação da solução. No entanto, ao guardar todas as estratégias numa árvore, a complexidade espacial será também da ordem de~$N!$. É possível melhorar isto utilizando outro algoritmo de força bruta sem recorrer a uma árvore. A ideia é para cada~$i$ entre~$1$ e~$N!$ gerar a~$i$-ésima sequência (utilizando para isso uma resolução matemática), calcular o tempo de percurso dessa sequência e manter guardada apenas a melhor sequência encontrada até então. Com esta abordagem, o custo temporal será mesmo~$O(N!)$, pois não existe a possibilidade de poda de soluções, no entanto, o custo espacial é~$O(N)$, porque não mantemos registo de todas as sequências, apenas uma.
 
 Para o caso do Problema de Roteamento de Veículos, isto é, quando temos um limite de tempo, o algoritmo de retrocesso é muito semelhante. No entanto, a cada instante, quando o tempo limite é atingido, não inspecionamos o resto daquele ramo da árvore. Por outro lado, não podemos descartar um ramo por ser mais demorado que outro visto antes, dado que o mais importante nesta versão do problema é maximizar o valor dos vértices visitados.
 
 Para o algoritmo em que se gera cada sequência, já parece não haver tanta vantagem. De facto, interessa-nos inspecionar todas as subsequências de vértices do grafo, que ao todo são~$\sum_{1 \leq i \leq N} i!$. Claro que para valores elevados de~$N$, o que interessa é a parcela~$N!$, isto é, a complexidade temporal continua a ser~$O(N!)$, mas o tamanho da árvore será no máximo~$N!$ e o mais certo é que se possa podar uma parte significativa. Aliás, se não se conseguir podar nada de um ramo é porque existe alguma sequência com todos os vértices que cabe no tempo limite e isso seria imediatamente uma solução para o problema. Em termos de complexidade espacial, mantém-se a análise feita para o PCV, a cada instante apenas temos que guardar a melhor subsequência encontrada, que tem no máximo~$N$ vértices.
 
 \section{Algoritmo de Held-Karp}
+
+Um dos melhores algoritmos conhecidos para resolver o PCV é o algoritmo de Held-Karp. Este é um algoritmo típico de programação dinâmica e assenta no facto de todo o subpercurso de um percurso de distância mínima ter também distância mínima. Sendo assim, a ideia é resolver o PCV para todos os subconjuntos de vértices, utilizando recursividade. Isto é, para cada subproblema, iremos utilizar as soluções ótimas dos problemas ainda mais pequenos do que ele. No final, à semelhança de outros problemas de programação dinâmica (como o problema da mochila de que falamos na secção seguinte) obtém-se o percurso da seguinte forma:
+\begin{itemize}
+	\item o primeiro vértice do percurso é o vértice obtido no passo final da recursão;
+	\item o vértice seguinte obtém-se utilizando o subproblema com todos os vértices exceto aquele que já incluímos;
+	\item repete-se o passo anterior até ter o percurso completo.
+\end{itemize}
+
+Uma vez que este algoritmo prevê a resolução de todos os subproblemas do PCV, à partida será possível deduzir dele uma solução também para o caso em que temos um tempo limitado para a viagem.
+
+A grande vantagem deste algoritmo é ter uma complexidade temporal de~$O(N^2 2^N)$, permitindo obter soluções exatas mais rapidamente do que os algoritmos de força bruta.
 
 \section{Algoritmos Aproximados}
 
@@ -249,7 +260,7 @@ O problema de determinar o melhor percurso para visitar todas as cidades é conh
 
 $P$ é a classe de todos os problemas que podem ser resolvidos em tempo polinomial. Já $NP$, vem da expressão em inglês para tempo polinomial não determinístico e contém todos os problemas para os quais é possível validar uma solução em tempo polinomial. Facilmente se conclui das definições que~$P \subseteq NP$. No entanto há uma imensidão de problemas em~$NP$ para os quais não se conhece nenhum algoritmo polinomial, entre eles o PCV. A comunidade científica está maioritariamente convencida que tais algoritmos não existem, ou seja, que~$P \neq NP$. No entanto, até hoje ninguém conseguiu provar uma coisa ou outra, sendo um dos problemas mais famosos da Ciência dos Computadores, cuja solução dá direito a 1 milhão de dólares.
 
-A complexidade temporal da resolução do PVC por um algoritmo de força bruta é~$O(n!)$ num grafo com~$n$ vértices, dado que existem~$n!$ percursos possíveis. A complexidade espacial é constante, dado que a cada momento apenas é necessário guardar o percurso melhor até então e o seu custo. Existem algoritmos de programação dinâmica, nomeadamente o algoritmo de Held–Karp, que calculam soluções exatas mais rapidamente, com um custo temporal de~$O(n^2 2^n)$. No entanto, a complexidade espacial deste algoritmo é~$O(2^n n)$, significativamente pior que um algoritmo de força bruta.
+A complexidade temporal da resolução do PVC por um algoritmo de força bruta é~$O(n!)$ num grafo com~$n$ vértices, dado que existem~$n!$ percursos possíveis. A complexidade espacial é constante, dado que a cada momento apenas é necessário guardar o percurso melhor até então e o seu custo. Existem algoritmos de programação dinâmica, nomeadamente o algoritmo de Held–Karp de que falamos, que calculam soluções exatas mais rapidamente, com um custo temporal de~$O(n^2 2^n)$. No entanto, a complexidade espacial deste algoritmo é~$O(2^n n)$, significativamente pior que um algoritmo de força bruta.
 
 Devido ao elevado custo computacional do cálculo de soluções exatas, são conhecidos inúmeros algoritmos que providenciam soluções aproximadas. De facto, a procura de heurísticas para resolver o PVC é das áreas mais prolíferas da optimização. Por exemplo, se assumirmos que os tempos de viagem respeitam a desigualdade triangular, um algoritmo ganancioso em que se escolha sempre a cidade não visitada mais próxima, obtém aproximações razoáveis da solução ótima com complexidade temporal~$O(n^2)$.
 
