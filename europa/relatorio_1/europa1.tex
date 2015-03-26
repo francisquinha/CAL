@@ -197,21 +197,21 @@ O algoritmo funcionaria em 3 etapas distintas.
 
 Primeiramente soma-se ao peso (tempo de visita) de cada vértice a o peso da
 aresta com maior peso para esse mesmo vértice (tempo de viagem). Assim sendo
-consideramos um conjunto de soluções $C[i]$,~$(1 \leq i \leq L)$ para o problema
+consideramos um conjunto de soluções $F[i]$,~$(1 \leq i \leq L)$ para o problema
 em que:
 \begin{center}
-$peso(C)$ \equiv \sum_{1 \leq i \leq L} (~T[C[i],C[i]] + \max
-\{T[C[i],j],(1 \leq j \leq N \wedge i \neq j)\}~)
+$peso(F)$ \equiv \sum_{1 \leq i \leq L} (~T[F[i],F[i]] + \max
+\{T[F[i],j],(1 \leq j \leq N \wedge F[i] \neq j)\}~)
 
 Note-se para qualquer conjunto de solução possível I existe um conjunto C que
 contém os mesmos vértices (cidades) tal que:
 \begin{equation}
 		\sum_{1 \leq j \leq M}
-		(T[I[i],I[i]] + T[I[i],I[i+1]]) \leq peso(C)
+		(T[I[i],I[i]] + T[I[i],I[i+1]]) \leq peso(F)
 \end{equation}
 assim sendo\ldots 
 \begin{equation}
-		peso(C) \leq T_{max} \Rightarrow \exists I~| \sum_{1 \leq j \leq M}
+		peso(F) \leq T_{max} \Rightarrow \exists I~| \sum_{1 \leq j \leq M}
 		(T[I[i],I[i]] + T[I[i],I[i+1]]) \leq T_{max}
 \end{equation}
 \end{center}
