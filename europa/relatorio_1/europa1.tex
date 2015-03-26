@@ -183,16 +183,15 @@ Na segunda versão, queremos minimizar o tempo de visita a todas as cidades. Ist
 %%%%%%%%%%%%
 \chapter{Perspetivas de Solução}
 
-\section{Estratégia Mista(Branch and Bound seguido de TSP)}
+\section{Estratégia Mista}
 Esta abordagem procura um trajecto que cumpra as condições de limite de tempo e que tenha potencial para satisfazer a condição de maximização dos valores (preferências). Não apresentando uma solução óptima o algoritmo faz uso de heurística para conseguir obter uma solução aceitável em menos tempos que algoritmos mais precisos.
 O algoritmo funcionaria em 3 etapas distintas.
 
 Em primeiro lugar devia encontrar a aresta de maior peso do grafo.
-\begin{equation}
-		MTV - \max \{T[i,j]\},(1 \leq i,j \leq N \wedge i \neq j))
-\end{equation}
+\begin{center}
+$MTV$ \equiv \max \{T[i,j]\},(1 \leq i,j \leq N \wedge i \neq j)
 
-Note-se para qualquer conjunto de solução possível I temos que:
+Note-se para qualquer conjunto de solução possível I temos:
 \begin{equation}
 		\sum_{1 \leq i \leq M} T[I[i],I[i+1]] \leq \sum_{1 \leq i \leq M} MTV
 		\rightarrow 
@@ -202,6 +201,7 @@ Note-se para qualquer conjunto de solução possível I temos que:
 		T[I[i],I[i]]
 \end{equation}
 
+\end{center}
 Seguidamente é usado um algoritmo de branch and bound. Para este algoritmo teríamos:
 \begin{enumerate}
 	\item O limite de tempo como o peso máximo;
@@ -212,7 +212,7 @@ encontrado na etapa 1. Assim sendo garante-se que o resultado obtido é uma comb
 \end{enumerate}
 \begin{equation}
 		\sum_{1 \leq i \leq M} MTV + \sum_{1 \leq i \leq M} T[I[i],I[i]] \leq
-		T_{max} \Rightarrow \sum_{1 \leq j \leq M} T[I[i],I[i]] + T[I[i],I[i+1]])
+		T_{max} \Rightarrow \sum_{1 \leq j \leq M} (T[I[i],I[i]] + T[I[i],I[i+1]])
 		\leq T_{max}
 \end{equation}
 
