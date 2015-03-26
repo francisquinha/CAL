@@ -168,25 +168,94 @@ Mais uma vez, consoante a versão do problema, temos diferentes funções objeti
 
 \
 \
-\
 
 Na segunda versão, queremos minimizar o tempo de visita a todas as cidades. Isto é, assumindo que~$I[N+1] = I[1] = 1$ é a cidade de origem, queremos obter um vetor~$I$ que cumpra a seguinte condição:
 \begin{equation}
-	\begin{align*}
+	\begin{split}
 		\sum_{1 \leq i \leq N} (T[I[i],I[i]] + T[I[i],I[i+1]]) & = T_F = \\
 		\min \Bigg\{\sum_{1 \leq j \leq N} (T[J[j],J[j]] + T[J[j],J[j+1]]) \Bigg. & \Bigg. : J[j] \in \{1, 2, \ldots, N\}\Bigg\}.
-	\end{align*}
+	\end{split}
 \end{equation}
+
 
 %%%%%%%%%%%%
 % SOLUÇÕES %
 %%%%%%%%%%%%
 \chapter{Perspetivas de Solução}
 
+\section{Algoritmos de Força Bruta}
+
+Este tipo de algoritmos geralmente são os mais simples de descrever e implementar. Costumam corresponder à primeira solução que ocorre à maior parte das pessoas que tentem resolver o mesmo problema. Para os nossos problemas (PCV e PRV), esta abordagem é mais uma vez a mais simples. No entanto, como já mencionamos tem um custo temporal de~$O(N!)$, que o inutiliza ao fim de cerca de 20 cidades.
+
+Concentremo-nos para já no Problema do Caixeiro Viajante.
+
+A ideia deste algoritmo é enumerar praticamente todos os percursos, utilizando para isso uma árvore em que os nós serão os vértices e a sua sequência na árvore indica a ordem pela qual aparecem no percurso. Para cada nó, os seus filhos serão todos os vértices que ainda não tenham sido visitados até então. A árvore é percorrida em profundidade primeiro e só depois em largura. Assim, se a dada altura conseguirmos deduzir que uma sequência de nós é inviável (porque o seu tempo de percurso é superior ao de outra já analisada), descartamos todos as estratégias filhas dessa, retrocedendo a um ponto em que ainda haja estratégias viáveis não estudadas.
+
+A este tipo de abordagem dá-se o nome de algoritmo de retrocesso, porque ao podar um determinado conjunto de soluções da árvore, regressamos a um ponto prévio para o qual ainda há possibilidades a estudar.
+
+Apesar de o número total de estratégias ser~$N!$, com o descartar precoce de algumas é possível reduzir o tempo de computação da solução. No entanto, ao guardar todas as estratégias numa árvore, a complexidade espacial será também da ordem de~$N!$. É possível melhorar isto utilizando outro algoritmo de força bruta sem utilizar uma árvore. A ideia é para cada~$i$ entre~$1$ e~$N!$ gerar a~$i$-ésima sequência, calcular o tempo de percurso dessa sequência e manter guardada apenas a melhor sequência encontrada até então. Com esta abordagem, o custo temporal será mesmo~$O(N!)$, pois não existe a possibilidade de poda de soluções, no entanto, o custo espacial é~$O(N)$, porque não mantemos registo de todas as sequências, apenas uma.
+
+Para o caso do Problema de Roteamento de Veículos, isto é, quando temos um limite de tempo, o algoritmo de retrocesso é muito semelhante. No entanto, a cada instante, quando o tempo limite é atingido, não inspecionamos o resto daquele ramo da árvore. Por outro lado, não podemos descartar um ramo por ser mais demorado que outro visto antes, dado que o mais importante nesta versão do problema é maximizar o valor dos vértices visitados.
+
+Para o algoritmo em que se gera cada sequência, já parece não haver tanta vantagem. De facto, interessa-nos inspecionar todas as subsequências de vértices do grafo, que ao todo são~$\sum_{1 \leq i \leq N} i!$. Claro que para valores elevados de~$N$, o que interessa é a parcela~$N!$, isto é, a complexidade temporal continua a ser~$O(N!)$, mas o tamanho da árvore será no máximo~$N!$ e o mais certo é que se possa podar uma parte significativa. Aliás, se não se conseguir podar nada de um ramo é porque existe alguma sequência com todos os vértices que cabe no tempo limite e isso seria imediatamente uma solução para o problema. Em termos de complexidade espacial, mantém-se a análise feita para o PCV, a cada instante apenas temos que guardar a melhor subsequência encontrada, que tem no máximo~$N$ vértices.
+
+\section{Algoritmo de Held-Karp}
+
+\section{Algoritmos Aproximados}
+
+Novamente, vamos concentrar-nos primeiro no PCV. Uma abordagem simples para obter uma solução aproximada é utilizar um algoritmo ganancioso, em que a cada passo se visita a cidade mais próxima. Este algoritmo tem complexidade temporal~$O(N^2)$, dado que para cada vértice se irá procurar de entre os vértices não visitados o mais próximo. Estudos mostram que dado um conjunto aleatório de vértices, este algoritmo em média obtém um percurso 25\% mais demorado que a solução ótima. Se assumirmos que o grafo cumpre a desigualdade triangular, então o desempenho do algoritmo (em termos da qualidade da solução encontrada) é ainda melhor.
+
+Em relação ao PRV, a heurística que propomos é baseada no problema da mochila. A capacidade da mochila será o tempo limite para fazer a viagem e cada cidade representará um objeto, com o valor correspondente ao interesse do cliente em visitá-la e um peso correspondente a uma métrica de tempo para a visitar que explicaremos de seguida.
+
+O algoritmo funcionaria em 4 etapas que serão efetuadas por ordem:
+\begin{enumerate}
+	\item Calcular o peso de cada vértice do grafo.
+	\item Utilizar a solução usual do problema da mochila para selecionar um subconjunto de cidades a visitar.
+	\item Com um algoritmo aproximado, resolver o PCV para o subconjunto de cidades obtido.
+	\item Verificar se o percurso obtido ultrapassa o tempo limite para a viagem:
+	\begin{enumerate}[label*=\arabic*.]
+		\item Se sobrar tempo, tentar adicionais mais cidades, utilizando um algoritmo ganancioso em que a métrica seria a razão entre o valor da cidade e o tempo para a visitar.
+		\item Se o percurso ultrapassar o tempo limite, utilizar a mesma métrica para retirar as cidades menos valiosas até obter um percurso válido.
+	\end{enumerate}
+\end{enumerate}
+
+O primeiro ponto tem uma complexidade temporal~$O(N^2)$, dado que basta somar ao tempo de visita de cada cidade o maior tempo de percurso de uma aresta com destino nessa cidade, para obter o peso do vértice correspondente. Note-se que ao utilizar o custo da pior aresta que chega a cada vértice estamos a garantir que para o subconjunto de cidades escolhido no segundo passo é de facto possível encontrar um percurso que seja realizável dentro do tempo limite. No entanto, uma vez que iremos utilizar um algoritmo aproximado para encontrar o percurso, poderá ser necessário retirar cidades, daí considerarmos duas alternativas no passo 4.
+
+Uma vez realizado o primeiro passo temos dois vetores~$V[i]$,~$1 \leq i \leq N$ com os valores das cidades (fornecido inicialmente) e~$P[i]$,~$1 \leq i \leq N$ com o \"peso\" de cada cidade. Também sabemos a capacidade da mochila~$T_{max}$. 
+
+Assim, o segundo passo resolve-se da forma usual fazendo variar~$i$ entre~$0$ e~$N$ vamos calculando recursivamente dois vetores:
+\begin{itemize}
+	\item~$c[k]$,~$1 \leq k \leq T_{max}$, contém o valor máximo que conseguimos acumular numa mochila de capacidade~$k$, utilizando apenas os vértices de~$1$ a~$i$;
+	\item~$b[k]$,~$1 \leq k \leq T_{max}$, contém o último item adicionado à mochila de capacidade~$k$ para obter~$c[k]$, utilizando apenas os vértices de~$1$ a~$i$.
+\end{itemize}
+
+No final, o subconjunto de cidades ideal para a mochila de capacidade~$T_{max}$ é:~$b[T_{max}]$,~$b[T_{max}-P[b[T_{max}]]]$, etc. Quanto à complexidade temporal deste passo, seria~$O(NT_{max})$.
+
+O terceiro passo poderia ser resolvido com o algoritmo ganancioso descrito no início desta secção, ficando apenas por resolver o último ponto. Independentemente de ser necessário, nesta última fase, acrescentar ou retirar cidades do percurso obtido, o processo é o mesmo:
+\begin{itemize}
+	\item escolher cidade ideal (mais valiosa se for para acrescentar, menos valiosa se for para retirar);
+	\item se for para acrescentar, escolher o melhor ponto do percurso (onde as viagens para a nova cidade são mais curtas), retirar uma aresta entre duas cidades do percurso e acrescentar a nova cidade e as respetivas arestas;
+	\item se for para retirar, basta substituir a cidade e as suas arestas pela aresta que une as duas cidades do percurso às quais ela estava ligada.
+\end{itemize}
+
+Sendo assim, a complexidade temporal deste último passo é~$O(N^2)$, tal como no terceiro passo. O que significa que ao todo a complexidade temporal do algoritmo é~$O(\max{N^2,NT_{max}})$, ou seja, é pseudo-polinomial, comparando muito favoravelmente com a complexidade factorial das soluções exatas. Resta avaliar a qualidade da aproximação obtida. Para isso utilizaremos vários conjuntos de cidades nos quais testaremos o algoritmo exacto e o algoritmo aproximado, por forma a determinar quão pior é a solução aproximada.
+
 %%%%%%%%%%%%
 % AVALIÇÃO %
 %%%%%%%%%%%%
 \chapter{Métricas de Avaliação}
+
+O problema de determinar o melhor percurso para visitar todas as cidades é conhecido como o Problema do Caixeiro Viajante (PCV). Este é um dos problemas de optimização mais estudados e é sabido que se trata de um problema $NP$-difícil. Informalmente, isto significa que é pelo menos tão difícil como os problemas mais difíceis em $NP$. Posto de outra forma, encontrar uma resolução exata para este problema em tempo polinomial seria equivalente a resolver todos os problemas em NP em tempo polinomial, ou seja, um tal algoritmo provaria que $P = NP$.
+
+$P$ é a classe de todos os problemas que podem ser resolvidos em tempo polinomial. Já $NP$, vem da expressão em inglês para tempo polinomial não determinístico e contém todos os problemas para os quais é possível validar uma solução em tempo polinomial. Facilmente se conclui das definições que~$P \subseteq NP$. No entanto há uma imensidão de problemas em~$NP$ para os quais não se conhece nenhum algoritmo polinomial, entre eles o PCV. A comunidade científica está maioritariamente convencida que tais algoritmos não existem, ou seja, que~$P \neq NP$. No entanto, até hoje ninguém conseguiu provar uma coisa ou outra, sendo um dos problemas mais famosos da Ciência dos Computadores, cuja solução dá direito a 1 milhão de dólares.
+
+A complexidade temporal da resolução do PVC por um algoritmo de força bruta é~$O(n!)$ num grafo com~$n$ vértices, dado que existem~$n!$ percursos possíveis. A complexidade espacial é constante, dado que a cada momento apenas é necessário guardar o percurso melhor até então e o seu custo. Existem algoritmos de programação dinâmica, nomeadamente o algoritmo de Held–Karp, que calculam soluções exatas mais rapidamente, com um custo temporal de~$O(n^2 2^n)$. No entanto, a complexidade espacial deste algoritmo é~$O(2^n n)$, significativamente pior que um algoritmo de força bruta.
+
+Devido ao elevado custo computacional do cálculo de soluções exatas, são conhecidos inúmeros algoritmos que providenciam soluções aproximadas. De facto, a procura de heurísticas para resolver o PVC é das áreas mais prolíferas da optimização. Por exemplo, se assumirmos que os tempos de viagem respeitam a desigualdade triangular, um algoritmo ganancioso em que se escolha sempre a cidade não visitada mais próxima, obtém aproximações razoáveis da solução ótima com complexidade temporal~$O(n^2)$.
+
+Relativamente à versão do problema em que existe um limite de tempo é conhecido como o Problema do Roteamento de Veículos (PRV). Tal como o PVC, este problema é NP-difícil, sendo o algoritmo de força bruta semelhante também ao que é utilizado para o PVC.
+
+Nestes problemas o custo mais critico é o temporal, isto é, com o crescimento do número de vértices, aquilo que impedirá a obtenção de uma solução exata será o tempo que esse cálculo demora e não a memória necessária. Assim, no que diz respeito às métricas de avaliação dos algoritmos que implementarmos, iremos concentrar os nossos esforços na avaliação da complexidade temporal dos mesmos. Para isso, faremos várias experiências com um número crescente de cidades. De seguida, para um conjunto de experiências com o mesmo número de vértices, utilizaremos a média dos tempos de computação como aproximação do tempo necessário para esse número de vértices. No final, para cada algoritmo, deverá ser possível obter um gráfico discreto cuja interpolação levará à sua função de complexidade temporal.
 
 %%%%%%%%%%%%%%%%
 % DIFICULDADES %
