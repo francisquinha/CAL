@@ -185,12 +185,18 @@ Na segunda versão, queremos minimizar o tempo de visita a todas as cidades. Ist
 %%%%%%%%%%%%
 \chapter{Perspetivas de Solução}
 
+\section{Backtracking Bruto}
+Criar/percorrer uma árvore para testar todas as combinações que se encontram
+dentro do tempo limite descartando as que ultrapassem o tempo limite. É guardado
+o melhor percurso (com maior “preferência” somada) e o seu respectivo valor a ser actualizados cada vez que encontrado um melhor. Caso não se
+pretenda o percurso óptimo o algoritmo pode parar ao encontrar uma solução que use todas as cidades.
+
 \section{Estratégia Mista}
 Esta abordagem procura um trajecto que cumpra as condições de limite de tempo e que tenha potencial para satisfazer a condição de maximização dos valores (preferências). Não apresentando uma solução óptima o algoritmo faz uso de heurística para conseguir obter uma solução aceitável em menos tempos que algoritmos mais precisos.
 O algoritmo funcionaria em 3 etapas distintas.
 
 Primeiramente soma-se ao peso (tempo de visita) de cada vértice a o peso da
-aresta com maior peso para este mesmo vértice (tempo de viagem). Assim sendo
+aresta com maior peso para esse mesmo vértice (tempo de viagem). Assim sendo
 consideramos um conjunto de soluções $C[i]$,~$(1 \leq i \leq L)$ para o problema
 em que:
 \begin{center}
