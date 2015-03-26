@@ -150,7 +150,9 @@ Para a primeira versão do problema, em que existe um tempo máximo para a viage
 Para a segunda versão do problema, em que serão visitadas todas as cidades e queremos qual a ordem de visita e o tempo necessário, a solução final terá o formato seguinte:
 \begin{itemize}
 	\item $T_F$ - tempo do percurso obtido, no caso de uma solução exata, é o menor tempo necessário para visitar todas as cidades;
-	\item $I[i]$,~$(1 \leq i \leq N)$ - vetor com o índice de cada cidade do percurso, pela ordem em que é visitada, isto é, o percurso final será~$I[1] -> I[2] -> \cdots -> I[N] -> I[1]$.
+	\item $I[i]$,~$(1 \leq i \leq N)$ - vetor com o índice de cada cidade do
+	percurso, pela ordem em que é visitada, isto é, o percurso final será~$I[1]
+	\rightarrow I[2] \rightarrow \cdots \rightarrow I[N] \rightarrow I[1]$.
 \end{itemize}
 
 \section{Funções Objetivo}
@@ -187,20 +189,25 @@ Na segunda versão, queremos minimizar o tempo de visita a todas as cidades. Ist
 Esta abordagem procura um trajecto que cumpra as condições de limite de tempo e que tenha potencial para satisfazer a condição de maximização dos valores (preferências). Não apresentando uma solução óptima o algoritmo faz uso de heurística para conseguir obter uma solução aceitável em menos tempos que algoritmos mais precisos.
 O algoritmo funcionaria em 3 etapas distintas.
 
-Em primeiro lugar devia encontrar a aresta de maior peso do grafo.
+Primeiramente soma-se ao peso (tempo de visita) de cada vértice a o peso da
+aresta com maior peso para este mesmo vértice (tempo de viagem). Assim sendo
+consideramos um conjunto de soluções $C[i]$,~$(1 \leq i \leq L)$ para o problema
+em que:
 \begin{center}
-$MTV$ \equiv \max \{T[i,j]\},(1 \leq i,j \leq N \wedge i \neq j)
+$peso(C)$ \equiv \sum_{1 \leq i \leq L} (~T[C[i],C[i]] + \max
+\{T[C[i],j],(1 \leq j \leq N \wedge i \neq j)\}~)
 
-Note-se para qualquer conjunto de solução possível I temos:
+Note-se para qualquer conjunto de solução possível I existe um conjunto C que
+contém os mesmos vértices (cidades) tal que:
 \begin{equation}
-		\sum_{1 \leq i \leq M} T[I[i],I[i+1]] \leq \sum_{1 \leq i \leq M} MTV
-		\rightarrow 
-		
-		 \sum_{1 \leq i \leq M} T[I[i],I[i+1]] + \sum_{1 \leq i \leq M}
-		T[I[i],I[i]] \leq \sum_{1 \leq i \leq M} MTV + \sum_{1 \leq i \leq M}
-		T[I[i],I[i]]
+		\sum_{1 \leq j \leq M}
+		(T[I[i],I[i]] + T[I[i],I[i+1]]) \leq peso(C)
 \end{equation}
-
+assim sendo\ldots 
+\begin{equation}
+		peso(C) \leq T_{max} \Rightarrow \exists I~| \sum_{1 \leq j \leq M}
+		(T[I[i],I[i]] + T[I[i],I[i+1]]) \leq T_{max}
+\end{equation}
 \end{center}
 Seguidamente é usado um algoritmo de branch and bound. Para este algoritmo teríamos:
 \begin{enumerate}
@@ -210,11 +217,7 @@ Seguidamente é usado um algoritmo de branch and bound. Para este algoritmo ter�
 	\item O peso seria dado pela soma do tempo de visita da cidade com o tempo
 encontrado na etapa 1. Assim sendo garante-se que o resultado obtido é uma combinação válida (que pode ser visitada dentro do tempo limite).
 \end{enumerate}
-\begin{equation}
-		\sum_{1 \leq i \leq M} MTV + \sum_{1 \leq i \leq M} T[I[i],I[i]] \leq
-		T_{max} \Rightarrow \sum_{1 \leq j \leq M} (T[I[i],I[i]] + T[I[i],I[i+1]])
-		\leq T_{max}
-\end{equation}
+
 
 Uma vez já encontrada uma combinação de cidades que sabemos ser possível de visitar em qualquer ordem dentro do tempo dado podemos abordar o problema como um TSP para arranjar o melhor trajecto possível (que demora menos tempo) entre as cidades seleccionadas.
 
