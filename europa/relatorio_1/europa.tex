@@ -183,6 +183,8 @@ Na segunda versão, queremos minimizar o tempo de visita a todas as cidades. Ist
 %%%%%%%%%%%%
 \chapter{Perspetivas de Solução}
 
+O problema de determinar o melhor percurso para visitar todas as cidades é conhecido como o Problema do Caixeiro Viajante (PCV)~\cite{wiki_tsp} e será assim que nos iremos referir a esta parte do trabalho. Relativamente à versão do problema em que existe um limite de tempo é conhecido como o Problema do Roteamento de Veículos (PRV)~\cite{wiki_vrp}.
+
 \section{Algoritmos de Força Bruta}
 
 Este tipo de algoritmos geralmente são os mais simples de descrever e implementar. Costumam corresponder à primeira solução que ocorre à maior parte das pessoas que tentem resolver o mesmo problema. Para os nossos problemas (PCV e PRV), esta abordagem é mais uma vez a mais simples. No entanto, como já mencionamos tem um custo temporal de~$O(N!)$, que o inutiliza ao fim de cerca de 20 cidades.
@@ -201,7 +203,7 @@ Para o algoritmo em que se gera cada sequência, já parece não haver tanta van
 
 \section{Algoritmo de Held-Karp}
 
-Um dos melhores algoritmos conhecidos para resolver o PCV é o algoritmo de Held-Karp. Este é um algoritmo típico de programação dinâmica e assenta no facto de todo o subpercurso de um percurso de distância mínima ter também distância mínima. Sendo assim, a ideia é resolver o PCV para todos os subconjuntos de vértices, utilizando recursividade. Isto é, para cada subproblema, iremos utilizar as soluções ótimas dos problemas ainda mais pequenos do que ele. No final, à semelhança de outros problemas de programação dinâmica (como o problema da mochila de que falamos na secção seguinte) obtém-se o percurso da seguinte forma:
+Um dos melhores algoritmos conhecidos para resolver o PCV é o algoritmo de Held-Karp~\cite{Held&Karp:1962}. Este é um algoritmo típico de programação dinâmica e assenta no facto de todo o subpercurso de um percurso de distância mínima ter também distância mínima. Sendo assim, a ideia é resolver o PCV para todos os subconjuntos de vértices, utilizando recursividade. Isto é, para cada subproblema, iremos utilizar as soluções ótimas dos problemas ainda mais pequenos do que ele. No final, à semelhança de outros problemas de programação dinâmica (como o problema da mochila de que falamos na secção seguinte) obtém-se o percurso da seguinte forma:
 \begin{itemize}
 	\item o primeiro vértice do percurso é o vértice obtido no passo final da recursão;
 	\item o vértice seguinte obtém-se utilizando o subproblema com todos os vértices exceto aquele que já incluímos;
@@ -242,6 +244,24 @@ Assim, o segundo passo resolve-se da forma usual fazendo variar~$i$ entre~$0$ e~
 
 No final, o subconjunto de cidades ideal para a mochila de capacidade~$T_{max}$ é:~$b[T_{max}]$,~$b[T_{max}-P[b[T_{max}]]]$, etc. Quanto à complexidade temporal deste passo, seria~$O(NT_{max})$.
 
+Alternativamente, para resolver este segundo passo, podemos utilizar um algoritmo de \emph{branch and bound}~\cite{tube_bnb_kp, Narahari:2000}. Para isso considera-se uma árvore cujos nós serão os estados sucessivos da mochila consoante se coloca lá cada um dos objetos:
+\begin{itemize} 
+	\item A raiz da árvore será o estado inicial da mochila, isto é, vazia.
+	\item Esse nó terá dois filhos, consoante se colocar na mochila o primeiro objeto ou não.
+	\item De facto, à exceção das folhas da árvore, cada nó terá dois filhos, consoante se coloca na mochila o objeto seguinte ou não.
+	\item As folhas representam estados finais da mochila. Um percurso até uma folha, indica para cada objeto se foi lá colocado ou não.
+\end{itemize}
+Esta é a parte de \emph{branch} do algoritmo. No entanto, não iremos calcular a árvore na sua totalidade, porque essa seria uma abordagem de força bruta, com um custo temporal de~$O(2^N)$. É aqui que entra a parte de \emph{bound} do algoritmo. Para o caso da mochila será um \emph{upper bound}, ou seja, um majorante. Para cada estado da mochila (ou nó da árvore), iremos calcular o majorante do valor máximo que ainda é possível colocar na mochila:
+\begin{itemize}
+	\item Começamos por calcular para cada objeto a razão entre o seu valor e o seu peso.
+	\item Ordenamos os objetos por ordem decrescente da razão calculada.
+	\item Enquanto houver espaço na mochila, acrescentamos ao majorante o valor de cada um dos objetos pela ordem anterior.
+	\item Se sobrar espaço para parte de um objeto, mas não a sua totalidade, adicionamos ao majorante a parte correspondente do valor da cidade.
+\end{itemize}
+Este cálculo do majorante de um nó será utilizado para escolher a cada momento qual o nó que desejamos expandir: será aquele com maior majorante. Se numa dada expansão não for possível adicionar um objeto, por falta de espaço na mochila, paramos de expandir nesse sentido. O importante é escolher sempre o nó com maior majorante de entre todos aqueles que ainda não foram expandidos. No final teremos o melhor subconjunto de objetos a colocar na mochila.
+
+Também é possível utilizar um algoritmo de \emph{branch and bound} para calcular uma solução exata do PCV~\cite{tube_bnb_tsp, Narahari:2000}. Note-se ainda que poderíamos também utilizar uma heurística para resolver a parte da mochila, de forma a obter um algoritmo mais rápido.
+
 O terceiro passo poderia ser resolvido com o algoritmo ganancioso descrito no início desta secção, ficando apenas por resolver o último ponto. Independentemente de ser necessário, nesta última fase, acrescentar ou retirar cidades do percurso obtido, o processo é o mesmo:
 \begin{itemize}
 	\item escolher cidade ideal (mais valiosa se for para acrescentar, menos valiosa se for para retirar);
@@ -256,7 +276,7 @@ Sendo assim, a complexidade temporal deste último passo é~$O(N^2)$, tal como n
 %%%%%%%%%%%%
 \chapter{Métricas de Avaliação}
 
-O problema de determinar o melhor percurso para visitar todas as cidades é conhecido como o Problema do Caixeiro Viajante (PCV). Este é um dos problemas de optimização mais estudados e é sabido que se trata de um problema $NP$-difícil. Informalmente, isto significa que é pelo menos tão difícil como os problemas mais difíceis em $NP$. Posto de outra forma, encontrar uma resolução exata para este problema em tempo polinomial seria equivalente a resolver todos os problemas em NP em tempo polinomial, ou seja, um tal algoritmo provaria que $P = NP$.
+O Problema do Caixeiro Viajante é um dos problemas de optimização mais estudados e é sabido que se trata de um problema $NP$-difícil~\cite{Garey&Johnson:1979,Papadimitriou:1994}. Informalmente, isto significa que é pelo menos tão difícil como os problemas mais difíceis em $NP$. Posto de outra forma, encontrar uma resolução exata para este problema em tempo polinomial seria equivalente a resolver todos os problemas em NP em tempo polinomial, ou seja, um tal algoritmo provaria que $P = NP$.
 
 $P$ é a classe de todos os problemas que podem ser resolvidos em tempo polinomial. Já $NP$, vem da expressão em inglês para tempo polinomial não determinístico e contém todos os problemas para os quais é possível validar uma solução em tempo polinomial. Facilmente se conclui das definições que~$P \subseteq NP$. No entanto há uma imensidão de problemas em~$NP$ para os quais não se conhece nenhum algoritmo polinomial, entre eles o PCV. A comunidade científica está maioritariamente convencida que tais algoritmos não existem, ou seja, que~$P \neq NP$. No entanto, até hoje ninguém conseguiu provar uma coisa ou outra, sendo um dos problemas mais famosos da Ciência dos Computadores, cuja solução dá direito a 1 milhão de dólares.
 
@@ -264,40 +284,38 @@ A complexidade temporal da resolução do PVC por um algoritmo de força bruta �
 
 Devido ao elevado custo computacional do cálculo de soluções exatas, são conhecidos inúmeros algoritmos que providenciam soluções aproximadas. De facto, a procura de heurísticas para resolver o PVC é das áreas mais prolíferas da optimização. Por exemplo, se assumirmos que os tempos de viagem respeitam a desigualdade triangular, um algoritmo ganancioso em que se escolha sempre a cidade não visitada mais próxima, obtém aproximações razoáveis da solução ótima com complexidade temporal~$O(n^2)$.
 
-Relativamente à versão do problema em que existe um limite de tempo é conhecido como o Problema do Roteamento de Veículos (PRV). Tal como o PVC, este problema é NP-difícil, sendo o algoritmo de força bruta semelhante também ao que é utilizado para o PVC.
+Relativamente ao Problema do Roteamento de Veículos, tal como o PVC, este problema é NP-difícil, sendo o algoritmo de força bruta semelhante também ao que é utilizado para o PVC.
 
 Nestes problemas o custo mais critico é o temporal, isto é, com o crescimento do número de vértices, aquilo que impedirá a obtenção de uma solução exata será o tempo que esse cálculo demora e não a memória necessária. Assim, no que diz respeito às métricas de avaliação dos algoritmos que implementarmos, iremos concentrar os nossos esforços na avaliação da complexidade temporal dos mesmos. Para isso, faremos várias experiências com um número crescente de cidades. De seguida, para um conjunto de experiências com o mesmo número de vértices, utilizaremos a média dos tempos de computação como aproximação do tempo necessário para esse número de vértices. No final, para cada algoritmo, deverá ser possível obter um gráfico discreto cuja interpolação levará à sua função de complexidade temporal.
+
+Tal como discutido anteriormente, no caso dos algoritmos aproximados será também necessário avaliar a qualidade da aproximação, além do tempo necessário para a calcular. O método será semelhante: utilizar vários conjuntos aleatórios, com várias dimensões, e calcular para cada amostra a diferença entre a solução exata e a solução aproximada.
 
 %%%%%%%%%%%%%%%%
 % DIFICULDADES %
 %%%%%%%%%%%%%%%%
 \chapter{Principais Dificuldades}
 
-Tendo em conta que não chegamos a encontrar nenhum problema análogo ao nosso e
-dado que a formulação/escolha de algoritmos concretos e a definição dos dados de
-entrada são dependentes um do outro houve alguma incerteza inicial sobre como
-abordar a resolução do problema. A maior incerteza foi a escolha do tipo de
-grafo a usar. Haviam várias hipóteses e cada uma delas necessitava de ser
-abordada de diferente forma, fazendo o uso de algoritmos diferentes. Ao
-ponderar soluções pequenas ideias que intuitivamente pareciam corretas eram
-frequentemente falaciosas e tentar conciliar diferentes técnicas para chegar a
-uma solução computacionalmente eficiente parecia uma tarefa impossível.
+A parte do problema com um tempo limite para fazer a viagem não parece ser muito conhecida. De facto, não chegamos a encontrar nenhum problema análogo ao nosso, mesmo a informação sobre o Problema de Roteamento de Veículos parece focar-se em problemas ligeiramente diferentes. Mais, este problema é pelo menos tão difícil como a versão sem tempo limite. De facto, se o tempo limite for suficientemente grande, passamos a calcular o melhor percurso para visitar todas as cidades, em vez de escolher um subconjunto de cidades a visitar. Por isso fomos obrigados a tratar os dois problemas em conjunto, o que complicou a tarefa.
 
-Apesar deste atrito inicial existe bastante informação disponível sobre
-problemas ligados a grafos e desde cedo que tivemos conhecimento do problema do
-caixeiro viajante (PCV) que nos levou a escolher um grafo completo e
-consequentemente simplificar a análise do problema. A ajuda dos docentes também se verificou valiosa na formulação de soluções.
+Por outro lado, a formulação/escolha de algoritmos concretos e o modelo a utilizar são dependentes um do outro, o que gerou uma maior incerteza inicial sobre como abordar a resolução do problema. Logo à partida, a escolha do tipo de grafo a usar gerou algumas confusões. Havia várias hipóteses e cada uma delas necessitava de ser tratada de diferente forma, fazendo o uso de algoritmos diferentes. Ao ponderar possíveis resoluções, pequenas ideias que intuitivamente pareciam corretas eram frequentemente falaciosas. Além disso, tentar conciliar diferentes técnicas para chegar a um algoritmo relativamente eficiente parecia uma tarefa impossível.
 
+Apesar deste atrito inicial, existe bastante informação disponível sobre problemas ligados a grafos e desde cedo tivemos conhecimento do Problema do Caixeiro Viajante, que nos levou a escolher um grafo completo e consequentemente simplificar a análise do problema. A ajuda dos docentes também se verificou valiosa na formulação de soluções.
 
 %%%%%%%%%%%%%
 % CONCLUSAO %
 %%%%%%%%%%%%%
 \chapter{Conclusão}
 
-Esta fase inicial de pesquisa e formulação de soluções permitiu aprofundar o conhecimento relativo a problemas similares e possíveis resoluções. A equipa foi exposta a alguns dos algoritmos a ser implementados na próxima fase do trabalho prático e já tem uma noção geral de como prosseguir. 
-Ficamos também com maior sensibilidade face à escolha dos tipos de dados a usar,
-tendo optado por usar um grafo completo de modo a simplificar em parte a
-formulação de soluções.
+Esta fase inicial de pesquisa e formulação de soluções permitiu aprofundar o conhecimento relativo a problemas similares e possíveis resoluções. A equipa foi exposta a alguns dos algoritmos a ser implementados na próxima fase do trabalho prático e já tem uma noção geral de como prosseguir.
 
+Ficamos também com maior sensibilidade face à escolha dos tipos de dados a usar, nomeadamente no que diz respeito às restrições consideradas e até que ponto ajudam a encontrar algoritmos mais eficientes.
+
+Será certamente gratificante passar tudo isto à prática numa próxima fase do trabalho, embora a quantidade de algoritmos diferentes que estamos a considerar faça esta tarefa parecer hercúlea. Eventualmente será necessário optar por apenas alguns destes caminhos, consoante a dificuldade de implementação e a promessa de eficiência de cada um.
+
+%%%%%%%%%%%%%%
+%BIBLIOGRAPHY%
+%%%%%%%%%%%%%%
+\bibliographystyle{IEEEtran}
+\bibliography{rabb,refs}
 
 \end{document}
