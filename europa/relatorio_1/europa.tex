@@ -1,31 +1,36 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%												   %
-%	VIAGEM PELA EUROPA  						   %
-%												   %
-%	Março 2015									   %
-%												   %
-%	Angela Cardodo, Felipe Galvão e Bruno Madeira  %
-%   											   %	
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%												    %
+%	VIAGEM PELA EUROPA  						    %
+%												    %
+%	Março 2015									    %
+%												    %
+%	Angela Cardodo, Felipe Galvão e Bruno Madeira	%
+%   											    %	
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \documentclass[12pt,a4paper,reqno]{report}
 \linespread{1.5}
 
-\usepackage{amsfonts,amsmath,amssymb,indentfirst,mathrsfs,amscd}
+\usepackage[active]{srcltx}    
+\usepackage{graphicx}
+\usepackage{amsthm,amsfonts,amsmath,amssymb,indentfirst,mathrsfs,amscd}
 \usepackage[mathscr]{eucal}
 \usepackage[active]{srcltx} %inverse search
 \usepackage{tensor}
 \usepackage[utf8x]{inputenc}
 \usepackage[portuges]{babel}
 \usepackage[T1]{fontenc}
+\numberwithin{figure}{section}
+\numberwithin{equation}{section}
+\usepackage{enumitem}
+\setlist{nolistsep}
+\usepackage{comment} 
 \usepackage{tikz}
-\usepackage{graphicx}
 \usepackage[numbers,square, comma, sort&compress]{natbib}
 \numberwithin{figure}{section}
 \numberwithin{equation}{section}
 \usepackage{scalefnt}
 \usepackage[top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm]{geometry}
-\usepackage{comment} 
 %\usepackage{tweaklist}
 %\renewcommand{\itemhook}{\setlength{\topsep}{0pt}%
 %	\setlength{\itemsep}{0pt}}
@@ -38,12 +43,15 @@
 \usepackage{enumitem}
 \usepackage{titling}
 \newcommand{\subtitle}[1]{%
-  \posttitle{%
-    \par\end{center}
-    \begin{center}\large#1\end{center}
-    \vskip0.5em}%
+	\posttitle{%
+	\par\end{center}
+	\begin{center}\large#1\end{center}
+	\vskip0.5em}%
 }
 \newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+\usepackage{caption}
+\usepackage{etoolbox}% http://ctan.org/pkg/etoolbox
+\usepackage{complexity}
 
 \usepackage[official]{eurosym}
 
@@ -87,35 +95,34 @@
 
 No âmbito da disciplina de Concepção e Análise de Algoritmos do Mestrado Integrado em Engenharia Informática e Computação, foi-nos proposta a resolução de um problema cuja formulação é frequentemente feita através da utilização de grafos.
 
-O tema do nosso projeto é o planeamento de uma viagem pela Europa. Mais precisamente, o cliente pretende visitar várias cidades na Europa, deslocando-se de carro entre as cidades. Tem um tempo máximo predefinido para realizar a viagem, assim como uma classificação das cidades consoante o seu interesse, numa pontuação de 0 (pouco interessado) a 10 (muito interessado). Além disso, o cliente disponibiliza informação sobre o tempo de deslocação entre as cidades, assim como o tempo que demora a visitar cada uma delas. A solução a devolver ao cliente será uma lista ordenada de cidades a visitar, tendo em conta que começa e acaba na cidade onde reside.
+O tema do nosso projeto é o planeamento de uma viagem pela Europa. Mais precisamente, o cliente pretende visitar várias cidades europeias, deslocando-se de carro entre elas. Tem um tempo máximo predefinido para realizar a viagem, assim como uma classificação das cidades consoante o seu interesse, numa pontuação de 0 (pouco interessado) a 10 (muito interessado). Além disso, o cliente disponibiliza informação sobre o tempo de deslocação entre as cidades, assim como o tempo que demora a visitar cada uma delas. A solução a devolver ao cliente será uma lista ordenada de cidades a visitar, tendo em conta que começa e acaba na cidade onde reside.
 
 Numa versão inicial do problema, o tempo para a viagem é limitado e, como tal, poderá não ser possível ir a todas as cidades, o objetivo é visitar as cidades mais interessantes. Numa outra versão, será calculado o tempo mínimo necessário para visitar todas as cidades, sendo devolvido o percurso mais eficiente.
 
-Nesta primeira parte do projeto é apresentada uma formulação matemática do problema, que inclui as restrições assumidas. Serão ainda esboçadas possíveis resoluções, exatas e aproximadas, para as duas versões do problema, assim como propostas de análise do custo computacional dos algoritmos propostos.
+Nesta primeira parte do projeto é apresentada uma formulação matemática do problema, que inclui as restrições assumidas. Serão ainda esboçadas possíveis resoluções, exatas e aproximadas, para as duas versões do problema, assim como propostas de análise do custo computacional dos algoritmos propostos, assim como da qualidade das aproximações.
 
 
 %%%%%%%%%%%%%%
 % RESTRIÇÕES %
 %%%%%%%%%%%%%%
-\chapter{Restrições Consideradas}
+\chapter{Limites de Aplicabilidade}
 
-Cada instância do nosso problema será representada por um grafo, em que os vértices representam as cidades a visitar e as arestas representam os percursos entre as cidades. Apesar de esta representação já contemplar uma série de aspetos do problema, existem ainda várias alternativas consoante os dados fornecidos e as restrições que sejam consideradas. A menos que algo seja dito explicitamente em contrário, à partida, o ideal será não impor restrições que limitem a aplicabilidade dos algoritmos desenvolvidos. Por outro lado, existem casos em que a limitação é recompensada pela eficiência dos algoritmos possíveis.
+Cada instância do nosso problema será representada por um grafo, em que os vértices correspondem às cidades a visitar e as arestas correspondem aos percursos entre as cidades. Apesar de esta representação já contemplar uma série de aspetos do problema, existem ainda várias alternativas consoante os dados fornecidos e as restrições que sejam consideradas. A menos que algo seja dito explicitamente em contrário, à partida, o ideal será não impor restrições que limitem a aplicabilidade dos algoritmos desenvolvidos. Por outro lado, existem casos em que a limitação é recompensada pela eficiência dos algoritmos possíveis.
 
-No caso do planeamento de uma viagem, há quatro questões que devem ser respondidas, por forma a identificar as eventuais restrições a considerar:
+No caso do planeamento de uma viagem, há três questões que devem ser respondidas, por forma a identificar eventuais restrições a considerar:
 \begin{enumerate}
 	\item Dadas duas cidades, existe sempre um caminho que as une sem passar por nenhuma outra cidade da lista? Isto é, podemos considerar um grafo completo?
 	\item Dado um caminho que une as cidades A e B, existe alguma diferença entre ir de A para B ou de B para A? Isto é, teremos que considerar um grafo dirigido ou não?
-	\item No percurso devolvido é possível visitar a mesma cidade mais do que uma vez (além da cidade origem, claro)?
 	\item Podemos assumir que dadas três cidades A, B e C, o tempo de viagem de [A, C] nunca é maior que a soma dos tempos de [A, B] e [B, C]? Isto é, a desigualdade triangular é válida nos custos associados às arestas do grafo?
 \end{enumerate}
 
-Apesar de não ser dito de forma explícita, iremos assumir que o grafo é completo, porque não se trata de uma verdadeira restrição para este problema específico. De facto, se não existisse um caminho direto entre as cidade A e C e fosse sempre necessário passar por C, poderíamos considerar uma nova aresta entre A e C, cujo tempo de percurso é a soma dos tempos [A, B] e [B, C]. Na prática isto corresponderia a ir da cidade A para a cidade C passando pela cidade B, mas sem a visitar.
+Apesar de não ser dito de forma explícita, iremos assumir que o grafo é completo, porque não se trata de uma verdadeira restrição para este problema específico. De facto, se não existisse um caminho direto entre as cidades A e C e fosse sempre necessário passar por B, poderíamos considerar uma nova aresta entre A e C, cujo tempo de percurso é a soma dos tempos [A, B] e [B, C]. Na prática isto corresponderia a ir de A para C passando pela cidade B, mas sem a visitar.
 
 Tipicamente, dentro de localidades, existem diferenças entre ir do ponto A para o ponto B ou fazer o percurso inverso. Já neste caso, à partida não seria muito restritivo assumir que não é necessário considerar arestas dirigidas, porque os tempos de deslocação serão relativamente grandes e pequenas diferenças devidas à orientação poderiam ser desprezadas. No entanto, uma vez que também é necessário considerar o tempo de visita de cada cidade a que chegamos, iremos considerar arestas dirigidos, cujo custo incluirá, além do tempo de viagem, o tempo de visita da cidade de destino. Ora, uma vez que os grafos considerados serão dirigidos, podemos perfeitamente permitir que os tempos sejam diferentes consoante se vá num sentido ou noutro. Convém no entanto notar que, ao considerar grafos completos dirigidos, teremos o dobro das arestas, em relação à versão do problema não dirigido. Este crescimento do grafo poderá ter um impacto negativo na eficiência dos algoritmos desenvolvidos.
 
-Dado que o objetivo da primeira versão do problema é visitar as cidades mais interessantes dentro do tempo limite, visitar duas vezes a mesma cidade não é nada aconselhável, será melhor reservar esse tempo para visitar outra cidade diferente. Isto poderá não ser tão claro se considerarmos que, estando na cidade A, regressar a uma cidade já visitada B e depois visitar a cidade C é mais rápido do que ir diretamente de A para C. Ora, isto está obviamente relacionado com a resposta à quarta questão. Além disso, está também relacionado com a resposta à primeira questão. Se ir de A para C passando por B é mais rápido, porque não considerar que o caminho de A para C é precisamente A junção dos caminhos de A para B e B para C? Posto desta forma, não parece muito restritivo considerar que a resposta à quarta questão é sim, donde resulta que não há vale a pena visitar duas vezes a mesma cidade. Por outro lado, como veremos mais adiante, em termos de complexidade dos algoritmos, não há vantagem em impor a desigualdade triangular. Já a passagem pelo mesmo vértice mais do que uma vez, conduz a um tipo de problema bastante diferente. Sendo assim, vamos assumir que cada cidade é visitada no máximo uma vez e que a desigualdade triangular poderá não se verificar.
+Se ir de A para C passando por B é mais rápido, porque não considerar que o caminho de A para C é precisamente a junção dos caminhos de A para B e B para C? Posto desta forma, não parece muito restritivo considerar que a resposta à terceira questão é sim. Por outro lado, como veremos mais adiante, em termos de complexidade dos algoritmos, geralmente não há vantagem em impor a desigualdade triangular.
 
-Em suma, temos uma grafo completo dirigido, do qual queremos extrair um percurso fechado que passa por cada vértice no máximo uma vez. Se passa por todos os vértices ou não, depende da versão do problema que estivermos a considerar.
+Em suma, temos uma grafo completo dirigido que não verifica necessariamente a desigualdade triangular.
 
 %%%%%%%%%%%%%%
 % FORMULAÇÃO %
@@ -136,29 +143,37 @@ Note-se que podemos referir-nos a cada cidade pelo seu índice, que é o mesmo n
 
 \section{Dados de Trabalho}
 
-Estes dados dependerão da versão do problema e do algoritmo usado para o resolver, pelo que serão apresentados numa próxima parte do projeto.
+Estes dados dependerão da versão do problema e do algoritmo usado para o resolver, pelo que serão apresentados numa próxima fase do projeto.
 
 \section{Dados de Saída}
 
 Para a primeira versão do problema, em que existe um tempo máximo para a viagem~$T_M$ e são consideradas as pontuações atribuídas às cidades, a solução final terá o formato seguinte:
 \begin{itemize}
 	\item $M$ - número de cidades do percurso obtido;
-	\item $I[i]$,~$(1 \leq i \leq M)$ - vetor com o índice de cada cidade do percurso, pela ordem em que é visitada, isto é, o percurso final será~$I[1] -> I[2] -> \cdots -> I[M] -> I[1]$;
-	\item $V_{max}$ - valor do percurso obtido, ou seja, é a soma das pontuações das cidades do vetor~$P$ e, numa solução exata, é a pontuação máxima possível dentro do limite de tempo~$T_{max}$.
+	\item $I[i]$,~$(1 \leq i \leq M)$ - vetor com o índice de cada cidade do percurso, pela ordem em que é visitada, isto é, o percurso final será~$I[1] \rightarrow I[2] \rightarrow \cdots \rightarrow I[M] \rightarrow I[1]$;
+	\item $V_{max}$ - valor do percurso obtido, ou seja, é a soma das pontuações das cidades do vetor~$P$ e, numa solução exata, é a pontuação máxima possível dentro do limite de tempo~$T_{max}$;
+	\item $T_F$ - tempo do percurso obtido.
 \end{itemize}
 
 Para a segunda versão do problema, em que serão visitadas todas as cidades e queremos qual a ordem de visita e o tempo necessário, a solução final terá o formato seguinte:
 \begin{itemize}
 	\item $T_F$ - tempo do percurso obtido, no caso de uma solução exata, é o menor tempo necessário para visitar todas as cidades;
-	\item $I[i]$,~$(1 \leq i \leq N)$ - vetor com o índice de cada cidade do percurso, pela ordem em que é visitada, isto é, o percurso final será~$I[1] -> I[2] -> \cdots -> I[N] -> I[1]$.
+	\item $I[i]$,~$(1 \leq i \leq N)$ - vetor com o índice de cada cidade do percurso, pela ordem em que é visitada, isto é, o percurso final será~$I[1] \rightarrow I[2] \rightarrow \cdots \rightarrow I[N] \rightarrow I[1]$.
 \end{itemize}
+
+\section{Restrições às Soluções}
+
+Dado que o objetivo da primeira versão do problema é visitar as cidades mais interessantes dentro do tempo limite, visitar duas vezes a mesma cidade não é nada aconselhável, será melhor reservar esse tempo para visitar outra cidade diferente. Mesmo na segunda versão, em que se irão visitar todas as cidades, o objetivo é minimizar o tempo total de percurso, por isso vamos assumir que não há repetição de vértices no ciclo devolvido ao cliente.
+
+Além disso, para o primeiro problema, não podemos ultrapassar o tempo limite para a viagem, ou seja, queremos obter um vetor~$I$ que cumpra a seguinte restrição:
+\begin{equation}
+		\mathscr{P}(I): \sum_{1 \leq i \leq M} (T[I[i],I[i]] + T[I[i],I[i+1]]) \leq T_{max},
+\end{equation}
+assumindo que~$I[M+1] = I[1] = 1$ é a cidade de origem e destino final.
 
 \section{Funções Objetivo}
 
-Mais uma vez, consoante a versão do problema, temos diferentes funções objetivo. Na primeira versão, queremos maximizar a soma de valores das cidades visitadas, garantindo que o tempo total do percurso não ultrapassa o tempo de viagem disponível. Isto é, assumindo que~$I[M+1] = I[1] = 1$ é a cidade de origem, queremos obter um vetor~$I$ que cumpra as seguintes condições:
-\begin{equation}
-		\mathscr{P}(I): \sum_{1 \leq i \leq M} (T[I[i],I[i]] + T[I[i],I[i+1]]) \leq T_{max};
-\end{equation}
+Consoante a versão do problema, temos diferentes funções objetivo. Na primeira versão, queremos maximizar a soma de valores das cidades visitadas, garantindo que o tempo total do percurso não ultrapassa o tempo de viagem disponível. Isto é, a solução devolvida cumpre a condição:
 \begin{equation}
 	\begin{split}
 		\sum_{1 \leq i \leq M} V[I[i]] & = V_{max} = \\
@@ -187,15 +202,58 @@ O problema de determinar o melhor percurso para visitar todas as cidades é conh
 
 \section{Algoritmos de Força Bruta}
 
-Este tipo de algoritmos geralmente são os mais simples de descrever e implementar. Costumam corresponder à primeira solução que ocorre à maior parte das pessoas que tentem resolver o mesmo problema. Para os nossos problemas (PCV e PRV), esta abordagem é mais uma vez a mais simples. No entanto, como já mencionamos tem um custo temporal de~$O(N!)$, que o inutiliza ao fim de cerca de 20 cidades.
+Este tipo de algoritmos geralmente são os mais simples de descrever e implementar. Costumam corresponder à primeira solução que ocorre à maior parte das pessoas que tentem resolver o mesmo problema. Para os nossos problemas (PCV e PRV), esta abordagem é mais uma vez a mais simples. No entanto, tem um custo temporal de~$O(N!)$, que o inutiliza ao fim de cerca de 20 cidades~\cite{wiki_tsp}.
 
 Concentremo-nos para já no Problema do Caixeiro Viajante.
 
-A ideia deste algoritmo é enumerar praticamente todos os percursos, utilizando para isso uma árvore em que os nós serão os vértices e a sua sequência na árvore indica a ordem pela qual aparecem no percurso. Para cada nó, os seus filhos serão todos os vértices que ainda não tenham sido visitados até então. A árvore é percorrida em profundidade primeiro e só depois em largura. Assim, se a dada altura conseguirmos deduzir que uma sequência de nós é inviável (porque o seu tempo de percurso é superior ao de outra já analisada), descartamos todos as estratégias filhas dessa, retrocedendo a um ponto em que ainda haja estratégias viáveis não estudadas.
+A ideia deste algoritmo é enumerar praticamente todos os percursos, utilizando para isso uma árvore em que os nós serão os vértices e a sua sequência na árvore indica a ordem pela qual aparecem no percurso. Para cada nó, os seus filhos serão todos os vértices que ainda não tenham sido visitados até então, como se pode ver na Figura~\ref{PCV_arvore}, onde os nós contém o nome da cidade e o valor e as arestas contém os tempos. A árvore é percorrida em profundidade primeiro e só depois em largura. Assim, se a dada altura conseguirmos deduzir que uma sequência de nós é inviável (porque o seu tempo de percurso é superior ao de outra já analisada), descartamos todos as estratégias filhas dessa, retrocedendo a um ponto em que ainda haja estratégias viáveis não estudadas.
+
+\begin{figure}[ht]
+	\scalefont{0.75}
+	\begin{center}
+		\begin{tikzpicture}[level/.style={sibling distance=72mm/#1}]
+			\tikzstyle{normal_node}= [draw,rectangle, rounded corners=.8ex,thick,minimum size=0.8cm]
+			\node [normal_node] (r) {Porto - 0}
+			child {node [normal_node] (a1) {Aveiro - 5}
+				child {node [normal_node] (b1) {Berlin - 10}
+					child {node {$\vdots$}
+    					child {node {$\vdots$}
+							child {node [normal_node] (z1) {Zurich - 4}}} 
+    						child {node {$\vdots$}
+						child {node [normal_node] (y1) {Yerevan - 3}}}}
+					child {node {$\vdots$}}}
+    			child {node [normal_node] (z2) {Zurich - 4}
+      		  		child {node {$\vdots$}}
+      			  	child {node {$\vdots$}}}}
+			 child {node [normal_node] (z3) {Zurich - 4}
+    		 	child {node [normal_node] (a2) {Aveiro - 5}
+      	   			child {node {$\vdots$}}
+      	 	   		child {node {$\vdots$}}}
+  			    child {node [normal_node] (y2) {Yerevan - 3}
+					child {node {$\vdots$}}
+					child {node {$\vdots$}
+    					child {node {$\vdots$}
+							child {node [normal_node] (b2) {Berlin - 10}}} 
+    						child {node {$\vdots$}
+						child {node [normal_node] (a3) {Aveiro - 5}}}}}};
+			\path (a1) -- (z3) node [midway] {$\cdots$};
+			\path (b1) -- (z2) node [midway] {$\cdots$};
+			\path (a2) -- (y2) node [midway] {$\cdots$};
+			\path (r) -- (a1) node [midway, above] {$2$};
+			\path (a1) -- (b1) node [midway, left] {$72$};
+			\path (a1) -- (z2) node [midway, right] {$73$};
+			\path (r) -- (z3) node [midway, above] {$75$};
+			\path (z3) -- (a2) node [midway, left] {$73$};
+			\path (z3) -- (y2) node [midway, right] {$47$};
+		\end{tikzpicture}
+	\caption{Exemplo de solução PCV com árvore}
+	\label{PCV_arvore}
+	\end{center}
+\end{figure}
 
 A este tipo de abordagem dá-se o nome de algoritmo de retrocesso, porque ao podar um determinado conjunto de soluções da árvore, regressamos a um ponto prévio para o qual ainda há possibilidades a estudar.
 
-Apesar de o número total de estratégias ser~$N!$, com o descartar precoce de algumas é possível reduzir o tempo de computação da solução. No entanto, ao guardar todas as estratégias numa árvore, a complexidade espacial será também da ordem de~$N!$. É possível melhorar isto utilizando outro algoritmo de força bruta sem recorrer a uma árvore. A ideia é para cada~$i$ entre~$1$ e~$N!$ gerar a~$i$-ésima sequência (utilizando para isso uma resolução matemática), calcular o tempo de percurso dessa sequência e manter guardada apenas a melhor sequência encontrada até então. Com esta abordagem, o custo temporal será mesmo~$O(N!)$, pois não existe a possibilidade de poda de soluções, no entanto, o custo espacial é~$O(N)$, porque não mantemos registo de todas as sequências, apenas uma.
+Apesar de o número total de estratégias ser~$N!$, com o descartar precoce de algumas é possível reduzir o tempo de computação da solução. No entanto, ao guardar todas as estratégias numa árvore, a complexidade espacial será também da ordem de~$N!$. É possível melhorar isto utilizando outro algoritmo de força bruta sem recorrer a uma árvore. A ideia é para cada~$i$ entre~$1$ e~$N!$ gerar a~$i$-ésima sequência (utilizando para isso uma resolução matemática), calcular o tempo de percurso dessa sequência e manter guardada apenas a melhor sequência encontrada até então. Com esta abordagem, não existe a possibilidade de poda de soluções, no entanto, o custo espacial é~$O(N)$, porque não mantemos registo de todas as sequências, apenas uma.
 
 Para o caso do Problema de Roteamento de Veículos, isto é, quando temos um limite de tempo, o algoritmo de retrocesso é muito semelhante. No entanto, a cada instante, quando o tempo limite é atingido, não inspecionamos o resto daquele ramo da árvore. Por outro lado, não podemos descartar um ramo por ser mais demorado que outro visto antes, dado que o mais importante nesta versão do problema é maximizar o valor dos vértices visitados.
 
@@ -232,9 +290,9 @@ O algoritmo funcionaria em 4 etapas que serão efetuadas por ordem:
 	\end{enumerate}
 \end{enumerate}
 
-O primeiro ponto tem uma complexidade temporal~$O(N^2)$, dado que basta somar ao tempo de visita de cada cidade o maior tempo de percurso de uma aresta com destino nessa cidade, para obter o peso do vértice correspondente. Note-se que ao utilizar o custo da pior aresta que chega a cada vértice estamos a garantir que para o subconjunto de cidades escolhido no segundo passo é de facto possível encontrar um percurso que seja realizável dentro do tempo limite. No entanto, uma vez que iremos utilizar um algoritmo aproximado para encontrar o percurso, poderá ser necessário retirar cidades, daí considerarmos duas alternativas no passo 4.
+O primeiro ponto tem uma complexidade temporal~$O(N^2)$, dado que basta somar ao tempo de visita de cada cidade o maior tempo de percurso de uma aresta com destino nessa cidade, para obter o peso do vértice correspondente. Note-se que, ao utilizar o custo da pior aresta que chega a cada vértice, estamos a garantir que para o subconjunto de cidades escolhido no segundo passo é de facto possível encontrar um percurso que seja realizável dentro do tempo limite. No entanto, uma vez que iremos utilizar um algoritmo aproximado para determinar o percurso, poderá ser necessário retirar cidades, daí considerarmos duas alternativas no passo 4.
 
-Uma vez realizado o primeiro passo temos dois vetores~$V[i]$,~$1 \leq i \leq N$ com os valores das cidades (fornecido inicialmente) e~$P[i]$,~$1 \leq i \leq N$ com o \"peso\" de cada cidade. Também sabemos a capacidade da mochila~$T_{max}$. 
+Depois de realizado o primeiro passo, temos dois vetores~$V[i]$,~$1 \leq i \leq N$ com os valores das cidades (fornecido inicialmente) e~$P[i]$,~$1 \leq i \leq N$ com o ``peso'' de cada cidade. Também sabemos a capacidade da mochila~$T_{max}$. 
 
 Assim, o segundo passo resolve-se da forma usual fazendo variar~$i$ entre~$0$ e~$N$ vamos calculando recursivamente dois vetores:
 \begin{itemize}
@@ -242,9 +300,9 @@ Assim, o segundo passo resolve-se da forma usual fazendo variar~$i$ entre~$0$ e~
 	\item~$b[k]$,~$1 \leq k \leq T_{max}$, contém o último item adicionado à mochila de capacidade~$k$ para obter~$c[k]$, utilizando apenas os vértices de~$1$ a~$i$.
 \end{itemize}
 
-No final, o subconjunto de cidades ideal para a mochila de capacidade~$T_{max}$ é:~$b[T_{max}]$,~$b[T_{max}-P[b[T_{max}]]]$, etc. Quanto à complexidade temporal deste passo, seria~$O(NT_{max})$.
+No final, o subconjunto de cidades ideal para a mochila de capacidade~$T_{max}$ é: $b[T_{max}]$, $b[T_{max}-P[b[T_{max}]]]$, etc. Quanto à complexidade temporal deste passo, seria~$O(NT_{max})$.
 
-Alternativamente, para resolver este segundo passo, podemos utilizar um algoritmo de \emph{branch and bound}~\cite{tube_bnb_kp, Narahari:2000}. Para isso considera-se uma árvore cujos nós serão os estados sucessivos da mochila consoante se coloca lá cada um dos objetos:
+Alternativamente, para resolver este segundo passo, podemos utilizar um algoritmo de \emph{branch and bound}~\cite{tube_bnb_kp_1, tube_bnb_kp_2, Narahari:2000}. Para isso considera-se uma árvore cujos nós serão os estados sucessivos da mochila consoante se coloca lá cada um dos objetos:
 \begin{itemize} 
 	\item A raiz da árvore será o estado inicial da mochila, isto é, vazia.
 	\item Esse nó terá dois filhos, consoante se colocar na mochila o primeiro objeto ou não.
@@ -260,35 +318,35 @@ Esta é a parte de \emph{branch} do algoritmo. No entanto, não iremos calcular 
 \end{itemize}
 Este cálculo do majorante de um nó será utilizado para escolher a cada momento qual o nó que desejamos expandir: será aquele com maior majorante. Se numa dada expansão não for possível adicionar um objeto, por falta de espaço na mochila, paramos de expandir nesse sentido. O importante é escolher sempre o nó com maior majorante de entre todos aqueles que ainda não foram expandidos. No final teremos o melhor subconjunto de objetos a colocar na mochila.
 
-Também é possível utilizar um algoritmo de \emph{branch and bound} para calcular uma solução exata do PCV~\cite{tube_bnb_tsp, Narahari:2000}. Note-se ainda que poderíamos também utilizar uma heurística para resolver a parte da mochila, de forma a obter um algoritmo mais rápido.
+Também é possível utilizar um algoritmo de \emph{branch and bound} para calcular uma solução exata do PCV~\cite{tube_bnb_tsp_1, tube_bnb_tsp_2, Narahari:2000}. Note-se ainda que poderíamos também utilizar uma heurística para resolver a parte da mochila, de forma a obter um algoritmo mais rápido.
 
 O terceiro passo poderia ser resolvido com o algoritmo ganancioso descrito no início desta secção, ficando apenas por resolver o último ponto. Independentemente de ser necessário, nesta última fase, acrescentar ou retirar cidades do percurso obtido, o processo é o mesmo:
 \begin{itemize}
-	\item escolher cidade ideal (mais valiosa se for para acrescentar, menos valiosa se for para retirar);
-	\item se for para acrescentar, escolher o melhor ponto do percurso (onde as viagens para a nova cidade são mais curtas), retirar uma aresta entre duas cidades do percurso e acrescentar a nova cidade e as respetivas arestas;
+	\item escolher uma cidade ideal (mais valiosa se for para acrescentar, menos valiosa se for para retirar);
+	\item se for para acrescentar, escolher o melhor ponto do percurso (onde as viagens para a nova cidade são mais curtas), retirar a aresta que une as duas cidades desse ponto e acrescentar a nova cidade e as respetivas arestas;
 	\item se for para retirar, basta substituir a cidade e as suas arestas pela aresta que une as duas cidades do percurso às quais ela estava ligada.
 \end{itemize}
 
-Sendo assim, a complexidade temporal deste último passo é~$O(N^2)$, tal como no terceiro passo. O que significa que ao todo a complexidade temporal do algoritmo é~$O(\max{N^2,NT_{max}})$, ou seja, é pseudo-polinomial, comparando muito favoravelmente com a complexidade factorial das soluções exatas. Resta avaliar a qualidade da aproximação obtida. Para isso utilizaremos vários conjuntos de cidades nos quais testaremos o algoritmo exacto e o algoritmo aproximado, por forma a determinar quão pior é a solução aproximada.
+Sendo assim, a complexidade temporal deste último passo é~$O(N^2)$, tal como no terceiro passo. O que significa que ao todo a complexidade temporal do algoritmo é~$O(\max\{N^2,NT_{max}\})$, ou seja, é pseudo-polinomial, comparando muito favoravelmente com a complexidade factorial das soluções exatas. Resta avaliar a qualidade da aproximação obtida. Para isso utilizaremos vários conjuntos de cidades nos quais testaremos o algoritmo exacto e o algoritmo aproximado, por forma a determinar quão pior é a solução aproximada.
 
 %%%%%%%%%%%%
 % AVALIÇÃO %
 %%%%%%%%%%%%
 \chapter{Métricas de Avaliação}
 
-O Problema do Caixeiro Viajante é um dos problemas de optimização mais estudados e é sabido que se trata de um problema $NP$-difícil~\cite{Garey&Johnson:1979,Papadimitriou:1994}. Informalmente, isto significa que é pelo menos tão difícil como os problemas mais difíceis em $NP$. Posto de outra forma, encontrar uma resolução exata para este problema em tempo polinomial seria equivalente a resolver todos os problemas em NP em tempo polinomial, ou seja, um tal algoritmo provaria que $P = NP$.
+O Problema do Caixeiro Viajante é um dos problemas de optimização mais estudados e é sabido que se trata de um problema $\NP$-difícil~\cite{Garey&Johnson:1979, Papadimitriou:1994}. Informalmente, isto significa que é pelo menos tão difícil como os problemas mais difíceis em $\NP$. Posto de outra forma, encontrar uma resolução exata para este problema em tempo polinomial seria equivalente a resolver todos os problemas em $\NP$ em tempo polinomial, ou seja, um tal algoritmo provaria que $\P = \NP$.
 
-$P$ é a classe de todos os problemas que podem ser resolvidos em tempo polinomial. Já $NP$, vem da expressão em inglês para tempo polinomial não determinístico e contém todos os problemas para os quais é possível validar uma solução em tempo polinomial. Facilmente se conclui das definições que~$P \subseteq NP$. No entanto há uma imensidão de problemas em~$NP$ para os quais não se conhece nenhum algoritmo polinomial, entre eles o PCV. A comunidade científica está maioritariamente convencida que tais algoritmos não existem, ou seja, que~$P \neq NP$. No entanto, até hoje ninguém conseguiu provar uma coisa ou outra, sendo um dos problemas mais famosos da Ciência dos Computadores, cuja solução dá direito a 1 milhão de dólares.
+$\P$ é a classe de todos os problemas que podem ser resolvidos em tempo polinomial. Já $\NP$, vem da expressão em inglês para tempo polinomial não determinístico e contém todos os problemas para os quais é possível validar uma solução em tempo polinomial. Facilmente se conclui das definições que~$\P \subseteq \NP$. No entanto há uma imensidão de problemas em~$\NP$ para os quais não se conhece nenhum algoritmo polinomial, entre eles o PCV. A comunidade científica está maioritariamente convencida que tais algoritmos não existem, ou seja, que~$\P \neq \NP$. No entanto, até hoje ninguém conseguiu provar uma coisa ou outra, sendo um dos problemas mais famosos da Ciência dos Computadores, cuja solução dá direito a 1 milhão de dólares.
 
-A complexidade temporal da resolução do PVC por um algoritmo de força bruta é~$O(n!)$ num grafo com~$n$ vértices, dado que existem~$n!$ percursos possíveis. A complexidade espacial é constante, dado que a cada momento apenas é necessário guardar o percurso melhor até então e o seu custo. Existem algoritmos de programação dinâmica, nomeadamente o algoritmo de Held–Karp de que falamos, que calculam soluções exatas mais rapidamente, com um custo temporal de~$O(n^2 2^n)$. No entanto, a complexidade espacial deste algoritmo é~$O(2^n n)$, significativamente pior que um algoritmo de força bruta.
+A complexidade temporal da resolução do PCV por um algoritmo de força bruta é~$O(n!)$ num grafo com~$n$ vértices, dado que existem~$n!$ percursos possíveis. A complexidade espacial é constante, dado que a cada momento apenas é necessário guardar o percurso melhor até então e o seu custo. Existem algoritmos de programação dinâmica, nomeadamente o algoritmo de Held–Karp de que falamos, que calculam soluções exatas mais rapidamente, com um custo temporal de~$O(n^2 2^n)$. No entanto, a complexidade espacial deste algoritmo é~$O(2^n n)$, significativamente pior que um algoritmo de força bruta.
 
-Devido ao elevado custo computacional do cálculo de soluções exatas, são conhecidos inúmeros algoritmos que providenciam soluções aproximadas. De facto, a procura de heurísticas para resolver o PVC é das áreas mais prolíferas da optimização. Por exemplo, se assumirmos que os tempos de viagem respeitam a desigualdade triangular, um algoritmo ganancioso em que se escolha sempre a cidade não visitada mais próxima, obtém aproximações razoáveis da solução ótima com complexidade temporal~$O(n^2)$.
+Devido ao elevado custo computacional do cálculo de soluções exatas, são conhecidos inúmeros algoritmos que providenciam soluções aproximadas. De facto, a procura de heurísticas para resolver o PCV é das áreas mais prolíferas da optimização. Por exemplo, se assumirmos que os tempos de viagem respeitam a desigualdade triangular, um algoritmo ganancioso em que se escolha sempre a cidade não visitada mais próxima, obtém aproximações razoáveis da solução ótima com complexidade temporal~$O(n^2)$.
 
-Relativamente ao Problema do Roteamento de Veículos, tal como o PVC, este problema é NP-difícil, sendo o algoritmo de força bruta semelhante também ao que é utilizado para o PVC.
+Relativamente ao Problema do Roteamento de Veículos, tal como o PCV, este problema é $\NP$-difícil, sendo o algoritmo de força bruta semelhante também ao que é utilizado para o PCV.
 
 Nestes problemas o custo mais critico é o temporal, isto é, com o crescimento do número de vértices, aquilo que impedirá a obtenção de uma solução exata será o tempo que esse cálculo demora e não a memória necessária. Assim, no que diz respeito às métricas de avaliação dos algoritmos que implementarmos, iremos concentrar os nossos esforços na avaliação da complexidade temporal dos mesmos. Para isso, faremos várias experiências com um número crescente de cidades. De seguida, para um conjunto de experiências com o mesmo número de vértices, utilizaremos a média dos tempos de computação como aproximação do tempo necessário para esse número de vértices. No final, para cada algoritmo, deverá ser possível obter um gráfico discreto cuja interpolação levará à sua função de complexidade temporal.
 
-Tal como discutido anteriormente, no caso dos algoritmos aproximados será também necessário avaliar a qualidade da aproximação, além do tempo necessário para a calcular. O método será semelhante: utilizar vários conjuntos aleatórios, com várias dimensões, e calcular para cada amostra a diferença entre a solução exata e a solução aproximada.
+Tal como discutido anteriormente, no caso dos algoritmos aproximados será também necessário avaliar a qualidade da aproximação, além do tempo necessário para a calcular. O método será semelhante: utilizar vários conjuntos de dados aleatórios, com várias dimensões, e calcular para cada amostra a diferença entre a solução exata e a solução aproximada.
 
 %%%%%%%%%%%%%%%%
 % DIFICULDADES %
@@ -310,11 +368,11 @@ Esta fase inicial de pesquisa e formulação de soluções permitiu aprofundar o
 
 Ficamos também com maior sensibilidade face à escolha dos tipos de dados a usar, nomeadamente no que diz respeito às restrições consideradas e até que ponto ajudam a encontrar algoritmos mais eficientes.
 
-Será certamente gratificante passar tudo isto à prática numa próxima fase do trabalho, embora a quantidade de algoritmos diferentes que estamos a considerar faça esta tarefa parecer hercúlea. Eventualmente será necessário optar por apenas alguns destes caminhos, consoante a dificuldade de implementação e a promessa de eficiência de cada um.
+Será certamente gratificante passar tudo isto à prática numa próxima fase do trabalho, embora a quantidade de algoritmos diferentes que estamos a considerar faça esta tarefa parecer hercúlea. Eventualmente será necessário optar por apenas alguns destes caminhos, consoante a dificuldade de implementação e a promessa de eficiência de cada um. n
 
-%%%%%%%%%%%%%%
-%BIBLIOGRAPHY%
-%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%
+% BIBLIOGRAPHY %
+%%%%%%%%%%%%%%%%
 \bibliographystyle{IEEEtran}
 \bibliography{rabb,refs}
 
