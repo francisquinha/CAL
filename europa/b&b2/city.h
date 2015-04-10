@@ -8,16 +8,18 @@
 #ifndef CITY_H_
 #define CITY_H_
 
+using namespace std;
+
 class City{
 public:
-	std::string name;
-	std::string info;
+	string name;
+	string info;
 	double preference;
 	double visitTime;
 	double mostExpensiveArrivalRoute;
 
 
-	City(std::string name, std::string info, double preference, double visitTime, double mostExpensiveArrivalRoute):
+	City(string name, string info, double preference, double visitTime, double mostExpensiveArrivalRoute):
 		name(name),info(info),preference(preference),visitTime(visitTime),mostExpensiveArrivalRoute(mostExpensiveArrivalRoute)
 	{}
 
