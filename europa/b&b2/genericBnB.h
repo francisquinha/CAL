@@ -66,7 +66,7 @@ void BNBdebugger(){};
 #include <cmath>
 using namespace std;
 
-#define EPSILON 0.01f // 1/10
+#define EPSILON 0.001f // 1/1000
 
 //===================================
 /*
@@ -213,17 +213,17 @@ public:
 
 //================================================
 //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-	double findUpperBound_1(BnB_node* &node,int* lastItemInBoundIndex,double* latItemInBoundCostUsed)
+	double findUpperBound_1(BnB_node* node,int* lastItemInBoundIndex,double* latItemInBoundCostUsed)
 	{
-		int i = node->index+1;//current node (uncheked) item index
+		int i = node->index;//current node (uncheked) item index
 		double oldBound=node->bound;
 
-		while (node->checked())node=node->parent;
+		while (node->checked()) node=node->parent;
 
 		DEBUG_CODE2(if (node==NULL) cout<<"debug02ALERT:NULL!!!!\n";)
 
-		int prevLastIndex = ((BnB_node_notChecked*) &node)->lastItemInBoundIndex;
-		double prevLastCost = ((BnB_node_notChecked*) &node)->lastItemInBoundCostUsed;
+		int prevLastIndex = ((BnB_node_notChecked*) node)->lastItemInBoundIndex;
+		double prevLastCost = ((BnB_node_notChecked*) node)->lastItemInBoundCostUsed;
 
 		DEBUG_CODE2(
 		cout << "BnBdebug02A: prevLastIndex:" <<prevLastIndex <"\n";
@@ -232,36 +232,38 @@ public:
 		)
 
 		double newBound = oldBound - prevLastCost*ordered_elements[prevLastIndex].first.value/ordered_elements[prevLastIndex].first.cost;
-		DEBUG_CODE2(cout << "BnBdebug03: new bound = "<< newBound <<"\n";)
-		return 1;
+		DEBUG_CODE2(cout << "BnBdebug03: new bound init = "<< newBound <<"\n";)
+		//return 1;
 		double auxCost = maxCost-prevLastCost;
 
-		if(i+1!=prevLastIndex)//remove the next i
+		if(i!=prevLastIndex) //remove if was not removed on last index
 		{
 			newBound -= ordered_elements[i+1].first.value;
 			auxCost  -= ordered_elements[i+1].first.cost;
 		}
 
 		i=prevLastIndex;
+		if(i==prevLastIndex) i++;//se for o mesmo q o retirado do not count it
+
 		for(; i<ordered_elements.size();i++)
 		{
 			if(auxCost+ordered_elements[i].first.cost>maxCost)
 			{
-				if (std::fabs(maxCost-auxCost) < EPSILON)
+				if (std::fabs(maxCost-auxCost) < EPSILON) //consider that the limit has been reached
 				{
 					*lastItemInBoundIndex=i-1;
 					*latItemInBoundCostUsed=ordered_elements[i-1].first.cost;
 				}
-				else
+				else //"add the item partially"
 				{
-				newBound+=ordered_elements[i].first.value*(maxCost-auxCost)/ordered_elements[i].first.cost;
+					*latItemInBoundCostUsed=maxCost-auxCost;
+				newBound+=ordered_elements[i].first.value*(*latItemInBoundCostUsed)/ordered_elements[i].first.cost;
 				//auxcost=maxCost;
 				*lastItemInBoundIndex=i;
-				*latItemInBoundCostUsed=maxCost-auxCost;
 				}
 				break;
 			}
-			else
+			else //ainda tem espaço,"add normally"
 			{
 				newBound+=ordered_elements[i].first.value;
 				auxCost+=ordered_elements[i].first.cost;
@@ -273,7 +275,7 @@ public:
 				}
 			}
 		}
-
+		DEBUG_CODE2(cout << "BnBdebug03: new bound return = "<< newBound <<"\n";)
 		return newBound;
 	}
 
@@ -300,9 +302,9 @@ public:
 				}
 				else
 				{
-				upperbound+=ordered_elements[i].first.value*(maxCost-auxcost)/ordered_elements[i].first.cost;
-				lastIndexUsed=i;
 				lastIndexCostUsed=maxCost-auxcost;
+				upperbound+=ordered_elements[i].first.value*lastIndexCostUsed/ordered_elements[i].first.cost;
+				lastIndexUsed=i;
 				allfit=false;
 				}
 				break;
@@ -338,6 +340,7 @@ public:
 				cout<<"debug04:"<< ((BnB_node_notChecked*)&startNode)->lastItemInBoundCostUsed<<"\n";
 				   cout<<"debug05:"<< ((BnB_node_notChecked*)&startNode)->lastItemInBoundIndex<<"\n";
 				   cout<<"debug06:"<< startNode->bound<<"\n";
+				   cout<<"1st lic:"<< lastIndexCostUsed<<"\n";
 				   )
 
 		unsigned long i=0;//iterator p/ os items
@@ -362,12 +365,14 @@ public:
 
 				int currentIndex=node->index+1;
 				double newCost = node->cost+ordered_elements[currentIndex].first.cost;
-				if (newCost<maxCost){
+				if (newCost<=maxCost+EPSILON){
 					BnB_node* checked=new BnB_node_checked(newCost,node->value+ordered_elements[currentIndex].first.value,node->bound,currentIndex,node);
 					nodesQ.push(checked);
 				}
 
+				DEBUG_CODE2(cout<<"1st lic 2->"<<((BnB_node_notChecked*) startNode)->lastItemInBoundCostUsed <<"\n";)
 				double newUpperBound = findUpperBound_1(node,&lastIndexUsed,&lastIndexCostUsed);//calculate new upperBound
+				DEBUG_CODE2(cout<<"lic->"<<lastIndexCostUsed<<"\n";)
 				if(bestNode->value<newUpperBound)
 				{
 					BnB_node* unchecked = new BnB_node_notChecked(node->cost,node->value,newUpperBound,currentIndex,node,lastIndexUsed,lastIndexCostUsed);

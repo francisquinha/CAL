@@ -49,25 +49,29 @@ int main() {
 	nodesQ.push(b6);
 	while(nodesQ.size()>0) { cout<<nodesQ.top().bound<<"\n"; nodesQ.pop();  }
 	*/
-	/*
-	City cities3[] = {
-	City("A","bla bla bla...",2,3,5),
-	City("B","bla bla bla...",6,2,6),
-	City("C","bla bla bla...",3,1,2),
-	City("D","bla bla bla...",9,1,8),
-	City("E","bla bla bla...",1,2,7),
-	City("F","bla bla bla...",2,4,5),
-	City("G","bla bla bla...",5,3,9),
-	City("H","bla bla bla...",8,5,7),
-	City("I","bla bla bla...",7,4,3),
-	City("J","bla bla bla...",4,5,4),
-	City("L","bla bla bla...",2,1,7),
-	City("K","bla bla bla...",4,2,2)
-	};
-	vector<City> citiesV3 (cities3,&cities3[12]);
-	BnB_UP<City> bnbCity(citiesV3, 31,&City::getMaxPossibleTravelTimeSpent,&City::getPreference );
 
-	*/
+	City cities3[] = {
+	City("A","bla bla bla...",25,50,0),
+	City("B","bla bla bla...",10,50,0),
+	City("C","bla bla bla...",5,50,0),
+	City("D","bla bla bla...",25,25,0),
+	City("E","bla bla bla...",30,10,0),
+	City("F","bla bla bla...",20,20,0),
+	City("G","bla bla bla...",10,30,0),
+	City("H","bla bla bla...",70,30,0),
+	City("I","bla bla bla...",5,5,0),
+	City("J","bla bla bla...",10,5,0),
+	City("L","bla bla bla...",60,30,0),
+	City("K","bla bla bla...",10,50,0)
+	};//p/ 65 max = E,F,H,J
+	vector<City> citiesV3 (cities3,&cities3[12]);
+	BnB_UP<City> bnbCity2(citiesV3, 65,&City::getMaxPossibleTravelTimeSpent,&City::getPreference );
+	vector<City*> sol2 = bnbCity2.findSolution();
+	cout<<"debug2:\n";
+	cout<<bnbCity2.minItemCost<<"\n";
+	for(int i = 0 ; i<sol2.size();i++) cout<<sol2[i]->name<<"\n";
+	cout<<"debug2 ended \n";
+
 
 	cout << "END" << endl; // prints !!!Hello World!!!
 	return 0;
