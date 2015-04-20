@@ -44,7 +44,7 @@ void BNBdebugger(){};
 #define DEBUG_CODE1(A){}
 #endif
 //findUpperBound checks
-#define DEBUG2
+//#define DEBUG2
 #ifdef DEBUG2
 #define DEBUG_CODE2(A) A
 #else
@@ -57,6 +57,14 @@ void BNBdebugger(){};
 #else
 #define DEBUG_CODE3(A){}
 #endif
+//check node branching
+#define DEBUG4
+#ifdef DEBUG4
+#define DEBUG_CODE4(A) A
+#else
+#define DEBUG_CODE4(A){}
+#endif
+//#defin
 //===============================================================================================================
 // GENERIC BRANCH&BOUND IMPLEMENTATION
 //===============================================================================================================
@@ -215,13 +223,14 @@ public:
 //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 	double findUpperBound_1(BnB_node* node,int* lastItemInBoundIndex,double* latItemInBoundCostUsed)
 	{
-		int i = node->index;//current node (uncheked) item index
+		int i = node->index+1;//current node (uncheked) item index
 		double oldBound=node->bound;
 
 		while (node->checked()) node=node->parent;
 
 		DEBUG_CODE2(if (node==NULL) cout<<"debug02ALERT:NULL!!!!\n";)
 
+		//last element used to calcuate bound index and cost used
 		int prevLastIndex = ((BnB_node_notChecked*) node)->lastItemInBoundIndex;
 		double prevLastCost = ((BnB_node_notChecked*) node)->lastItemInBoundCostUsed;
 
@@ -238,12 +247,11 @@ public:
 
 		if(i!=prevLastIndex) //remove if was not removed on last index
 		{
-			newBound -= ordered_elements[i+1].first.value;
-			auxCost  -= ordered_elements[i+1].first.cost;
+			newBound -= ordered_elements[i].first.value;
+			auxCost  -= ordered_elements[i].first.cost;
+			i=prevLastIndex;
 		}
-
-		i=prevLastIndex;
-		if(i==prevLastIndex) i++;//se for o mesmo q o retirado do not count it
+		else i++;//(i==prevLastIndex)  se for o mesmo q o retirado do not count it
 
 		for(; i<ordered_elements.size();i++)
 		{
@@ -332,13 +340,13 @@ public:
 		}
 		//===============================
 		//COMPUTE STUFF TO FIND BEST SOLUTION
-		BnB_node* startNode = new BnB_node_notChecked(0,0,upperbound,0,NULL,lastIndexUsed,lastIndexCostUsed);
+		BnB_node* startNode = new BnB_node_notChecked(0,0,upperbound,-1,NULL,lastIndexUsed,lastIndexCostUsed);
 		nodesQ.push( startNode );
 		bestNode=nodesQ.top();
 
 		DEBUG_CODE1(
-				cout<<"debug04:"<< ((BnB_node_notChecked*)&startNode)->lastItemInBoundCostUsed<<"\n";
-				   cout<<"debug05:"<< ((BnB_node_notChecked*)&startNode)->lastItemInBoundIndex<<"\n";
+				cout<<"debug04:"<< ((BnB_node_notChecked*)startNode)->lastItemInBoundCostUsed<<"\n";
+				   cout<<"debug05:"<< ((BnB_node_notChecked*)startNode)->lastItemInBoundIndex<<"\n";
 				   cout<<"debug06:"<< startNode->bound<<"\n";
 				   cout<<"1st lic:"<< lastIndexCostUsed<<"\n";
 				   )
@@ -359,24 +367,33 @@ public:
 			 * if item is checked keeps the same bound because items are ordered by ratio (i think)
 			 * */
 			//if the minCost always breaks the max there is no need to continue further the node
-			if(minItemCost+node->cost<maxCost && node->index<ordered_elements.size()-1)
+			if(minItemCost+node->cost<maxCost && node->index< (int) ordered_elements.size()-1)
 			{
 				DEBUG_CODE3(cout<<"BnB_debug01__minCost+nodeCost:" << (double) (minItemCost+node->cost) <<"__maxCost:"<< maxCost <<"\n";)
 
 				int currentIndex=node->index+1;
 				double newCost = node->cost+ordered_elements[currentIndex].first.cost;
-				if (newCost<=maxCost+EPSILON){
+				if (newCost<=maxCost+EPSILON && (node->bound>bestNode->value||node->index==-1)){
 					BnB_node* checked=new BnB_node_checked(newCost,node->value+ordered_elements[currentIndex].first.value,node->bound,currentIndex,node);
 					nodesQ.push(checked);
+					DEBUG_CODE4(cout<<"(checked," << currentIndex <<")<-("
+											<< (node!=NULL?node->index:-1)	<< "," << (node->checked()?"y":"n") << ")"
+											<< "___vc_"<< checked->value <<"_" << checked->cost << "\n";)
 				}
 
 				DEBUG_CODE2(cout<<"1st lic 2->"<<((BnB_node_notChecked*) startNode)->lastItemInBoundCostUsed <<"\n";)
+
 				double newUpperBound = findUpperBound_1(node,&lastIndexUsed,&lastIndexCostUsed);//calculate new upperBound
+
 				DEBUG_CODE2(cout<<"lic->"<<lastIndexCostUsed<<"\n";)
+
 				if(bestNode->value<newUpperBound)
 				{
 					BnB_node* unchecked = new BnB_node_notChecked(node->cost,node->value,newUpperBound,currentIndex,node,lastIndexUsed,lastIndexCostUsed);
 					nodesQ.push(unchecked);
+					DEBUG_CODE4(cout<<"(unchecked," << currentIndex <<")<-("
+							<< (node!=NULL?node->index:-1)	<< "," << (node->checked()?"y":"n") << ")"
+							<< "___vc_"<< unchecked->value << "_"<<unchecked->cost <<"\n";)
 				}
 			}
 			i++;
@@ -385,7 +402,7 @@ public:
 
 		//===============================
 		//get answer set from the bestFound
-		while(bestNode!=NULL)
+		while(bestNode->index!=-1)
 		{
 			if(bestNode->checked()) solution.push_back(ordered_elements[bestNode->index].second);
 			bestNode=bestNode->parent;
