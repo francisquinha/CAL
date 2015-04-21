@@ -1,0 +1,108 @@
+\hypertarget{class_bn_b___u_p}{}\section{Bn\+B\+\_\+\+U\+P$<$ T $>$ Class Template Reference}
+\label{class_bn_b___u_p}\index{Bn\+B\+\_\+\+U\+P$<$ T $>$@{Bn\+B\+\_\+\+U\+P$<$ T $>$}}
+
+
+Branch n Bound implementation, done with max bounds (usually it\textquotesingle{}s done in reverse)  
+
+
+
+
+{\ttfamily \#include $<$generic\+Bn\+B.\+h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_bn_b___u_p_a1906f95c4d3eb96568d6f314e2878808}{}{\bfseries Bn\+B\+\_\+\+U\+P} (vector$<$ T $>$ \&elements, double \hyperlink{class_bn_b___u_p_a0749a907c11c880f825fd0644a8a2bfd}{max\+Cost}, double(T\+::$\ast$get\+Cost)(void), double(T\+::$\ast$get\+Value)(void))\label{class_bn_b___u_p_a1906f95c4d3eb96568d6f314e2878808}
+
+\item 
+\hypertarget{class_bn_b___u_p_ae26455243268d49878421014d4bc1645}{}{\bfseries Bn\+B\+\_\+\+U\+P} (vector$<$ T $\ast$ $>$ \&elements, double \hyperlink{class_bn_b___u_p_a0749a907c11c880f825fd0644a8a2bfd}{max\+Cost}, void(T\+::$\ast$get\+Cost)(void), void(T\+::$\ast$get\+Value)(void))\label{class_bn_b___u_p_ae26455243268d49878421014d4bc1645}
+
+\item 
+double \hyperlink{class_bn_b___u_p_a52efbfa978fd9b6c43e50da878862d93}{find\+Upper\+Bound\+\_\+1} (\hyperlink{class_bn_b__node}{Bn\+B\+\_\+node} $\ast$node, int $\ast$last\+Item\+In\+Bound\+Index, double $\ast$lat\+Item\+In\+Bound\+Cost\+Used)
+\begin{DoxyCompactList}\small\item\em Find new upper bound. Called only when uncheking. \end{DoxyCompactList}\item 
+vector$<$ T $\ast$ $>$ \hyperlink{class_bn_b___u_p_a18f7b192ac90dcf610c850f7ab10e365}{find\+Solution} ()
+\begin{DoxyCompactList}\small\item\em What do you expect? Finds a solution if there is one. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_bn_b___u_p_a17570dfb1185be4ab8d1e651b7064ea5}{}static bool {\bfseries compare\+Elems} (typename \hyperlink{struct_bn_b__pair}{Bn\+B\+\_\+pair}$<$ T $>$\+::type\+T a, typename \hyperlink{struct_bn_b__pair}{Bn\+B\+\_\+pair}$<$ T $>$\+::type\+T b)\label{class_bn_b___u_p_a17570dfb1185be4ab8d1e651b7064ea5}
+
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+vector$<$ typename \hyperlink{struct_bn_b__pair}{Bn\+B\+\_\+pair}$<$ T $>$\+::type\+T $>$ \hyperlink{class_bn_b___u_p_a8308ba99698255a402675713b1ac6cb0}{ordered\+\_\+elements}
+\item 
+\hypertarget{class_bn_b___u_p_a0749a907c11c880f825fd0644a8a2bfd}{}double \hyperlink{class_bn_b___u_p_a0749a907c11c880f825fd0644a8a2bfd}{max\+Cost}\label{class_bn_b___u_p_a0749a907c11c880f825fd0644a8a2bfd}
+
+\begin{DoxyCompactList}\small\item\em the limit \end{DoxyCompactList}\item 
+\hypertarget{class_bn_b___u_p_ae5fdb19ab49f1e0dc93700a42c5884f9}{}double \hyperlink{class_bn_b___u_p_ae5fdb19ab49f1e0dc93700a42c5884f9}{min\+Item\+Cost}\label{class_bn_b___u_p_ae5fdb19ab49f1e0dc93700a42c5884f9}
+
+\begin{DoxyCompactList}\small\item\em the min cost found in the items list \end{DoxyCompactList}\item 
+\hypertarget{class_bn_b___u_p_a05b18af61820e672cff387958b393949}{}const unsigned long \hyperlink{class_bn_b___u_p_a05b18af61820e672cff387958b393949}{max\+Iterations\+Allowed} =10000\label{class_bn_b___u_p_a05b18af61820e672cff387958b393949}
+
+\begin{DoxyCompactList}\small\item\em control variable. Limits the steps used by the algorithm to avoid really heavy computations \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_bn_b___u_p_a2128624eeb7db03035cdae59ad87ec8b}{}void {\bfseries check\+\_\+order} (\hyperlink{class_bn_b___u_p}{Bn\+B\+\_\+\+U\+P}$<$ T $>$ $\ast$bnb)\label{class_bn_b___u_p_a2128624eeb7db03035cdae59ad87ec8b}
+
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\subsubsection*{template$<$class T$>$class Bn\+B\+\_\+\+U\+P$<$ T $>$}
+
+Branch n Bound implementation, done with max bounds (usually it\textquotesingle{}s done in reverse) 
+
+\subsection{Member Function Documentation}
+\hypertarget{class_bn_b___u_p_a18f7b192ac90dcf610c850f7ab10e365}{}\index{Bn\+B\+\_\+\+U\+P@{Bn\+B\+\_\+\+U\+P}!find\+Solution@{find\+Solution}}
+\index{find\+Solution@{find\+Solution}!Bn\+B\+\_\+\+U\+P@{Bn\+B\+\_\+\+U\+P}}
+\subsubsection[{find\+Solution}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T$>$ vector$<$T$\ast$$>$ {\bf Bn\+B\+\_\+\+U\+P}$<$ T $>$\+::find\+Solution (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_bn_b___u_p_a18f7b192ac90dcf610c850f7ab10e365}
+
+
+What do you expect? Finds a solution if there is one. 
+
+\begin{DoxyReturn}{Returns}
+list of pointers to the elements of the found solution. If no solution is found, will be returned an empty vector. 
+\end{DoxyReturn}
+\hypertarget{class_bn_b___u_p_a52efbfa978fd9b6c43e50da878862d93}{}\index{Bn\+B\+\_\+\+U\+P@{Bn\+B\+\_\+\+U\+P}!find\+Upper\+Bound\+\_\+1@{find\+Upper\+Bound\+\_\+1}}
+\index{find\+Upper\+Bound\+\_\+1@{find\+Upper\+Bound\+\_\+1}!Bn\+B\+\_\+\+U\+P@{Bn\+B\+\_\+\+U\+P}}
+\subsubsection[{find\+Upper\+Bound\+\_\+1}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T$>$ double {\bf Bn\+B\+\_\+\+U\+P}$<$ T $>$\+::find\+Upper\+Bound\+\_\+1 (
+\begin{DoxyParamCaption}
+\item[{{\bf Bn\+B\+\_\+node} $\ast$}]{node, }
+\item[{int $\ast$}]{last\+Item\+In\+Bound\+Index, }
+\item[{double $\ast$}]{lat\+Item\+In\+Bound\+Cost\+Used}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_bn_b___u_p_a52efbfa978fd9b6c43e50da878862d93}
+
+
+Find new upper bound. Called only when uncheking. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em node} & node previous to the onde being unchecked \\
+\hline
+{\em last\+Item\+In\+Bound\+Index} & last item\textquotesingle{}s, used in bound calculation, index, to be given to the new node afterwards \\
+\hline
+{\em lat\+Item\+In\+Bound\+Cost\+Used} & last item\textquotesingle{}s, used in bound calculation, used cost found in calculation, to be given to the new node afterwards \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+new upperbound calculated 
+\end{DoxyReturn}
+
+
+\subsection{Member Data Documentation}
+\hypertarget{class_bn_b___u_p_a8308ba99698255a402675713b1ac6cb0}{}\index{Bn\+B\+\_\+\+U\+P@{Bn\+B\+\_\+\+U\+P}!ordered\+\_\+elements@{ordered\+\_\+elements}}
+\index{ordered\+\_\+elements@{ordered\+\_\+elements}!Bn\+B\+\_\+\+U\+P@{Bn\+B\+\_\+\+U\+P}}
+\subsubsection[{ordered\+\_\+elements}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T$>$ vector$<$ typename {\bf Bn\+B\+\_\+pair}$<$T$>$\+::type\+T $>$ {\bf Bn\+B\+\_\+\+U\+P}$<$ T $>$\+::ordered\+\_\+elements}\label{class_bn_b___u_p_a8308ba99698255a402675713b1ac6cb0}
+saves info for each element (cost,value,value/cost ratio) and a pointer for the respective element ordered by higher value/cost ratio 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+generic\+Bn\+B.\+h\end{DoxyCompactItemize}

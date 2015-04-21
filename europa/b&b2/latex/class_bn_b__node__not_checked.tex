@@ -1,0 +1,63 @@
+\hypertarget{class_bn_b__node__not_checked}{}\section{Bn\+B\+\_\+node\+\_\+not\+Checked Class Reference}
+\label{class_bn_b__node__not_checked}\index{Bn\+B\+\_\+node\+\_\+not\+Checked@{Bn\+B\+\_\+node\+\_\+not\+Checked}}
+
+
+Subclass that indicates that the index of the node as been checked Saves values related to previous calculated bound to speed up the calculation of a new bound.  
+
+
+
+
+{\ttfamily \#include $<$generic\+Bn\+B.\+h$>$}
+
+Inheritance diagram for Bn\+B\+\_\+node\+\_\+not\+Checked\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_bn_b__node__not_checked}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+bool \hyperlink{class_bn_b__node__not_checked_a470c31c7d9f0cce678a2d9074a481407}{checked} ()
+\begin{DoxyCompactList}\small\item\em Checks if a node is checked or unchecked. \end{DoxyCompactList}\item 
+\hypertarget{class_bn_b__node__not_checked_a9bd7b93617b59a61e24e663478552b98}{}{\bfseries Bn\+B\+\_\+node\+\_\+not\+Checked} (double \hyperlink{class_bn_b__node_a6a44afc83f3d0c1601804b61cf03fbf1}{cost}, double \hyperlink{class_bn_b__node_a726b74bbceb33532ee8678e0722d62aa}{value}, double \hyperlink{class_bn_b__node_a275b8c6f02b922e74a7f82d8fb3b5cf9}{bound}, int \hyperlink{class_bn_b__node_a531520424d5cc944a542a984cc14f32f}{index}, \hyperlink{class_bn_b__node}{Bn\+B\+\_\+node} $\ast$\hyperlink{class_bn_b__node_ac70c63a5ed68adefb9bc9540ac8e68dd}{parent}, int liib\+Index, double liib\+Cost\+Used)\label{class_bn_b__node__not_checked_a9bd7b93617b59a61e24e663478552b98}
+
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_bn_b__node__not_checked_ad552ee24485d0f9f2f2d2481a6fdbfe4}{}int \hyperlink{class_bn_b__node__not_checked_ad552ee24485d0f9f2f2d2481a6fdbfe4}{last\+Item\+In\+Bound\+Index}\label{class_bn_b__node__not_checked_ad552ee24485d0f9f2f2d2481a6fdbfe4}
+
+\begin{DoxyCompactList}\small\item\em index of the last item used to calculate the previous bound \end{DoxyCompactList}\item 
+\hypertarget{class_bn_b__node__not_checked_aa3dc272166a29543020ffc37fe82f9d4}{}double \hyperlink{class_bn_b__node__not_checked_aa3dc272166a29543020ffc37fe82f9d4}{last\+Item\+In\+Bound\+Cost\+Used}\label{class_bn_b__node__not_checked_aa3dc272166a29543020ffc37fe82f9d4}
+
+\begin{DoxyCompactList}\small\item\em the part of the cost used by the element at index $<$index$>$ in previous bound calculation (might be less than the actual element cost) \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Subclass that indicates that the index of the node as been checked Saves values related to previous calculated bound to speed up the calculation of a new bound. 
+
+\subsection{Member Function Documentation}
+\hypertarget{class_bn_b__node__not_checked_a470c31c7d9f0cce678a2d9074a481407}{}\index{Bn\+B\+\_\+node\+\_\+not\+Checked@{Bn\+B\+\_\+node\+\_\+not\+Checked}!checked@{checked}}
+\index{checked@{checked}!Bn\+B\+\_\+node\+\_\+not\+Checked@{Bn\+B\+\_\+node\+\_\+not\+Checked}}
+\subsubsection[{checked}]{\setlength{\rightskip}{0pt plus 5cm}bool Bn\+B\+\_\+node\+\_\+not\+Checked\+::checked (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}\label{class_bn_b__node__not_checked_a470c31c7d9f0cce678a2d9074a481407}
+
+
+Checks if a node is checked or unchecked. 
+
+\begin{DoxyReturn}{Returns}
+true if checked, false otherwise 
+\end{DoxyReturn}
+
+
+Implements \hyperlink{class_bn_b__node_ae59aee037f8c7c88b9b63948e7b5d8cb}{Bn\+B\+\_\+node}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+generic\+Bn\+B.\+h\end{DoxyCompactItemize}

@@ -37,7 +37,7 @@ void BNBdebugger(){};
 #endif /*DEBUG_BNB*/
 //SECTION DEBBUGS
 //outside solution checks
-#define DEBUG1
+//#define DEBUG1
 #ifdef DEBUG1
 #define DEBUG_CODE1(A) A
 #else
@@ -58,7 +58,7 @@ void BNBdebugger(){};
 #define DEBUG_CODE3(A){}
 #endif
 //check node branching
-#define DEBUG4
+//#define DEBUG4
 #ifdef DEBUG4
 #define DEBUG_CODE4(A) A
 #else
@@ -77,48 +77,42 @@ using namespace std;
 #define EPSILON 0.001f // 1/1000
 
 //===================================
-/*
- * saves an element data needed to use BnB solution
+/**
+ * @brief Saves an element's data needed to compute the BnB solution
  * */
 struct BnB_elementDATA
 {
-	double cost;
-	double value;
-	double value_cost_ratio;
+	double cost;///<element evaluated cost
+	double value;///<element evaluated value
+	double value_cost_ratio;///<ratio = element value / element cost
 };
 //===================================
-/*
- * creates alias for a type that
+/**
+ * @brief creates alias for a type that
  * saves the element data and a pointer to the element
- * inside the BnB class
+ * inside the BnB class (not really a needed struct, only used to "simplify" notation)
  * */
 template<typename T>
 struct BnB_pair {
 	typedef pair<BnB_elementDATA,T*> typeT;
 };
 //===================================
+/**@brief Stores Branch and Bound node information
+ * */
 class BnB_node{
 public:
-	double cost;
-	double value;
-	double bound;
+	double cost;	///<sum of all the checked items (indexes in parentNodes) cost plus cost of element at index <index> if the node is checked
+	double value;	///<same as cost but done with the values of the elements
+	double bound;	///<the max/min bound calculated for the current node (the current implementation uses max bounds)
 
 	int index;///<index of the un/checked item.
 	BnB_node* parent;///<the parent node. should be NULL if is first node.
-	/*
-	 * thought of some other way but not sure...
-	 * hmmm...could be faster no???
-	unsigned int itemsChecked;
-	 // each bit represents an item (bit 1 -> 1st item, and so on...)
-	 // 1 = used/checked | 0 = not used/checked
-	//could eleminate initial nodes
-	 * should use long[] so if there are plenty of items it can still be processed
-	unsigned long selections;
-	011100110.00000(0...) -> items checked = 9
-	 */
 
 	BnB_node(double cost,double value, double bound, int index,BnB_node* parent):cost(cost),value(value),bound(bound),index(index),parent(parent){}
 
+	/**@brief Checks if a node is checked or unchecked
+	 * @return true if checked, false otherwise
+	 * */
 	virtual bool checked() = 0;
 
 	/*friend bool operator<(const BnB_node &a,const BnB_node &b)
@@ -126,22 +120,31 @@ public:
 		return a.bound<b.bound;
 	}*/
 };
+
+/**@brief Subclass that indicates that the index of the node as been unchecked
+ * */
 class BnB_node_checked:public BnB_node
 {
-	public:
+public:
 	bool checked(){return true;}
 	BnB_node_checked(double cost,double value, double bound, int index,BnB_node* parent):BnB_node(cost,value,bound,index,parent){}
 };
+
+/**@brief Subclass that indicates that the index of the node as been checked
+ * Saves values related to previous calculated bound to speed up the calculation of a new bound
+ * */
 class BnB_node_notChecked:public BnB_node
 {
-	public:
-	int lastItemInBoundIndex;
-	double lastItemInBoundCostUsed;
+public:
+	int lastItemInBoundIndex;		///<index of the last item used to calculate the previous bound
+	double lastItemInBoundCostUsed; ///<the part of the cost used by the element at index <index> in previous bound calculation (might be less than the actual element cost)
 	bool checked(){return false;}
 	BnB_node_notChecked(double cost,double value, double bound, int index,BnB_node* parent,int liibIndex,double liibCostUsed):
 		BnB_node(cost,value,bound,index,parent),lastItemInBoundIndex(liibIndex),lastItemInBoundCostUsed(liibCostUsed){}
 };
 //- - - - - - - - - - - - - - - - - -
+/**@brief Defines comparison for node pointers, to be used in queue ordering
+ * */
 struct compare_BnBnodePointers
 {
 	bool operator()(const BnB_node *a,const BnB_node *b) const
@@ -152,16 +155,16 @@ struct compare_BnBnodePointers
 	}
 };
 //===================================
-//upperbound bnb
+/**@brief Branch n Bound implementation, done with max bounds (usually it's done in reverse)
+ * */
 template <class T>
 class BnB_UP{
 public:
-	/*
+	/**
 	 * saves info for each element (cost,value,value/cost ratio)
 	 * and a pointer for the respective element
 	 * ordered by higher value/cost ratio
 	 * */
-	//typename BnB_pair<T>::typeT ordered_elements;
 	vector< typename BnB_pair<T>::typeT > ordered_elements;
 
 	double maxCost;///<the limit
@@ -219,8 +222,14 @@ public:
 		BNBdebugger("VERIFY ORDER",(void(*)(void*)) &check_order<T>,this);
 	}
 
-//================================================
-//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+	//================================================
+	/**
+	 * @brief Find new upper bound. Called only when uncheking.
+	 * @param node node previous to the onde being unchecked
+	 * @param lastItemInBoundIndex last item's, used in bound calculation, index, to be given to the new node afterwards
+	 * @param latItemInBoundCostUsed last item's, used in bound calculation, used cost found in calculation, to be given to the new node afterwards
+	 * @return new upperbound calculated
+	 * */
 	double findUpperBound_1(BnB_node* node,int* lastItemInBoundIndex,double* latItemInBoundCostUsed)
 	{
 		int i = node->index+1;//current node (uncheked) item index
@@ -235,7 +244,7 @@ public:
 		double prevLastCost = ((BnB_node_notChecked*) node)->lastItemInBoundCostUsed;
 
 		DEBUG_CODE2(
-		cout << "BnBdebug02A: prevLastIndex:" <<prevLastIndex <"\n";
+				cout << "BnBdebug02A: prevLastIndex:" <<prevLastIndex <"\n";
 		cout<< "__lastIndexCost:"<< ordered_elements[prevLastIndex].first.cost <<"\n";
 		cout << "BnBdebug02B: oldBound:" <<oldBound<< "__value:"<< ordered_elements[prevLastIndex].first.value <<"__prevLastCost:"<<prevLastCost <<"\n";
 		)
@@ -265,9 +274,9 @@ public:
 				else //"add the item partially"
 				{
 					*latItemInBoundCostUsed=maxCost-auxCost;
-				newBound+=ordered_elements[i].first.value*(*latItemInBoundCostUsed)/ordered_elements[i].first.cost;
-				//auxcost=maxCost;
-				*lastItemInBoundIndex=i;
+					newBound+=ordered_elements[i].first.value*(*latItemInBoundCostUsed)/ordered_elements[i].first.cost;
+					//auxcost=maxCost;
+					*lastItemInBoundIndex=i;
 				}
 				break;
 			}
@@ -287,8 +296,11 @@ public:
 		return newBound;
 	}
 
+	/**@brief What do you expect? Finds a solution if there is one.
+	 * @return list of pointers to the elements of the found solution. If no solution is found, will be returned an empty vector.
+	 * */
 	vector<T*> findSolution()
-		{
+						{
 		std::priority_queue<BnB_node, std::vector<BnB_node*>, compare_BnBnodePointers> nodesQ;
 		vector<T*> solution;
 		BnB_node* bestNode;//current best solution found (higher value)
@@ -310,10 +322,10 @@ public:
 				}
 				else
 				{
-				lastIndexCostUsed=maxCost-auxcost;
-				upperbound+=ordered_elements[i].first.value*lastIndexCostUsed/ordered_elements[i].first.cost;
-				lastIndexUsed=i;
-				allfit=false;
+					lastIndexCostUsed=maxCost-auxcost;
+					upperbound+=ordered_elements[i].first.value*lastIndexCostUsed/ordered_elements[i].first.cost;
+					lastIndexUsed=i;
+					allfit=false;
 				}
 				break;
 			}
@@ -346,10 +358,10 @@ public:
 
 		DEBUG_CODE1(
 				cout<<"debug04:"<< ((BnB_node_notChecked*)startNode)->lastItemInBoundCostUsed<<"\n";
-				   cout<<"debug05:"<< ((BnB_node_notChecked*)startNode)->lastItemInBoundIndex<<"\n";
-				   cout<<"debug06:"<< startNode->bound<<"\n";
-				   cout<<"1st lic:"<< lastIndexCostUsed<<"\n";
-				   )
+		cout<<"debug05:"<< ((BnB_node_notChecked*)startNode)->lastItemInBoundIndex<<"\n";
+		cout<<"debug06:"<< startNode->bound<<"\n";
+		cout<<"1st lic:"<< lastIndexCostUsed<<"\n";
+		)
 
 		unsigned long i=0;//iterator p/ os items
 		while(!nodesQ.empty())
@@ -357,7 +369,7 @@ public:
 			BnB_node* node = nodesQ.top();
 
 			DEBUG_CODE3(
-			cout<<"debug06:"<< ((BnB_node_notChecked*)&node)->lastItemInBoundIndex<<"\n";
+					cout<<"debug06:"<< ((BnB_node_notChecked*)&node)->lastItemInBoundIndex<<"\n";
 			)
 
 			if (node->value>bestNode->value) bestNode=node;
@@ -366,19 +378,21 @@ public:
 			 * if item is not checked then bound is reduced
 			 * if item is checked keeps the same bound because items are ordered by ratio (i think)
 			 * */
-			//if the minCost always breaks the max there is no need to continue further the node
-			if(minItemCost+node->cost<maxCost && node->index< (int) ordered_elements.size()-1)
+
+			if(minItemCost+node->cost<maxCost //if the minCost always breaks the max there is no need to continue further the node
+					&&(node->bound>bestNode->value||node->index==-1)//if bound leq than best value found so far no need to continue futher either
+					&& node->index< (int) ordered_elements.size()-1)//no more elements un/check
 			{
 				DEBUG_CODE3(cout<<"BnB_debug01__minCost+nodeCost:" << (double) (minItemCost+node->cost) <<"__maxCost:"<< maxCost <<"\n";)
 
-				int currentIndex=node->index+1;
+								int currentIndex=node->index+1;
 				double newCost = node->cost+ordered_elements[currentIndex].first.cost;
-				if (newCost<=maxCost+EPSILON && (node->bound>bestNode->value||node->index==-1)){
+				if (newCost<=maxCost+EPSILON){
 					BnB_node* checked=new BnB_node_checked(newCost,node->value+ordered_elements[currentIndex].first.value,node->bound,currentIndex,node);
 					nodesQ.push(checked);
 					DEBUG_CODE4(cout<<"(checked," << currentIndex <<")<-("
-											<< (node!=NULL?node->index:-1)	<< "," << (node->checked()?"y":"n") << ")"
-											<< "___vc_"<< checked->value <<"_" << checked->cost << "\n";)
+							<< (node!=NULL?node->index:-1)	<< "," << (node->checked()?"y":"n") << ")"
+							<< "___vc_"<< checked->value <<"_" << checked->cost << "\n";)
 				}
 
 				DEBUG_CODE2(cout<<"1st lic 2->"<<((BnB_node_notChecked*) startNode)->lastItemInBoundCostUsed <<"\n";)
@@ -409,7 +423,7 @@ public:
 		}
 
 		return solution;
-		}
+						}
 
 };
 
