@@ -1,0 +1,108 @@
+\hypertarget{class_brute_force}{}\section{Brute\+Force$<$ T, R $>$ Class Template Reference}
+\label{class_brute_force}\index{Brute\+Force$<$ T, R $>$@{Brute\+Force$<$ T, R $>$}}
+
+
+Branch n Bound implementation, done with max bounds (usually it\textquotesingle{}s done in reverse)  
+
+
+
+
+{\ttfamily \#include $<$brute\+Force.\+h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+double \hyperlink{class_brute_force_adb9075a2004631bb5c9b84be4d9db703}{get\+Edge\+Cost} (int vert\+Index1, int vert\+Index2)
+\begin{DoxyCompactList}\small\item\em gets the cost of the edge that connects elements at given indexes \end{DoxyCompactList}\item 
+\hypertarget{class_brute_force_aea1cc0269b2721549509a568d4c10673}{}{\bfseries Brute\+Force} (double \hyperlink{class_brute_force_ae66347aacfd3475ef265f17b0df1df4d}{max\+Cost}, vector$<$ T $>$ \&\hyperlink{class_brute_force_a0396c2f7b943c2894ce9fe8c11737030}{vertices}, int \hyperlink{class_brute_force_a11c645961c0bf974d5da32dfbc0c07e0}{start\+Index}, R $\ast$\hyperlink{class_brute_force_a183a96de9d3c8541e387bea53cffa8ed}{edges}, double(T\+::$\ast$get\+Value)(void), double(T\+::$\ast$get\+Cost)(void), double($\ast$get\+Edge\+Value)(T $\ast$, T $\ast$, int, int, R $\ast$))\label{class_brute_force_aea1cc0269b2721549509a568d4c10673}
+
+\item 
+vector$<$ T $\ast$ $>$ \hyperlink{class_brute_force_a9403e140036ec12e8ab3380ce78b5dd6}{solve} (bool optime)
+\begin{DoxyCompactList}\small\item\em normal brute force approach will discard some nodes when it\textquotesingle{}s possible to confirm they will not give better results. \end{DoxyCompactList}\item 
+vector$<$ T $\ast$ $>$ \hyperlink{class_brute_force_a070b976f2956db17cfff5ff534decd8e}{greedy\+Solve} ()
+\item 
+\hypertarget{class_brute_force_ac6f8a22139f24e8869d7dcf153522b23}{}void \hyperlink{class_brute_force_ac6f8a22139f24e8869d7dcf153522b23}{free\+Heap} ()\label{class_brute_force_ac6f8a22139f24e8869d7dcf153522b23}
+
+\begin{DoxyCompactList}\small\item\em clear heap used to find solution. do it only after interpreting the solution \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+vector$<$ typename \hyperlink{struct_b_f__pair}{B\+F\+\_\+pair}$<$ T $>$\+::type\+T $>$ \hyperlink{class_brute_force_a0396c2f7b943c2894ce9fe8c11737030}{vertices}
+\item 
+std\+::vector$<$ std\+::vector$<$ double $>$ $>$ \hyperlink{class_brute_force_a183a96de9d3c8541e387bea53cffa8ed}{edges}
+\item 
+\hypertarget{class_brute_force_ae66347aacfd3475ef265f17b0df1df4d}{}double \hyperlink{class_brute_force_ae66347aacfd3475ef265f17b0df1df4d}{max\+Cost}\label{class_brute_force_ae66347aacfd3475ef265f17b0df1df4d}
+
+\begin{DoxyCompactList}\small\item\em problem limit, max cost allowed \end{DoxyCompactList}\item 
+\hypertarget{class_brute_force_a596f112b7f9a9a0fee829003fa8666ba}{}double \hyperlink{class_brute_force_a596f112b7f9a9a0fee829003fa8666ba}{Min\+Cost}\label{class_brute_force_a596f112b7f9a9a0fee829003fa8666ba}
+
+\begin{DoxyCompactList}\small\item\em min vertex + min edge, used to discard certain combinations preemptively \end{DoxyCompactList}\item 
+\hypertarget{class_brute_force_a8f6988c4fdf200f57192024f7016d04d}{}double \hyperlink{class_brute_force_a8f6988c4fdf200f57192024f7016d04d}{max\+Value}\label{class_brute_force_a8f6988c4fdf200f57192024f7016d04d}
+
+\begin{DoxyCompactList}\small\item\em sum of all the values \end{DoxyCompactList}\item 
+\hypertarget{class_brute_force_a11c645961c0bf974d5da32dfbc0c07e0}{}int \hyperlink{class_brute_force_a11c645961c0bf974d5da32dfbc0c07e0}{start\+Index}\label{class_brute_force_a11c645961c0bf974d5da32dfbc0c07e0}
+
+\begin{DoxyCompactList}\small\item\em index of the starting node in the original vector (given to constructor as argument) \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\subsubsection*{template$<$class T, class R$>$class Brute\+Force$<$ T, R $>$}
+
+Branch n Bound implementation, done with max bounds (usually it\textquotesingle{}s done in reverse) 
+
+\subsection{Member Function Documentation}
+\hypertarget{class_brute_force_adb9075a2004631bb5c9b84be4d9db703}{}\index{Brute\+Force@{Brute\+Force}!get\+Edge\+Cost@{get\+Edge\+Cost}}
+\index{get\+Edge\+Cost@{get\+Edge\+Cost}!Brute\+Force@{Brute\+Force}}
+\subsubsection[{get\+Edge\+Cost}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T , class R $>$ double {\bf Brute\+Force}$<$ T, R $>$\+::get\+Edge\+Cost (
+\begin{DoxyParamCaption}
+\item[{int}]{vert\+Index1, }
+\item[{int}]{vert\+Index2}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_brute_force_adb9075a2004631bb5c9b84be4d9db703}
+
+
+gets the cost of the edge that connects elements at given indexes 
+
+\begin{DoxyReturn}{Returns}
+edge cost 
+\end{DoxyReturn}
+\hypertarget{class_brute_force_a070b976f2956db17cfff5ff534decd8e}{}\index{Brute\+Force@{Brute\+Force}!greedy\+Solve@{greedy\+Solve}}
+\index{greedy\+Solve@{greedy\+Solve}!Brute\+Force@{Brute\+Force}}
+\subsubsection[{greedy\+Solve}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T , class R $>$ vector$<$T$\ast$$>$ {\bf Brute\+Force}$<$ T, R $>$\+::greedy\+Solve (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_brute_force_a070b976f2956db17cfff5ff534decd8e}
+the same as solve but runs nodes in order of less ratio between-\/$>$ (max\+Value-\/node-\/$>$value)/(max\+Vost-\/node-\/$>$cost) to try to speedup the process. Doesn\textquotesingle{}t use optime, if we are to do a heavy/complete search then having priorities is actually worse because we sould be running all (or almost all) elements anyway with \char`\"{}heavier\char`\"{} code. \hypertarget{class_brute_force_a9403e140036ec12e8ab3380ce78b5dd6}{}\index{Brute\+Force@{Brute\+Force}!solve@{solve}}
+\index{solve@{solve}!Brute\+Force@{Brute\+Force}}
+\subsubsection[{solve}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T , class R $>$ vector$<$T$\ast$$>$ {\bf Brute\+Force}$<$ T, R $>$\+::solve (
+\begin{DoxyParamCaption}
+\item[{bool}]{optime}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_brute_force_a9403e140036ec12e8ab3380ce78b5dd6}
+
+
+normal brute force approach will discard some nodes when it\textquotesingle{}s possible to confirm they will not give better results. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em optime} & in case max Value is achieved within cost limits will return immediately if \char`\"{}optime\char`\"{} is set to false otherwise will try t find a solution of equal value but with less cost \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+vector with the vertices in order of the best Solution\+Found 
+\end{DoxyReturn}
+
+
+\subsection{Member Data Documentation}
+\hypertarget{class_brute_force_a183a96de9d3c8541e387bea53cffa8ed}{}\index{Brute\+Force@{Brute\+Force}!edges@{edges}}
+\index{edges@{edges}!Brute\+Force@{Brute\+Force}}
+\subsubsection[{edges}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T , class R $>$ std\+::vector$<$std\+::vector$<$double$>$ $>$ {\bf Brute\+Force}$<$ T, R $>$\+::edges}\label{class_brute_force_a183a96de9d3c8541e387bea53cffa8ed}
+saves edges cost in a jagged array style to avoid duplicating data. indexed with 2 indexes, the outer vector must use the lesser of the indexes \hypertarget{class_brute_force_a0396c2f7b943c2894ce9fe8c11737030}{}\index{Brute\+Force@{Brute\+Force}!vertices@{vertices}}
+\index{vertices@{vertices}!Brute\+Force@{Brute\+Force}}
+\subsubsection[{vertices}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T , class R $>$ vector$<$ typename {\bf B\+F\+\_\+pair}$<$T$>$\+::type\+T $>$ {\bf Brute\+Force}$<$ T, R $>$\+::vertices}\label{class_brute_force_a0396c2f7b943c2894ce9fe8c11737030}
+saves info for each element (cost,value) and pointer to the original element (could be ordered by ratio (value/cost) but then would need to reajust edges indexes) 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+brute\+Force.\+h\end{DoxyCompactItemize}
