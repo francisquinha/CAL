@@ -9,12 +9,16 @@
 #ifndef __europa__RandomTest__
 #define __europa__RandomTest__
 
+#include <random>
+#include <iostream>
 #include <vector>
+#include <sstream>
 #include "city.h"
 #include "Greedy.h"
+#include "genericBnB.h"
+#include "bruteForce.h"
 
-
-class TestBNB {
+class TestTime {
     
     unsigned int numberCities;
     unsigned int maxDist;
@@ -22,39 +26,31 @@ class TestBNB {
     unsigned int maxTime;
     unsigned int minTime;
     unsigned int timeLimit;
-    std::vector<City> cities;
-    
-public:
-    
-    TestBNB(unsigned int numC, unsigned int maxD, unsigned int minD, unsigned int maxT, unsigned int minT);
-  
-    clock_t runTime();
-    
-};
-
-class TestGreedy {
-    
-    unsigned int numberCities;
-    unsigned int maxDist;
-    unsigned int minDist;
-    unsigned int maxTime;
-    unsigned int minTime;
-    unsigned int timeLimit;
-    std::vector<std::vector<double> > adjacency;
-    std::vector<double> preference;
-    std::vector<unsigned int> tsp;
-    std::vector<unsigned int> vrp;
+    vector<vector<double> > adjacency;
+    vector<double> preference;
+    vector<unsigned int> tsp;
+    vector<unsigned int> vrp;
     double tsp_cost {0};
     double vrp_cost {0};
     double vrp_gain {0};
-    
+
 public:
     
-    TestGreedy(unsigned int numC, unsigned int maxD, unsigned int minD, unsigned int maxT, unsigned int minT);
+    TestTime(unsigned int numC, unsigned int maxD, unsigned int minD, unsigned int maxT, unsigned int minT);
     
     clock_t runTimeTSP();
     
     clock_t runTimeVRP();
+    
+    clock_t runTimeBF();
+
+    clock_t runTimeBFG();
+
+    clock_t runTimeBnB();
+    
+//    void convertData(vector<City*> &cities,int numCit, vector<vector<double> > &adjac, vector<double> &pref);
+    
+//    double getEdgeCostFrom2dArray(City *c1, City *c2,int i1,int i2,double ***edges);
 
 };
 

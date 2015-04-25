@@ -13,7 +13,6 @@
 #include <vector>
 #include <climits>
 #include <float.h>
-#include <unordered_map>
 
 const double DBL_INFINITY = DBL_MAX;
 

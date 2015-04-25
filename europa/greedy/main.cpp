@@ -6,9 +6,8 @@
 //  Copyright (c) 2015 Angie. All rights reserved.
 //
 
-#include "RandomTest.h"
 #include <iostream>
-#include "Greedy.h"
+#include "RandomTest.h"
 
 using namespace std;
 
@@ -68,19 +67,47 @@ int main() {
     cout << vrp2[0] << endl;
     cout << vrp_gain2 << " " << vrp_cost2 << endl;*/
     
-    unsigned int number_tests = 1000;
+/*    unsigned int number_tests = 1000;
     
     srand (static_cast<int>(time(NULL)));
     double avg_clock_tsp {0};
     double avg_clock_vrp {0};
     for (unsigned int i = 0; i < number_tests; i++) {
-        TestGreedy *test = new TestGreedy(800, 20, 1, 3, 1);
+        TestGreedy *test = new TestGreedy(900, 20, 1, 3, 1);
         avg_clock_tsp += test->runTimeTSP();
         avg_clock_vrp += test->runTimeVRP();
         delete test;
     }
     avg_clock_tsp /= number_tests;
     avg_clock_vrp /= number_tests;
-    cout << avg_clock_tsp << "/" << avg_clock_vrp << endl;
+    cout << avg_clock_tsp << "/" << avg_clock_vrp << endl;*/
+    
+    srand (static_cast<int>(time(NULL)));
+    
+    unsigned int number_tests = 1000;
+    
+    unsigned int number_cities = 30;
+     
+    double avg_clock_tsp {0};
+    double avg_clock_vrp {0};
+    double avg_clock_bf {0};
+    double avg_clock_bfg {0};
+    double avg_clock_bnb {0};
+    for (unsigned int i = 0; i < number_tests; i++) {
+        TestTime *test = new TestTime(number_cities, 20, 1, 3, 1);
+        avg_clock_tsp += test->runTimeTSP();
+        avg_clock_vrp += test->runTimeVRP();
+        avg_clock_bf += test->runTimeTSP();
+        avg_clock_bfg += test->runTimeVRP();
+        avg_clock_bnb += test->runTimeBnB();
+        delete test;
+    }
+    avg_clock_tsp /= number_tests;
+    avg_clock_vrp /= number_tests;
+    avg_clock_bf /= number_tests;
+    avg_clock_bfg /= number_tests;
+    avg_clock_bnb /= number_tests;
+    cout << avg_clock_tsp << "/" << avg_clock_vrp << "/" << avg_clock_bf << "/" << avg_clock_bfg << "/" << avg_clock_bnb << endl;
+    
 
 }

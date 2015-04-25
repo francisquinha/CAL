@@ -7,46 +7,44 @@
 //
 
 #include "RandomTest.h"
-#include "genericBnB.h"
-#include <random>
-#include <iostream>
 
-TestBNB::TestBNB(unsigned int numC, unsigned int maxD, unsigned int minD, unsigned int maxT, unsigned int minT) {
+using namespace std;
+
+void convertData(vector<City> &v, int numElems, vector<vector<double> > &elems, vector<double> &prefs) {
+    //note:consider 1st city to be the start checkpoint
+    
+    //create max edges with 0's
+    double maxEdges[numElems];
+    for(int i = 0;i<numElems;i++)maxEdges[i]=0;
+    
+    //get cities and max edges
+    for(int i = 0;i<numElems-1;i++)
+        for(int j = i;j<numElems;j++) {
+            stringstream ss {};
+            if (elems[i][j]>maxEdges[i]) maxEdges[i] = elems[i][j];
+            if (elems[i][j]>maxEdges[j]) maxEdges[j] = elems[i][j];
+            ss << i;
+            if (i==j) v.push_back(City(ss.str(),"",prefs[i] ,i ,0 ));
+        }
+    
+    //assign max edges and preferences to each city
+    for(int i = 0; i<numElems;i++) {v[i].mostExpensiveArrivalRoute = maxEdges[i]; v[i].preference = prefs[i];}
+}
+
+
+double getEdgeCost(City *c1, City *c2, int i1, int i2, vector<vector<double> > *edges) {
+    //could be more complicated, like searching a list for each vertex pair
+    return (*edges)[i1][i2];
+}
+
+TestTime::TestTime(unsigned int numC, unsigned int maxD, unsigned int minD, unsigned int maxT, unsigned int minT) {
     numberCities = numC;
     maxDist = maxD;
     minDist = minD;
     maxTime = maxT;
     minTime = minT;
-    timeLimit = rand() % (numC * (maxT + maxD)) + 1;
-    cities = {};
-    
-    for (int i = 0; i < numberCities; i++) {
-        unsigned int dist = rand() % (maxDist - minDist + 1) + minDist;
-        unsigned int time = rand() % (maxTime - minTime + 1) + minTime;
-        unsigned int pref = rand() % 11; //preference int between 0 and 10
-        City *city = new City(to_string(i), "0", pref, time, dist);
-        cities.push_back(*city);
-    }
-    
-}
-
-clock_t TestBNB::runTime(){
-    clock_t ini {clock()};
-    BnB_UP<City> bnbCity(cities, timeLimit, &City::getMaxPossibleTravelTimeSpent, &City::getPreference );
-    vector<City*> sol = bnbCity.findSolution();
-    clock_t fim {clock()};
-//    for(int i = 0 ; i<sol.size();i++) cout<<sol[i]->name<<"\n";
-    return fim - ini;
-}
-
-
-TestGreedy::TestGreedy(unsigned int numC, unsigned int maxD, unsigned int minD, unsigned int maxT, unsigned int minT) {
-    numberCities = numC;
-    maxDist = maxD;
-    minDist = minD;
-    maxTime = maxT;
-    minTime = minT;
-    timeLimit = rand() % (numC * (maxT + maxD)) + 1;
+    timeLimit = numC * (maxT + maxD);
+//    timeLimit = rand() % (numC * (maxT + maxD)) + 1;
     adjacency = {};
     preference = {};
     
@@ -61,18 +59,47 @@ TestGreedy::TestGreedy(unsigned int numC, unsigned int maxD, unsigned int minD, 
     }
 }
 
-clock_t TestGreedy::runTimeTSP(){
+clock_t TestTime::runTimeTSP(){
     clock_t ini {clock()};
     GreedyApproxTSP(adjacency, tsp, tsp_cost);
     clock_t fim {clock()};
     return fim - ini;
 }
 
-clock_t TestGreedy::runTimeVRP(){
+clock_t TestTime::runTimeVRP(){
     clock_t ini {clock()};
     GreedyApproxVRP(adjacency, preference, timeLimit, vrp, vrp_gain, vrp_cost);
     clock_t fim {clock()};
     return fim - ini;
 }
 
+clock_t TestTime::runTimeBF() {
+    vector<City> cities {};
+    convertData(cities, numberCities, adjacency, preference);
+    BruteForce<City, vector<vector<double> > > BF (timeLimit, cities, 0, &adjacency, &City::getPreference, getEdgeCost);
+    clock_t ini {clock()};
+    vector<City*> sol = BF.solve(false); // optime = false para retornar assim que achar uma solucao maxima (nao necessariamente a mais rapida das maximas)
+    clock_t fim {clock()};
+    return fim - ini;
+}
+
+clock_t TestTime::runTimeBFG() {
+    vector<City> cities {};
+    convertData(cities, numberCities, adjacency, preference);
+    BruteForce<City, vector<vector<double> > > BF (timeLimit, cities, 0, &adjacency, &City::getPreference, getEdgeCost);
+    clock_t ini {clock()};
+    vector<City*> sol=BF.greedySolve();
+    clock_t fim {clock()};
+    return fim - ini;
+}
+
+clock_t TestTime::runTimeBnB(){
+    vector<City> cities {};
+    convertData(cities, numberCities, adjacency, preference);
+    BnB_UP<City> BnB(cities, &City::getMaxPossibleTravelTimeSpent, &City::getPreference);
+    clock_t ini {clock()};
+    vector<City*> sol = BnB.problem8ApproximateSolve(&cities[0], &City::getMaxPossibleTravelTimeSpentOnStart, timeLimit);
+    clock_t fim {clock()};
+    return fim - ini;
+}
 
