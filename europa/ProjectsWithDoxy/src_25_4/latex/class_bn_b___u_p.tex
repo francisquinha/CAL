@@ -1,0 +1,130 @@
+\hypertarget{class_bn_b___u_p}{}\section{Bn\+B\+\_\+\+U\+P$<$ T $>$ Class Template Reference}
+\label{class_bn_b___u_p}\index{Bn\+B\+\_\+\+U\+P$<$ T $>$@{Bn\+B\+\_\+\+U\+P$<$ T $>$}}
+
+
+Branch n Bound implementation, done with max bounds (usually it\textquotesingle{}s done in reverse)  
+
+
+
+
+{\ttfamily \#include $<$generic\+Bn\+B.\+h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_bn_b___u_p_a1248087eb17017dceaafcc74ad2f9a8a}{}{\bfseries Bn\+B\+\_\+\+U\+P} (vector$<$ T $>$ \&elements, double(T\+::$\ast$get\+Cost)(void), double(T\+::$\ast$get\+Value)(void))\label{class_bn_b___u_p_a1248087eb17017dceaafcc74ad2f9a8a}
+
+\item 
+\hypertarget{class_bn_b___u_p_a5072c37cae886ccbffa76633b63c1367}{}{\bfseries Bn\+B\+\_\+\+U\+P} (vector$<$ T $\ast$ $>$ \&elements, void(T\+::$\ast$get\+Cost)(void), void(T\+::$\ast$get\+Value)(void))\label{class_bn_b___u_p_a5072c37cae886ccbffa76633b63c1367}
+
+\item 
+double \hyperlink{class_bn_b___u_p_a52efbfa978fd9b6c43e50da878862d93}{find\+Upper\+Bound\+\_\+1} (\hyperlink{class_bn_b__node}{Bn\+B\+\_\+node} $\ast$node, int $\ast$last\+Item\+In\+Bound\+Index, double $\ast$lat\+Item\+In\+Bound\+Cost\+Used)
+\begin{DoxyCompactList}\small\item\em Find new upper bound. Called only when uncheking. \end{DoxyCompactList}\item 
+vector$<$ T $\ast$ $>$ \hyperlink{class_bn_b___u_p_a12c938cc252ed8b58018571f9debe90c}{find\+Solution} (double limit\+Cost)
+\begin{DoxyCompactList}\small\item\em What do you expect? Finds a solution if there is one for the given Bn\+B problem. (Note\+: The Bn\+B by itself will not solve problem8, the initial city must be taken into account separately) \end{DoxyCompactList}\item 
+vector$<$ T $\ast$ $>$ \hyperlink{class_bn_b___u_p_aa3f7bb7593bd68c64409405ce0137438}{problem8\+Approximate\+Solve} (T $\ast$Start\+Point, double(T\+::$\ast$firt\+Node\+Cost)(void), double limit\+Cost)
+\item 
+vector$<$ T $\ast$ $>$ \hyperlink{class_bn_b___u_p_ac37be727765647cb3907a9b183031ba8}{problem8\+Approximate\+Solve} (T Start\+Point, double(T\+::$\ast$firt\+Node\+Cost)(void), double limit\+Cost)
+\item 
+\hypertarget{class_bn_b___u_p_a2e70ca6c5bddb5467c7b45335922e9ae}{}void \hyperlink{class_bn_b___u_p_a2e70ca6c5bddb5467c7b45335922e9ae}{free\+Heap} ()\label{class_bn_b___u_p_a2e70ca6c5bddb5467c7b45335922e9ae}
+
+\begin{DoxyCompactList}\small\item\em clear heap used to find solution. do it only after interpreting the solution \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_bn_b___u_p_a17570dfb1185be4ab8d1e651b7064ea5}{}static bool \hyperlink{class_bn_b___u_p_a17570dfb1185be4ab8d1e651b7064ea5}{compare\+Elems} (typename \hyperlink{struct_bn_b__pair}{Bn\+B\+\_\+pair}$<$ T $>$\+::type\+T a, typename \hyperlink{struct_bn_b__pair}{Bn\+B\+\_\+pair}$<$ T $>$\+::type\+T b)\label{class_bn_b___u_p_a17570dfb1185be4ab8d1e651b7064ea5}
+
+\begin{DoxyCompactList}\small\item\em compare ratio of the elements. to be used in priority\+\_\+queue \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_bn_b___u_p_ab8a6d7f562cea7911112b6b7dfd559c6}{}vector$<$ \hyperlink{class_bn_b__node}{Bn\+B\+\_\+node} $\ast$ $>$ {\bfseries used\+Nodes}\label{class_bn_b___u_p_ab8a6d7f562cea7911112b6b7dfd559c6}
+
+\item 
+vector$<$ typename \hyperlink{struct_bn_b__pair}{Bn\+B\+\_\+pair}$<$ T $>$\+::type\+T $>$ \hyperlink{class_bn_b___u_p_a8308ba99698255a402675713b1ac6cb0}{ordered\+\_\+elements}
+\item 
+\hypertarget{class_bn_b___u_p_a0749a907c11c880f825fd0644a8a2bfd}{}double \hyperlink{class_bn_b___u_p_a0749a907c11c880f825fd0644a8a2bfd}{max\+Cost}\label{class_bn_b___u_p_a0749a907c11c880f825fd0644a8a2bfd}
+
+\begin{DoxyCompactList}\small\item\em the limit (not relevant on initialize, should be set by the methods later) \end{DoxyCompactList}\item 
+\hypertarget{class_bn_b___u_p_ae5fdb19ab49f1e0dc93700a42c5884f9}{}double \hyperlink{class_bn_b___u_p_ae5fdb19ab49f1e0dc93700a42c5884f9}{min\+Item\+Cost}\label{class_bn_b___u_p_ae5fdb19ab49f1e0dc93700a42c5884f9}
+
+\begin{DoxyCompactList}\small\item\em the min cost found in the items list \end{DoxyCompactList}\item 
+\hypertarget{class_bn_b___u_p_a05b18af61820e672cff387958b393949}{}const unsigned long \hyperlink{class_bn_b___u_p_a05b18af61820e672cff387958b393949}{max\+Iterations\+Allowed} =10000\label{class_bn_b___u_p_a05b18af61820e672cff387958b393949}
+
+\begin{DoxyCompactList}\small\item\em control variable. Limits the steps used by the algorithm to avoid really heavy computations \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\subsubsection*{template$<$class T$>$class Bn\+B\+\_\+\+U\+P$<$ T $>$}
+
+Branch n Bound implementation, done with max bounds (usually it\textquotesingle{}s done in reverse) 
+
+\subsection{Member Function Documentation}
+\hypertarget{class_bn_b___u_p_a12c938cc252ed8b58018571f9debe90c}{}\index{Bn\+B\+\_\+\+U\+P@{Bn\+B\+\_\+\+U\+P}!find\+Solution@{find\+Solution}}
+\index{find\+Solution@{find\+Solution}!Bn\+B\+\_\+\+U\+P@{Bn\+B\+\_\+\+U\+P}}
+\subsubsection[{find\+Solution}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ vector$<$T$\ast$$>$ {\bf Bn\+B\+\_\+\+U\+P}$<$ T $>$\+::find\+Solution (
+\begin{DoxyParamCaption}
+\item[{double}]{limit\+Cost}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_bn_b___u_p_a12c938cc252ed8b58018571f9debe90c}
+
+
+What do you expect? Finds a solution if there is one for the given Bn\+B problem. (Note\+: The Bn\+B by itself will not solve problem8, the initial city must be taken into account separately) 
+
+\begin{DoxyReturn}{Returns}
+list of pointers to the elements of the found solution. If no solution is found, will be returned an empty vector. 
+\end{DoxyReturn}
+\hypertarget{class_bn_b___u_p_a52efbfa978fd9b6c43e50da878862d93}{}\index{Bn\+B\+\_\+\+U\+P@{Bn\+B\+\_\+\+U\+P}!find\+Upper\+Bound\+\_\+1@{find\+Upper\+Bound\+\_\+1}}
+\index{find\+Upper\+Bound\+\_\+1@{find\+Upper\+Bound\+\_\+1}!Bn\+B\+\_\+\+U\+P@{Bn\+B\+\_\+\+U\+P}}
+\subsubsection[{find\+Upper\+Bound\+\_\+1}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ double {\bf Bn\+B\+\_\+\+U\+P}$<$ T $>$\+::find\+Upper\+Bound\+\_\+1 (
+\begin{DoxyParamCaption}
+\item[{{\bf Bn\+B\+\_\+node} $\ast$}]{node, }
+\item[{int $\ast$}]{last\+Item\+In\+Bound\+Index, }
+\item[{double $\ast$}]{lat\+Item\+In\+Bound\+Cost\+Used}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_bn_b___u_p_a52efbfa978fd9b6c43e50da878862d93}
+
+
+Find new upper bound. Called only when uncheking. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em node} & node previous to the onde being unchecked \\
+\hline
+{\em last\+Item\+In\+Bound\+Index} & last item\textquotesingle{}s, used in bound calculation, index, to be given to the new node afterwards \\
+\hline
+{\em lat\+Item\+In\+Bound\+Cost\+Used} & last item\textquotesingle{}s, used in bound calculation, used cost found in calculation, to be given to the new node afterwards \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+new upperbound calculated 
+\end{DoxyReturn}
+\hypertarget{class_bn_b___u_p_aa3f7bb7593bd68c64409405ce0137438}{}\index{Bn\+B\+\_\+\+U\+P@{Bn\+B\+\_\+\+U\+P}!problem8\+Approximate\+Solve@{problem8\+Approximate\+Solve}}
+\index{problem8\+Approximate\+Solve@{problem8\+Approximate\+Solve}!Bn\+B\+\_\+\+U\+P@{Bn\+B\+\_\+\+U\+P}}
+\subsubsection[{problem8\+Approximate\+Solve}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ vector$<$T$\ast$$>$ {\bf Bn\+B\+\_\+\+U\+P}$<$ T $>$\+::problem8\+Approximate\+Solve (
+\begin{DoxyParamCaption}
+\item[{T $\ast$}]{Start\+Point, }
+\item[{double(T\+::$\ast$)(void)}]{firt\+Node\+Cost, }
+\item[{double}]{limit\+Cost}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_bn_b___u_p_aa3f7bb7593bd68c64409405ce0137438}
+brief try to find a approximate solution to problem 8 using a Bn\+B approach. Work better if cost of the nodes (time spent on checkpoints) is greater than the edges cost (travel time between checkpoints) ... ... ... N\+O\+T\+E\+:W\+I\+L\+L R\+E\+M\+O\+V\+E S\+T\+A\+R\+T P\+O\+I\+N\+T N\+O\+D\+E F\+R\+O\+M N\+O\+D\+E\+S ... ... ... param Start\+Point mem address of the start point (should be the same given to ordered\+\_\+elements) param firt\+Node\+Cost method should return the max cost (or slightly above value) that could be spent travelling in and out of the initil node (note\+:could be max edge value $\ast$2 or even better if could get the sum of the 2 max edges connected to the origin) param limit\+Cost the time limit to visit the given checkpoints return checkpoints that can be visited in any given order without exceeding the limit cost \hypertarget{class_bn_b___u_p_ac37be727765647cb3907a9b183031ba8}{}\index{Bn\+B\+\_\+\+U\+P@{Bn\+B\+\_\+\+U\+P}!problem8\+Approximate\+Solve@{problem8\+Approximate\+Solve}}
+\index{problem8\+Approximate\+Solve@{problem8\+Approximate\+Solve}!Bn\+B\+\_\+\+U\+P@{Bn\+B\+\_\+\+U\+P}}
+\subsubsection[{problem8\+Approximate\+Solve}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ vector$<$T$\ast$$>$ {\bf Bn\+B\+\_\+\+U\+P}$<$ T $>$\+::problem8\+Approximate\+Solve (
+\begin{DoxyParamCaption}
+\item[{T}]{Start\+Point, }
+\item[{double(T\+::$\ast$)(void)}]{firt\+Node\+Cost, }
+\item[{double}]{limit\+Cost}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_bn_b___u_p_ac37be727765647cb3907a9b183031ba8}
+The same a the the overload description ut instead of receiving and comparing pointers, uses a copy of the object and compares the object with the operator == 
+
+\subsection{Member Data Documentation}
+\hypertarget{class_bn_b___u_p_a8308ba99698255a402675713b1ac6cb0}{}\index{Bn\+B\+\_\+\+U\+P@{Bn\+B\+\_\+\+U\+P}!ordered\+\_\+elements@{ordered\+\_\+elements}}
+\index{ordered\+\_\+elements@{ordered\+\_\+elements}!Bn\+B\+\_\+\+U\+P@{Bn\+B\+\_\+\+U\+P}}
+\subsubsection[{ordered\+\_\+elements}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ vector$<$ typename {\bf Bn\+B\+\_\+pair}$<$T$>$\+::type\+T $>$ {\bf Bn\+B\+\_\+\+U\+P}$<$ T $>$\+::ordered\+\_\+elements}\label{class_bn_b___u_p_a8308ba99698255a402675713b1ac6cb0}
+saves info for each element (cost,value,value/cost ratio) and a pointer for the respective element ordered by higher value/cost ratio 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+generic\+Bn\+B.\+h\end{DoxyCompactItemize}
