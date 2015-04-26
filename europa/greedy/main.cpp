@@ -86,7 +86,7 @@ int main() {
     
     unsigned int number_tests = 1000;
     
-    unsigned int number_cities = 30;
+    unsigned int number_cities = 10;
      
     double avg_clock_tsp {0};
     double avg_clock_vrp {0};
@@ -97,8 +97,8 @@ int main() {
         TestTime *test = new TestTime(number_cities, 20, 1, 3, 1);
         avg_clock_tsp += test->runTimeTSP();
         avg_clock_vrp += test->runTimeVRP();
-        avg_clock_bf += test->runTimeTSP();
-        avg_clock_bfg += test->runTimeVRP();
+        avg_clock_bf += test->runTimeBF();
+        avg_clock_bfg += test->runTimeBFG();
         avg_clock_bnb += test->runTimeBnB();
         delete test;
     }

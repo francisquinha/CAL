@@ -17,6 +17,7 @@
 #include "Greedy.h"
 #include "genericBnB.h"
 #include "bruteForce.h"
+#include <ctime>
 
 class TestTime {
     
@@ -25,7 +26,7 @@ class TestTime {
     unsigned int minDist;
     unsigned int maxTime;
     unsigned int minTime;
-    unsigned int timeLimit;
+    unsigned long timeLimit;
     vector<vector<double> > adjacency;
     vector<double> preference;
     vector<unsigned int> tsp;

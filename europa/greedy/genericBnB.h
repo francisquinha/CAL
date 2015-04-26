@@ -90,6 +90,7 @@ public:
 	 * */
 	virtual bool checked() = 0;
 
+	virtual ~BnB_node(){}
 	/*friend bool operator<(const BnB_node &a,const BnB_node &b)
 	{
 		return a.bound<b.bound;
@@ -149,7 +150,7 @@ public:
 
 	double minItemCost;///<the min cost found in the items list
 
-	const unsigned long maxIterationsAllowed=10000;///<control variable. Limits the steps used by the algorithm to avoid really heavy computations
+	//const unsigned long maxIterationsAllowed=10000;///<control variable. Limits the steps used by the algorithm to avoid really heavy computations
 
 public:
 
@@ -395,7 +396,7 @@ public:
 				}
 			}
 			i++;
-			if (i>maxIterationsAllowed)break;
+			//if (i>maxIterationsAllowed)break;
 		}
 
 		//===============================
@@ -458,7 +459,8 @@ public:
 	{
 		for (int i = usedNodes.size()-1; i>=0;i--)
 		{
-			delete(usedNodes[i]);
+			if ( usedNodes[i]->checked() ) delete((BnB_node_checked*) usedNodes[i]);
+			else delete((BnB_node_notChecked*) usedNodes[i]);
 		}
 		usedNodes.clear();
 	}

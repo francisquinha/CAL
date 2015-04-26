@@ -12,13 +12,13 @@ using namespace std;
 
 void convertData(vector<City> &v, int numElems, vector<vector<double> > &elems, vector<double> &prefs) {
     //note:consider 1st city to be the start checkpoint
-    
+
     //create max edges with 0's
     double maxEdges[numElems];
     for(int i = 0;i<numElems;i++)maxEdges[i]=0;
-    
+
     //get cities and max edges
-    for(int i = 0;i<numElems-1;i++)
+    for(int i = 0;i<numElems;i++)
         for(int j = i;j<numElems;j++) {
             stringstream ss {};
             if (elems[i][j]>maxEdges[i]) maxEdges[i] = elems[i][j];
@@ -26,7 +26,7 @@ void convertData(vector<City> &v, int numElems, vector<vector<double> > &elems, 
             ss << i;
             if (i==j) v.push_back(City(ss.str(),"",prefs[i] ,i ,0 ));
         }
-    
+
     //assign max edges and preferences to each city
     for(int i = 0; i<numElems;i++) {v[i].mostExpensiveArrivalRoute = maxEdges[i]; v[i].preference = prefs[i];}
 }
@@ -80,6 +80,7 @@ clock_t TestTime::runTimeBF() {
     clock_t ini {clock()};
     vector<City*> sol = BF.solve(false); // optime = false para retornar assim que achar uma solucao maxima (nao necessariamente a mais rapida das maximas)
     clock_t fim {clock()};
+    BF.freeHeap();
     return fim - ini;
 }
 
@@ -90,6 +91,7 @@ clock_t TestTime::runTimeBFG() {
     clock_t ini {clock()};
     vector<City*> sol=BF.greedySolve();
     clock_t fim {clock()};
+    BF.freeHeap();
     return fim - ini;
 }
 
@@ -100,6 +102,7 @@ clock_t TestTime::runTimeBnB(){
     clock_t ini {clock()};
     vector<City*> sol = BnB.problem8ApproximateSolve(&cities[0], &City::getMaxPossibleTravelTimeSpentOnStart, timeLimit);
     clock_t fim {clock()};
+    BnB.freeHeap();
     return fim - ini;
 }
 
