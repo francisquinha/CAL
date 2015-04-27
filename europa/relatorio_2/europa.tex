@@ -25,6 +25,7 @@
 \usepackage{comment} 
 \usepackage{tikz}
 \usepackage[numbers,square, comma, sort&compress]{natbib}
+\usepackage[nottoc,numbib]{tocbibind}
 %\numberwithin{figure}{section}
 \numberwithin{equation}{section}
 \usepackage{scalefnt}
@@ -97,7 +98,7 @@ O tema do nosso projeto é o planeamento de uma viagem pela Europa. Mais precisa
 
 Numa versão inicial do problema, o tempo para a viagem é limitado e, como tal, poderá não ser possível ir a todas as cidades, o objetivo é visitar as cidades mais interessantes. Numa outra versão, será calculado o tempo mínimo necessário para visitar todas as cidades, sendo devolvido o percurso mais eficiente.
 
-Numa primeira parte do projeto apresentou-se uma formulação matemática do problema, incluindo as restrições assumidas. Expuseram-se ainda esboços de possíveis resoluções, exatas e aproximadas, para as duas versões do problema, assim como propostas de análise do custo computacional dos algoritmos propostos e da qualidade das aproximações.
+Na primeira parte do projeto apresentou-se uma formulação matemática do problema, incluindo as restrições assumidas. Expuseram-se ainda esboços de possíveis resoluções, exatas e aproximadas, para as duas versões do problema, assim como propostas de análise do custo computacional dos algoritmos propostos e da qualidade das aproximações.
 
 Nesta fase final, foram concretizadas praticamente todas as resoluções discutidas. Analisou-se experimentalmente a complexidade temporal dos algoritmos implementados, assim como a qualidade das soluções heurísticas. Tudo isto, assim como o que tinha sido feito anteriormente, é exposto no presente documento.
 
@@ -454,7 +455,7 @@ Por outro lado, a formulação/escolha de algoritmos concretos e o modelo a util
 
 Apesar deste atrito inicial, existe bastante informação disponível sobre problemas ligados a grafos e desde cedo tivemos conhecimento do Problema do Caixeiro Viajante, que nos levou a escolher um grafo completo e consequentemente simplificar a análise do problema. A ajuda dos docentes também se verificou valiosa na formulação de soluções.
 
-Entretanto, na fase de implementação das soluções que tínhamos discutido, também surgiram alguns problemas. Passar de uma ideia para um algoritmo concreto nem sempre é fácil, especialmente com algoritmos mais complexos, como é o caso do algoritmo de Held-Karp. Além disso, a organização de todo o projeto, com a integração de todas soluções, também não foi muito pacífica.
+Entretanto, na fase de implementação das soluções que tínhamos discutido, também surgiram alguns problemas. Passar de uma ideia para um algoritmo concreto nem sempre é fácil, especialmente com algoritmos mais complexos, como é o caso do algoritmo de Held-Karp. De resto, a organização de todo o projeto, com a integração das várias soluções, também não foi muito pacífica.
 
 %%%%%%%%%%%%%%%%
 % DISTRIBUICAO %
@@ -479,7 +480,7 @@ Claro que seria possível otimizar os algoritmos de força bruta, por exemplo ut
 
 Perante o custo dos algoritmos exatos, tornou-se imperativo considerar alternativas aproximadas. Todas aquelas que implementamos são bastante eficientes em termos de custo. No entanto, o mesmo não se pode dizer em termos de qualidade das aproximações. De facto, a única aproximação cujas soluções são consistentemente boas e muitas vezes iguais ao resultado exato é o algoritmo ganancioso para o problema com tempo limite. Além disso, se garantirmos determinadas condições, como a desigualdade triangular ou distâncias entre as cidades relativamente semelhantes, o algoritmo ganancioso para visitar todas as cidades também calcula boas aproximações.
 
-Teria sido interessante poder explorar mais o tema, especialmente procurando outro tipo de aproximações, dado que o Problema do Caixeiro Viajante é um dos problemas mais estudados em termos de heurísticas. Uma boa aproximação, sendo computacionalmente muito mais rápida, pode encontrar soluções praticamente tão boas como a solução exata, justificando assim a sua utilização.
+Seria interessante explorar mais o tema, especialmente procurando outras aproximações, dado que o Problema do Caixeiro Viajante é um dos problemas mais estudados em termos de heurísticas.
 
 %%%%%%%%%%%%%%%%
 % BIBLIOGRAPHY %
