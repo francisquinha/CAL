@@ -99,7 +99,7 @@ Numa versão inicial do problema, o tempo para a viagem é limitado e, como tal,
 
 Numa primeira parte do projeto apresentou-se uma formulação matemática do problema, incluindo as restrições assumidas. Expuseram-se ainda esboços de possíveis resoluções, exatas e aproximadas, para as duas versões do problema, assim como propostas de análise do custo computacional dos algoritmos propostos e da qualidade das aproximações.
 
-Nesta fase final, foram concretizadas várias das resoluções discutidas, mas também outras que não tinham sido apresentadas. Analisou-se experimentalmente a complexidade temporal dos algoritmos implementados, assim como a qualidade das soluções heurísticas. Tudo isto, assim como o que tinha sido feito anteriormente, é exposto no presente documento.
+Nesta fase final, foram concretizadas praticamente todas as resoluções discutidas. Analisou-se experimentalmente a complexidade temporal dos algoritmos implementados, assim como a qualidade das soluções heurísticas. Tudo isto, assim como o que tinha sido feito anteriormente, é exposto no presente documento.
 
 %%%%%%%%%%%%%%
 % RESTRIÇÕES %
@@ -402,14 +402,6 @@ $\P$ é a classe de todos os problemas que podem ser resolvidos em tempo polinom
 
 A complexidade temporal da resolução do PCV por um algoritmo de força bruta é~$O(n!)$ num grafo com~$n$ vértices, dado que existem~$n!$ percursos possíveis. A complexidade espacial é constante, dado que a cada momento apenas é necessário guardar o percurso melhor até então e o seu custo. Existem algoritmos de programação dinâmica, nomeadamente o algoritmo de Held–Karp de que falamos, que calculam soluções exatas mais rapidamente, com um custo temporal de~$O(n^2 2^n)$. No entanto, a complexidade espacial deste algoritmo é~$O(2^n n)$, significativamente pior que um algoritmo de força bruta.
 
-Devido ao elevado custo computacional do cálculo de soluções exatas, são conhecidos inúmeros algoritmos que providenciam soluções aproximadas. De facto, a procura de heurísticas para resolver o PCV é das áreas mais prolíferas da optimização. Por exemplo, se assumirmos que os tempos de viagem respeitam a desigualdade triangular, um algoritmo ganancioso em que se escolha sempre a cidade não visitada mais próxima, obtém aproximações razoáveis da solução ótima com complexidade temporal~$O(n^2)$.
-
-Relativamente ao Problema do Roteamento de Veículos, tal como o PCV, este problema é $\NP$-difícil, sendo o algoritmo de força bruta semelhante também ao que é utilizado para o PCV.
-
-Nestes problemas o custo mais critico é o temporal, isto é, com o crescimento do número de vértices, aquilo que impedirá a obtenção de uma solução exata será o tempo que esse cálculo demora e não a memória necessária. Assim, no que diz respeito às métricas de avaliação dos algoritmos que implementarmos, concentramos os nossos esforços na avaliação da complexidade temporal dos mesmos. Para isso, fizemos várias experiências aleatórias com um número crescente de cidades. De seguida, para um conjunto de experiências com o mesmo número de vértices, calculamos a média do número de ciclos de relógio como aproximação do tempo necessário para esse número de vértices. No final, para cada algoritmo, obteve-se um gráfico discreto cuja interpolação leva à sua função de complexidade temporal.
-
-Para os algoritmos aproximados, a complexidade temporal é quadrática, como se pode observar na Figura~\ref{aprox}. O que tem melhor desempenho é o algoritmo ganancioso para o PCV, embora para conjuntos pequenos de cidades, o algoritmo de \emph{branch and bound} para o PRV seja menos dispendioso.
-
 \begin{figure} [ht]
 \begin{center}
 \includegraphics[width=15cm]{aprox.png}
@@ -418,7 +410,11 @@ Para os algoritmos aproximados, a complexidade temporal é quadrática, como se 
 \end{center}
 \end{figure}
 
-Em relação aos algoritmos exatos, tal como esperado, a complexidade temporal observada é fatorial, como demonstra a Figura~\ref{exact}. Note-se que a escala do número de ciclos do relógio é logarítmica, por isso é que a função exponencial é representada por uma reta. Já as interpolações dos resultados obtidos, crescem bem mais do que a exponencial, como se pode observar melhor na Figura~\ref{exact2}, em que a escala é normal. Em relação ao desempenho relativo entre estes algoritmos, no PCV a optimização não ajuda, mas no PRV permite obter um desempenho consideravelmente melhor, apesar de a complexidade ser a mesma.
+Devido ao elevado custo computacional do cálculo de soluções exatas, são conhecidos inúmeros algoritmos que providenciam soluções aproximadas. De facto, a procura de heurísticas para resolver o PCV é das áreas mais prolíferas da optimização. Por exemplo, se assumirmos que os tempos de viagem respeitam a desigualdade triangular, um algoritmo ganancioso em que se escolha sempre a cidade não visitada mais próxima, obtém aproximações razoáveis da solução ótima com complexidade temporal~$O(n^2)$.
+
+Relativamente ao Problema do Roteamento de Veículos, tal como o PCV, este problema é $\NP$-difícil, sendo o algoritmo de força bruta semelhante também ao que é utilizado para o PCV.
+
+Nestes problemas o custo mais critico é o temporal, isto é, com o crescimento do número de vértices, aquilo que impedirá a obtenção de uma solução exata será o tempo que esse cálculo demora e não a memória necessária. Assim, no que diz respeito às métricas de avaliação dos algoritmos que implementarmos, concentramos os nossos esforços na avaliação da complexidade temporal dos mesmos. Para isso, fizemos várias experiências aleatórias com um número crescente de cidades. De seguida, para um conjunto de experiências com o mesmo número de vértices, calculamos a média do número de ciclos de relógio como aproximação do tempo necessário para esse número de vértices. No final, para cada algoritmo, obteve-se um gráfico discreto cuja interpolação leva à sua função de complexidade temporal.
 
 \begin{figure} [ht]
 \begin{center}
@@ -427,6 +423,11 @@ Em relação aos algoritmos exatos, tal como esperado, a complexidade temporal o
 \label{exact}
 \end{center}
 \end{figure}
+
+Para os algoritmos aproximados, a complexidade temporal é quadrática, como se pode observar na Figura~\ref{aprox}. O que tem melhor desempenho é o algoritmo ganancioso para o PCV, embora para conjuntos pequenos de cidades, o algoritmo de \emph{branch and bound} para o PRV seja menos dispendioso.
+
+
+Em relação aos algoritmos exatos, tal como esperado, a complexidade temporal observada é fatorial, como demonstra a Figura~\ref{exact}. Note-se que a escala do número de ciclos do relógio é logarítmica, por isso é que a função exponencial é representada por uma reta. Já as interpolações dos resultados obtidos, crescem bem mais do que a exponencial, como se pode observar melhor na Figura~\ref{exact2}, em que a escala é normal. Em relação ao desempenho relativo entre estes algoritmos, no PCV a optimização não ajuda, mas no PRV permite obter um desempenho consideravelmente melhor, apesar de a complexidade ser a mesma.
 
 \begin{figure} [ht]
 \begin{center}
@@ -438,9 +439,9 @@ Em relação aos algoritmos exatos, tal como esperado, a complexidade temporal o
 
 Estas diferenças de desempenho tão abismais, apontam para uma maior utilização dos algoritmos aproximados. Repare-se que os algoritmos exatos, a partir de 13 cidades começaram a demorar demasiado tempo para que fossem feitos os testes de complexidade. No entanto, antes de utilizar soluções aproximadas, é necessário estimar a sua qualidade. O método é semelhante ao teste de complexidade: utilizamos vários conjuntos de dados aleatórios, com várias dimensões, e calculamos para cada amostra a diferença entre a solução exata e a solução aproximada.
 
-Os resultados foram bastante interessantes. Em dados aleatórios em que os tempos de percurso possam variar bastante, o algoritmo ganancioso para o PCV encontra uma solução 32\% pior que a solução exata e o algoritmo \emph{branch and bound} é 42\% pior que o exato para o PRV. Mas se as distancias entre as cidade não variarem muito, o PRV tem uma solução aproximada 3\% pior e o PRV tem uma solução aproximada 27\% pior. Já a solução gananciosa para o PRV é apenas 3\% pior que a solução exata, independentemente das distâncias serem semelhantes ou não.
+Os resultados foram bastante interessantes. Em dados aleatórios em que os tempos de percurso possam variar bastante, o algoritmo ganancioso para o PCV encontra uma solução 32\% pior em média que a solução exata, enquanto que o o algoritmo \emph{branch and bound} para o PRV é 42\% pior que o exato. No entanto, se as distâncias entre as cidades não forem muito diferentes, o PCV tem uma solução aproximada 3\% pior e o PRV tem uma solução aproximada 27\% pior. Já a solução gananciosa para o PRV é apenas 3\% pior que a solução exata, independentemente das distâncias serem semelhantes ou não.
 
-Estes dados levaram-nos a escolher como algoritmos principais para o PRV a solução exata se o número de cidades for no máximo 10 e a solução gananciosa a partir daí.
+Estes dados levaram-nos a escolher como algoritmos principais para o PRV a solução exata, se o número de cidades for no máximo 10, e a solução gananciosa a partir daí.
 
 %%%%%%%%%%%%%%%%
 % DIFICULDADES %
@@ -453,16 +454,32 @@ Por outro lado, a formulação/escolha de algoritmos concretos e o modelo a util
 
 Apesar deste atrito inicial, existe bastante informação disponível sobre problemas ligados a grafos e desde cedo tivemos conhecimento do Problema do Caixeiro Viajante, que nos levou a escolher um grafo completo e consequentemente simplificar a análise do problema. A ajuda dos docentes também se verificou valiosa na formulação de soluções.
 
+Entretanto, na fase de implementação das soluções que tínhamos discutido, também surgiram alguns problemas. Passar de uma ideia para um algoritmo concreto nem sempre é fácil, especialmente com algoritmos mais complexos, como é o caso do algoritmo de Held-Karp. Além disso, a organização de todo o projeto, com a integração de todas soluções, também não foi muito pacífica.
+
+%%%%%%%%%%%%%%%%
+% DISTRIBUICAO %
+%%%%%%%%%%%%%%%%
+\chapter{Distribuição do Trabalho}
+
+Frequentemente, em projetos de grupo, a distribuição das várias tarefas pelos elementos causa alguns problemas. Infelizmente, este caso não foi excessão. Apesar de na primeira fase todos os elementos se terem envolvido na procura de perspetivas de solução, embora não necessariamente com o mesmo nível de empenho, quando chegou à fase de implementação, apenas dois elementos do grupo participaram:
+\begin{itemize}
+	\item O Bruno implementou o algoritmo de \emph{branch and bound} para resolver o PRV, o algoritmo de força bruta otimizado (que resolve o PCV ou o PRV consoante o limite de tempo que lhe é fornecido) e o algoritmo de força bruta ganancioso, tendo efetuado testes de depuração a cada um. Desenhou o interface gráfico com o utilizador e utilizou-o para realizar mais testes a dois dos algoritmos implementados.
+	\item A Ângela implementou os algoritmos gananciosos e de força bruta para ambos os problemas. Testou com exemplos concretos a resposta de cada algoritmo para garantir fiabilidade. Realizou os testes de complexidade a todos os algoritmos, assim como os testes de qualidade das aproximações. Finalmente, escreveu o relatório do projeto.
+\end{itemize}
+Ambos os elementos mencionados colaboraram ativamente um com o outro em praticamente todos os aspetos, apesar da divisão de tarefas ser relativamente clara.
+
 %%%%%%%%%%%%%
 % CONCLUSAO %
 %%%%%%%%%%%%%
 \chapter{Conclusão}
 
-Esta fase inicial de pesquisa e formulação de soluções permitiu aprofundar o conhecimento relativo a problemas similares e possíveis resoluções. A equipa foi exposta a alguns dos algoritmos a ser implementados na próxima fase do trabalho prático e já tem uma noção geral de como prosseguir.
+Ambos os problemas que nos foram propostas são extremamente difíceis e computacionalmente dispendiosos. Isso dificultou bastante todo o processo, desde a fase inicial de procura de soluções, até à implementação e aos testes. De facto, para os algoritmos exatos, nem sequer conseguimos efetuar testes para mais de 13 cidades, porque demoravam demasiado tempo. No caso das versões otimizadas, em que a árvore de expansão dos percursos é guardada em memória, com mais de 10 cidades começamos a ter problemas de falta de memória, num sistema com 16GB de RAM.
 
-Ficamos também com maior sensibilidade face à escolha dos tipos de dados a usar, nomeadamente no que diz respeito às restrições consideradas e até que ponto ajudam a encontrar algoritmos mais eficientes.
+Claro que seria possível otimizar os algoritmos de força bruta, por exemplo utilizando várias linhas de execução. No caso básico de força bruta, bastaria dividir as sequências a testar por cada linha de execução. No final o algoritmo teria que comparar a solução encontrada por cada linha e escolher a melhor, mas isso seria extremamente rápido. Em termos de complexidade, uma vez que estaríamos a dividir o tempo de execução por um número constante de linhas, não haveria alterações. No entanto, esta divisão certamente permitiria considerar números de cidades mais elevados.
 
-Será certamente gratificante passar tudo isto à prática numa próxima fase do trabalho, embora a quantidade de algoritmos diferentes que estamos a considerar faça esta tarefa parecer hercúlea. Eventualmente será necessário optar por apenas alguns destes caminhos, consoante a dificuldade de implementação e a promessa de eficiência de cada um. n
+Perante o custo dos algoritmos exatos, tornou-se imperativo considerar alternativas aproximadas. Todas aquelas que implementamos são bastante eficientes em termos de custo. No entanto, o mesmo não se pode dizer em termos de qualidade das aproximações. De facto, a única aproximação cujas soluções são consistentemente boas e muitas vezes iguais ao resultado exato é o algoritmo ganancioso para o problema com tempo limite. Além disso, se garantirmos determinadas condições, como a desigualdade triangular ou distâncias entre as cidades relativamente semelhantes, o algoritmo ganancioso para visitar todas as cidades também calcula boas aproximações.
+
+Teria sido interessante poder explorar mais o tema, especialmente procurando outro tipo de aproximações, dado que o Problema do Caixeiro Viajante é um dos problemas mais estudados em termos de heurísticas. Uma boa aproximação, sendo computacionalmente muito mais rápida, pode encontrar soluções praticamente tão boas como a solução exata, justificando assim a sua utilização.
 
 %%%%%%%%%%%%%%%%
 % BIBLIOGRAPHY %

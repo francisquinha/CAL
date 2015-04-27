@@ -11,20 +11,26 @@
 
 using namespace std;
 
-int main() {
-/*
-    vector<unsigned int> seq = {1, 2, 3, 4};
-    for (unsigned int i = 0; i < 24; i++) {
+void testSequanceGenerator(unsigned int n) {
+    vector<unsigned int> seq = {};
+    for (unsigned int i = 1; i < n; i++) {
+        seq.push_back(i);
+    }
+    n--;
+    unsigned int factor = factorial(n);
+    n++;
+    for (unsigned int i = 0; i < factor; i++) {
         vector<unsigned int> seqo = SequenceGenerator(seq, i);
         for (unsigned int j = 0; j < 4; j++) {
             cout << seqo[j] << " ";
         }
         cout << endl;
     }
-*/
-/*
-    TestTime *test = new TestTime(10, 20, 1, 10, 1);
+}
 
+void testResult() {
+    TestTime *test = new TestTime(10, 20, 1, 10, 1);
+    
     vector<vector<double> > adjacency1 = {
         {0, 2, 3, 1},
         {2, 2, 5, 2},
@@ -74,14 +80,14 @@ int main() {
     
     vector<City*> bbftsp1 {};
     test->BFTSPsol(adjacency1, preference1, bbftsp1);
-    cout << "TSPB ";
+    cout << "OTSP ";
     cout << "0 -> ";
     for (unsigned int i = 0; i < bbftsp1.size(); i++) {
         cout << bbftsp1[i]->name << " -> ";
     }
     cout << "0" << endl;
     vector<City*> bbfvrp1 {};
-    cout << "VRPB ";
+    cout << "OVRP ";
     cout << "0 -> ";
     test->BFVRPsol(adjacency1, preference1, limit1, bbfvrp1);
     for (unsigned int i = 0; i < bbfvrp1.size(); i++) {
@@ -90,7 +96,7 @@ int main() {
     cout << "0" << endl;
     
     cout << endl << endl;
-
+    
     vector<vector<double> > adjacency2 = {
         {0, 2, 4, 1, 3},
         {2,	4, 5, 3, 2},
@@ -141,7 +147,7 @@ int main() {
     
     vector<City*> bbftsp2 {};
     test->BFTSPsol(adjacency2, preference2, bbftsp2);
-    cout << "TSPB ";
+    cout << "TSPO ";
     cout << "0 -> ";
     for (unsigned int i = 0; i < bbftsp2.size(); i++) {
         cout << bbftsp2[i]->name << " -> ";
@@ -149,64 +155,63 @@ int main() {
     cout << "0" << endl;
     vector<City*> bbfvrp2 {};
     test->BFVRPsol(adjacency2, preference2, limit2, bbfvrp2);
-    cout << "VRPB ";
+    cout << "VRPO ";
     cout << "0 -> ";
     for (unsigned int i = 0; i < bbfvrp2.size(); i++) {
         cout << bbfvrp2[i]->name << " -> ";
     }
     cout << "0" << endl;
-*/
-/*
-    srand (static_cast<int>(time(NULL)));
-    
-    unsigned int number_tests = 1000;
-    
-    unsigned int number_cities = 1000;
+
+}
+
+void testTime(unsigned int number_tests, unsigned int number_cities) {
     
     double avg_clock_tsp {0};
     double avg_clock_vrp {0};
     double avg_clock_bnb {0};
-//    double avg_clock_bftsp {0};
-//    double avg_clock_bfvrp {0};
-//    double avg_clock_bfg {0};
+    double avg_clock_bftsp {0};
+    double avg_clock_bfvrp {0};
+    double avg_clock_bbftsp {0};
+    double avg_clock_bbfvrp {0};
+    double avg_clock_bfg {0};
     for (unsigned int i = 0; i < number_tests; i++) {
         TestTime *test = new TestTime(number_cities, 20, 1, 3, 1);
         avg_clock_tsp += test->runTimeTSP();
         avg_clock_vrp += test->runTimeVRP();
         avg_clock_bnb += test->runTimeBnB();
-//        avg_clock_bftsp += test->runTimeBFTSP();
-//        avg_clock_bfvrp += test->runTimeBFVRP();
-//        avg_clock_bftsp += test->runTimeTSPBF();
-//        avg_clock_bfvrp += test->runTimeVRPBF();
-//        avg_clock_bfg += test->runTimeBFG();
+        avg_clock_bftsp += test->runTimeBFTSP();
+        avg_clock_bfvrp += test->runTimeBFVRP();
+        avg_clock_bbftsp += test->runTimeTSPBF();
+        avg_clock_bbfvrp += test->runTimeVRPBF();
+        avg_clock_bfg += test->runTimeBFG();
         delete test;
     }
     avg_clock_tsp /= number_tests;
     avg_clock_vrp /= number_tests;
     avg_clock_bnb /= number_tests;
-//    avg_clock_bftsp /= number_tests;
-//    avg_clock_bfvrp /= number_tests;
-//    avg_clock_bfg /= number_tests;
+    avg_clock_bftsp /= number_tests;
+    avg_clock_bfvrp /= number_tests;
+    avg_clock_bbftsp /= number_tests;
+    avg_clock_bbfvrp /= number_tests;
+    avg_clock_bfg /= number_tests;
     cout << static_cast<int>(avg_clock_tsp) << endl;
     cout << static_cast<int>(avg_clock_vrp) << endl;
     cout << static_cast<int>(avg_clock_bnb) << endl;
-//    cout << static_cast<int>(avg_clock_bftsp) << endl;
-//    cout << static_cast<int>(avg_clock_bfvrp) << endl;
-//    cout << static_cast<int>(avg_clock_bfg) << endl;
-*/
+    cout << static_cast<int>(avg_clock_bftsp) << endl;
+    cout << static_cast<int>(avg_clock_bfvrp) << endl;
+    cout << static_cast<int>(avg_clock_bbftsp) << endl;
+    cout << static_cast<int>(avg_clock_bbfvrp) << endl;
+    cout << static_cast<int>(avg_clock_bfg) << endl;
     
-    srand (static_cast<int>(time(NULL)));
-    
-    unsigned int number_tests = 1000;
-    
-    unsigned int number_cities = 10;
+}
+
+void testQuality(unsigned int number_tests, unsigned int number_cities) {
     
     double avg_cost_tsp {0};
     double avg_cost_tspbf {0};
     double avg_gain_vrp {0};
     double avg_gain_bnb {0};
     double avg_gain_vrpbf {0};
-    unsigned int ups = 0;
     for (unsigned int i = 0; i < number_tests; i++) {
         TestTime *test = new TestTime(number_cities, 10, 7, 3, 1);
         vector<double> qualTSP = test->qualityTSP();
@@ -216,7 +221,6 @@ int main() {
         avg_gain_vrp += qualVRP[0];
         avg_gain_bnb += qualVRP[1];
         avg_gain_vrpbf +=qualVRP[2];
-        if (qualVRP[0] > qualVRP[2]) ups++;
         delete test;
     }
     avg_cost_tsp /= number_cities;
@@ -230,6 +234,23 @@ int main() {
     cout << static_cast<int>(avg_gain_vrp) << endl;
     cout << static_cast<int>(avg_gain_bnb) << endl;
     cout << static_cast<int>(avg_gain_vrpbf) << endl;
-    cout << ups << endl;
+
+}
+
+int main() {
+    
+    srand (static_cast<int>(time(NULL)));
+    
+    testSequanceGenerator(5);
+    cout << endl;
+    
+    testResult();
+    cout << endl;
+    
+    testTime(1000, 10);
+    cout << endl;
+    
+    testQuality(1000, 10);
+    cout << endl;
     
 }
