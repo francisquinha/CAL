@@ -35,7 +35,6 @@ void loadInterface()
 	//atribuir cores
 	gv->defineVertexColor("blue");
 	gv->defineEdgeColor("green");
-
 }
 
 void initGraphCities()
@@ -47,9 +46,20 @@ void initGraphCities()
 		}
 }
 
-void updateSelectedCities(int cityIndex)
+void updateSelectedCities(int cityIndex,bool first)
 {
 	gv->setVertexColor(cityIndex, "yellow");
+	if (!first)
+	{
+	stringstream ss;
+	ss<<"[ ";
+	ss << cities[cityIndex].visitTime;
+	ss<<" | ";
+	ss << cities[cityIndex].preference;
+	ss<<" ]";
+	gv->setVertexLabel(cityIndex,ss.str());
+	}
+	else gv->setVertexLabel(cityIndex,"X");
 	gv->rearrange();
 }
 
@@ -117,7 +127,7 @@ bool citySelection()
 	cities[answ].index=answ;
 	cities2visit.push_back(cities[answ]);
 
-	updateSelectedCities(answ);
+	updateSelectedCities(answ,cities2visit.size()==1);
 
 	return true;
 }
@@ -173,9 +183,11 @@ float TIMEPERPIXEL = 0.023333f;
 			else newV.push_back(
 					//missing sqrt to get distance, but shoud give similar results
 					//note that would need a database or something to get real traveling distances
+			round(
 		sqrt((double) ((cities[i].x -cities[j].x)*(cities[i].x -cities[j].x) + (cities[i].y -cities[j].y)*(cities[i].y -cities[j].y))
+
 				//give some extra value
-				)*TIMEPERPIXEL
+				)*TIMEPERPIXEL*10)/10
 					);
 		}
 		edges.push_back(newV);
@@ -231,7 +243,7 @@ int main() {
 	cout<<"Insert travel limit time (the press enter again to find solution):"<<endl;
 	int limitTime = readPositiveInteger(1,99999);
 	//for some reason need to press enter again here
-	cout<<"\n"<<limitTime;
+	//cout<<"\n"<<limitTime;
 	cout<<"Started calculating better path\n";
 	create_2Use_edges();
 	//=== find solution
@@ -245,12 +257,27 @@ int main() {
 		{
 			cout<<"Optimal solution was found."<<endl;
 			gv->setVertexColor(cities2visit[0].index,"green");
+
+			stringstream ss;
+			ss << edges[sol[sol.size()-1]->index][cities2visit[0].index];
 			gv->addEdge(sol.size(),sol[sol.size()-1]->index,cities2visit[0].index,EdgeType::UNDIRECTED);
+			gv->setEdgeLabel(sol.size(),ss.str());
+			ss.str("");
+
+			ss << edges[sol[0]->index][cities2visit[0].index];
 			gv->addEdge(sol.size()+1,sol[0]->index,cities2visit[0].index,EdgeType::UNDIRECTED);
+			gv->setEdgeLabel(sol.size()+1,ss.str());
+
 			for(unsigned int i = 0; i<sol.size();i++)
 			{
 				gv->setVertexColor(sol[i]->index,"green");
-				if(i>0) gv->addEdge(i-1,sol[i-1]->index,sol[i]->index,EdgeType::UNDIRECTED);
+				if(i>0)
+					{
+					ss.str("");//stringstream ss;
+					ss << edges[sol[i-1]->index][sol[i]->index];
+					gv->addEdge(i-1,sol[i-1]->index,sol[i]->index,EdgeType::UNDIRECTED);
+					gv->setEdgeLabel(i-1,ss.str());
+					}
 			}
 			gv->rearrange();
 		}
@@ -274,9 +301,18 @@ int main() {
 			for(unsigned int i = 0; i<sol.size();i++)
 			{
 				gv->setVertexColor(cities2visit[sol[i]].index ,"green");
-				if(i>0) gv->addEdge(i-1,cities2visit[sol[i-1]].index,cities2visit[sol[i]].index,EdgeType::UNDIRECTED);
+				if(i>0)
+					{
+					stringstream ss;
+					ss << edges[cities2visit[sol[i-1]].index][cities2visit[sol[i]].index];
+					gv->addEdge(i-1,cities2visit[sol[i-1]].index,cities2visit[sol[i]].index,EdgeType::UNDIRECTED);
+					gv->setEdgeLabel(i-1,ss.str());
+					}
 			}
+			stringstream ss;
+			ss << edges[cities2visit[sol[0]].index][cities2visit[sol.size()-1].index];
 			gv->addEdge(sol.size(),cities2visit[sol[0]].index,cities2visit[sol[sol.size()-1]].index,EdgeType::UNDIRECTED);
+			gv->setEdgeLabel(sol.size(),ss.str());
 			gv->rearrange();
 		}
 
