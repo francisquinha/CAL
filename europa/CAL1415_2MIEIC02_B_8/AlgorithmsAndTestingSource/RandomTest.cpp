@@ -24,7 +24,7 @@ void convertData(vector<City> &v, int numElems, vector<vector<double> > &elems, 
             if (elems[i][j]>maxEdges[i]) maxEdges[i] = elems[i][j];
             if (elems[i][j]>maxEdges[j]) maxEdges[j] = elems[i][j];
             ss << i;
-            if (i==j) v.push_back(City(ss.str(),"",prefs[i] ,i ,0 ));
+            if (i==j) v.push_back(City(ss.str(), "", prefs[i], elems[i][i], 0));
         }
 
     //assign max edges and preferences to each city
@@ -90,10 +90,10 @@ clock_t TestTime::runTimeBFVRP(){
 
 clock_t TestTime::runTimeTSPBF() {
     vector<City> cities {};
+    clock_t ini {clock()};
     convertData(cities, numberCities, adjacency, preference);
     BruteForce<City, vector<vector<double> > > BF (notimeLimit, cities, 0, &adjacency, &City::getPreference, getEdgeCost);
-    clock_t ini {clock()};
-    vector<City*> sol = BF.solve(false); // optime = false para retornar assim que achar uma solucao maxima (nao necessariamente a mais rapida das maximas)
+    vector<City*> sol = BF.solve(true); // optime = false para retornar assim que achar uma solucao maxima (nao necessariamente a mais rapida das maximas)
     clock_t fim {clock()};
     BF.freeHeap();
     return fim - ini;
@@ -101,10 +101,10 @@ clock_t TestTime::runTimeTSPBF() {
 
 clock_t TestTime::runTimeVRPBF() {
     vector<City> cities {};
+    clock_t ini {clock()};
     convertData(cities, numberCities, adjacency, preference);
     BruteForce<City, vector<vector<double> > > BF (timeLimit, cities, 0, &adjacency, &City::getPreference, getEdgeCost);
-    clock_t ini {clock()};
-    vector<City*> sol = BF.solve(false); // optime = false para retornar assim que achar uma solucao maxima (nao necessariamente a mais rapida das maximas)
+    vector<City*> sol = BF.solve(true); // optime = false para retornar assim que achar uma solucao maxima (nao necessariamente a mais rapida das maximas)
     clock_t fim {clock()};
     BF.freeHeap();
     return fim - ini;
@@ -112,9 +112,9 @@ clock_t TestTime::runTimeVRPBF() {
 
 clock_t TestTime::runTimeBFG() {
     vector<City> cities {};
+    clock_t ini {clock()};
     convertData(cities, numberCities, adjacency, preference);
     BruteForce<City, vector<vector<double> > > BF (timeLimit, cities, 0, &adjacency, &City::getPreference, getEdgeCost);
-    clock_t ini {clock()};
     vector<City*> sol=BF.greedySolve();
     clock_t fim {clock()};
     BF.freeHeap();
@@ -123,9 +123,9 @@ clock_t TestTime::runTimeBFG() {
 
 clock_t TestTime::runTimeBnB(){
     vector<City> cities {};
+    clock_t ini {clock()};
     convertData(cities, numberCities, adjacency, preference);
     BnB_UP<City> BnB(cities, &City::getMaxPossibleTravelTimeSpent, &City::getPreference);
-    clock_t ini {clock()};
     vector<City*> sol = BnB.problem8ApproximateSolve(&cities[0], &City::getMaxPossibleTravelTimeSpentOnStart, timeLimit);
     clock_t fim {clock()};
     BnB.freeHeap();
@@ -149,12 +149,6 @@ void TestTime::BFTSPsol(vector<vector<double> > &adjac, vector<double> &pref, ve
 void TestTime::BFVRPsol(vector<vector<double> > &adjac, vector<double> &pref, unsigned int &limit, vector<City*> &bfvrp) {
     vector<City> cities {};
     convertData(cities, static_cast<int>(adjac.size()), adjac, pref);
-    unsigned int nolimit{0};
-    for (unsigned int i = 0; i < adjac.size(); i++) {
-        for (unsigned int j = 0; j < adjac.size(); j++) {
-            nolimit += adjac[i][j];
-        }
-    }
     BruteForce<City, vector<vector<double> > > BF (limit, cities, 0, &adjac, &City::getPreference, getEdgeCost);
     bfvrp = BF.solve(true); // optime = false para retornar assim que achar uma solucao maxima (nao necessariamente a mais rapida das maximas)
     BF.freeHeap();

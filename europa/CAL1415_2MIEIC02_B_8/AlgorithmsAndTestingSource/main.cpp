@@ -50,7 +50,7 @@ void testResult() {
         cout << tsp1[i] << " -> ";
     }
     cout << tsp1[0] << endl;
-    cout << tsp_cost1 << endl;
+    cout << "cost " << tsp_cost1 << endl;
     vector<unsigned int> bftsp1 = {};
     double bftsp_cost1 {0};
     vector<unsigned int> bfvrp1 = {};
@@ -62,40 +62,54 @@ void testResult() {
         cout << bftsp1[i] << " -> ";
     }
     cout << bftsp1[0] << endl;
-    cout << bftsp_cost1 << endl;
+    cout << "cost " << bftsp_cost1 << endl;
     GreedyApproxVRP(adjacency1, preference1, limit1, vrp1, vrp_gain1, vrp_cost1);
     cout << "GVRP ";
     for (unsigned int i = 0; i < vrp1.size(); i++) {
         cout << vrp1[i] << " -> ";
     }
     cout << vrp1[0] << endl;
-    cout << vrp_gain1 << " " << vrp_cost1 << endl;
+    cout << "gain " << vrp_gain1 << " cost " << vrp_cost1 << endl;
     BruteForceVRP(adjacency1, preference1, limit1, bfvrp1, bfvrp_gain1, bfvrp_cost1);
     cout << "BVRP ";
     for (unsigned int i = 0; i < bfvrp1.size(); i++) {
         cout << bfvrp1[i] << " -> ";
     }
     cout << bfvrp1[0] << endl;
-    cout << bfvrp_gain1 << " " << bfvrp_cost1 << endl;
+    cout << "gain " << bfvrp_gain1 << " cost " << bfvrp_cost1 << endl;
     
     vector<City*> bbftsp1 {};
     test->BFTSPsol(adjacency1, preference1, bbftsp1);
     cout << "OTSP ";
     cout << "0 -> ";
+    double bbftsp_cost1{0};
     for (unsigned int i = 0; i < bbftsp1.size(); i++) {
         cout << bbftsp1[i]->name << " -> ";
+        if (i == 0) bbftsp_cost1 += adjacency1[0][atoi((bbftsp1[i]->name).c_str())];
+        else bbftsp_cost1 += adjacency1[atoi((bbftsp1[i-1]->name).c_str())][atoi((bbftsp1[i]->name).c_str())];
+        bbftsp_cost1 += bbftsp1[i]->visitTime;
     }
+    bbftsp_cost1 += adjacency1[atoi((bbftsp1[bbftsp1.size() - 1 ]->name).c_str())][0];
     cout << "0" << endl;
+    cout << "cost " << bbftsp_cost1 << endl;
     vector<City*> bbfvrp1 {};
     cout << "OVRP ";
     cout << "0 -> ";
     test->BFVRPsol(adjacency1, preference1, limit1, bbfvrp1);
+    double bbfvrp_gain1{0};
+    double bbfvrp_cost1{0};
     for (unsigned int i = 0; i < bbfvrp1.size(); i++) {
         cout << bbfvrp1[i]->name << " -> ";
+        bbfvrp_gain1 += bbfvrp1[i]->preference;
+        if (i == 0) bbfvrp_cost1 += adjacency1[0][atoi((bbfvrp1[i]->name).c_str())];
+        else bbfvrp_cost1 += adjacency1[atoi((bbfvrp1[i-1]->name).c_str())][atoi((bbfvrp1[i]->name).c_str())];
+        bbfvrp_cost1 += bbfvrp1[i]->visitTime;
     }
+    bbfvrp_cost1 += adjacency1[atoi((bbfvrp1[bbfvrp1.size() - 1 ]->name).c_str())][0];
     cout << "0" << endl;
-    
-    cout << endl << endl;
+    cout << "gain " << bbfvrp_gain1 << " cost " << bbfvrp_cost1 << endl;
+
+    cout << endl;
     
     vector<vector<double> > adjacency2 = {
         {0, 2, 4, 1, 3},
@@ -117,7 +131,7 @@ void testResult() {
         cout << tsp2[i] << " -> ";
     }
     cout << tsp2[0] << endl;
-    cout << tsp_cost2 << endl;
+    cout << "cost " << tsp_cost2 << endl;
     vector<unsigned int> bftsp2 = {};
     double bftsp_cost2 {0};
     vector<unsigned int> bfvrp2 = {};
@@ -129,38 +143,52 @@ void testResult() {
         cout << bftsp2[i] << " -> ";
     }
     cout << bftsp2[0] << endl;
-    cout << bftsp_cost2 << endl;
+    cout << "cost " << bftsp_cost2 << endl;
     GreedyApproxVRP(adjacency2, preference2, limit2, vrp2, vrp_gain2, vrp_cost2);
     cout << "GVRP ";
     for (unsigned int i = 0; i < vrp2.size(); i++) {
         cout << vrp2[i] << " -> ";
     }
     cout << vrp2[0] << endl;
-    cout << vrp_gain2 << " " << vrp_cost2 << endl;
+    cout << "gain " << vrp_gain2 << " cost " << vrp_cost2 << endl;
     BruteForceVRP(adjacency2, preference2, limit2, bfvrp2, bfvrp_gain2, bfvrp_cost2);
     cout << "BVRP ";
     for (unsigned int i = 0; i < bfvrp2.size(); i++) {
         cout << bfvrp2[i] << " -> ";
     }
     cout << bfvrp2[0] << endl;
-    cout << bfvrp_gain2 << " " << bfvrp_cost2 << endl;
+    cout << "gain " << bfvrp_gain2 << " cost " << bfvrp_cost2 << endl;
     
     vector<City*> bbftsp2 {};
     test->BFTSPsol(adjacency2, preference2, bbftsp2);
-    cout << "TSPO ";
+    cout << "OTSP ";
     cout << "0 -> ";
+    double bbftsp_cost2{0};
     for (unsigned int i = 0; i < bbftsp2.size(); i++) {
         cout << bbftsp2[i]->name << " -> ";
+        if (i == 0) bbftsp_cost2 += adjacency2[0][atoi((bbftsp2[i]->name).c_str())];
+        else bbftsp_cost2 += adjacency2[atoi((bbftsp2[i - 1]->name).c_str())][atoi((bbftsp2[i]->name).c_str())];
+        bbftsp_cost2 += bbftsp2[i]->visitTime;
     }
+    bbftsp_cost2 += adjacency2[atoi((bbftsp2[bbftsp2.size() - 1]->name).c_str())][0];
     cout << "0" << endl;
+    cout << "cost " << bbftsp_cost2 << endl;
     vector<City*> bbfvrp2 {};
-    test->BFVRPsol(adjacency2, preference2, limit2, bbfvrp2);
-    cout << "VRPO ";
+    cout << "OVRP ";
     cout << "0 -> ";
+    test->BFVRPsol(adjacency2, preference2, limit2, bbfvrp2);
+    double bbfvrp_gain2{0};
+    double bbfvrp_cost2{0};
     for (unsigned int i = 0; i < bbfvrp2.size(); i++) {
         cout << bbfvrp2[i]->name << " -> ";
+        bbfvrp_gain2 += bbfvrp2[i]->preference;
+        if (i == 0) bbfvrp_cost2 += adjacency2[0][atoi((bbfvrp2[i]->name).c_str())];
+        else bbfvrp_cost2 += adjacency2[atoi((bbfvrp2[i - 1]->name).c_str())][atoi((bbfvrp2[i]->name).c_str())];
+        bbfvrp_cost2 += bbfvrp2[i]->visitTime;
     }
+    bbfvrp_cost2 += adjacency2[atoi((bbfvrp2[bbfvrp2.size() - 1]->name).c_str())][0];
     cout << "0" << endl;
+    cout << "gain " << bbfvrp_gain2 << " cost " << bbfvrp_cost2 << endl;
 
 }
 
@@ -194,14 +222,14 @@ void testTime(unsigned int number_tests, unsigned int number_cities) {
     avg_clock_bbftsp /= number_tests;
     avg_clock_bbfvrp /= number_tests;
     avg_clock_bfg /= number_tests;
-    cout << static_cast<int>(avg_clock_tsp) << endl;
-    cout << static_cast<int>(avg_clock_vrp) << endl;
-    cout << static_cast<int>(avg_clock_bnb) << endl;
-    cout << static_cast<int>(avg_clock_bftsp) << endl;
-    cout << static_cast<int>(avg_clock_bfvrp) << endl;
-    cout << static_cast<int>(avg_clock_bbftsp) << endl;
-    cout << static_cast<int>(avg_clock_bbfvrp) << endl;
-    cout << static_cast<int>(avg_clock_bfg) << endl;
+    cout << "average clocks greedy TSP " << static_cast<int>(avg_clock_tsp) << endl;
+    cout << "average clocks greedy VRP "  << static_cast<int>(avg_clock_vrp) << endl;
+    cout << "average clocks branch VRP "  << static_cast<int>(avg_clock_bnb) << endl;
+    cout << "average clocks brutef TSP "  << static_cast<int>(avg_clock_bftsp) << endl;
+    cout << "average clocks brutef VRP "  << static_cast<int>(avg_clock_bfvrp) << endl;
+    cout << "average clocks bfopti TSP "  << static_cast<int>(avg_clock_bbftsp) << endl;
+    cout << "average clocks bfopti VRP "  << static_cast<int>(avg_clock_bbfvrp) << endl;
+    cout << "average clocks bfgree VRP "  << static_cast<int>(avg_clock_bfg) << endl;
     
 }
 
@@ -213,7 +241,7 @@ void testQuality(unsigned int number_tests, unsigned int number_cities) {
     double avg_gain_bnb {0};
     double avg_gain_vrpbf {0};
     for (unsigned int i = 0; i < number_tests; i++) {
-        TestTime *test = new TestTime(number_cities, 10, 7, 3, 1);
+        TestTime *test = new TestTime(number_cities, 10, 7, 5, 1);
         vector<double> qualTSP = test->qualityTSP();
         avg_cost_tsp += qualTSP[0];
         avg_cost_tspbf += qualTSP[1];
@@ -229,11 +257,14 @@ void testQuality(unsigned int number_tests, unsigned int number_cities) {
     avg_gain_bnb /= number_cities;
     avg_gain_vrpbf /= number_cities;
     
-    cout << static_cast<int>(avg_cost_tsp) << endl;
-    cout << static_cast<int>(avg_cost_tspbf) << endl;
-    cout << static_cast<int>(avg_gain_vrp) << endl;
-    cout << static_cast<int>(avg_gain_bnb) << endl;
-    cout << static_cast<int>(avg_gain_vrpbf) << endl;
+    cout << "total average cost greedy TSP " << static_cast<int>(avg_cost_tsp) << endl;
+    cout << "total average cost brutef TSP " << static_cast<int>(avg_cost_tspbf) << endl;
+    cout << "greedy solution is " << round ((avg_cost_tsp - avg_cost_tspbf) * 100 / avg_cost_tspbf) << "% worst" << endl;
+    cout << "total average gain greedy VRP " << static_cast<int>(avg_gain_vrp) << endl;
+    cout << "total average gain branch VRP " << static_cast<int>(avg_gain_bnb) << endl;
+    cout << "total average gain brutef VRP " << static_cast<int>(avg_gain_vrpbf) << endl;
+    cout << "greedy solution is " << round ((avg_gain_vrpbf - avg_gain_vrp) * 100 / avg_gain_vrpbf) << "% worst" << endl;
+    cout << "branch solution is " << round ((avg_gain_vrpbf - avg_gain_bnb) * 100 / avg_gain_vrpbf) << "% worst" << endl;
 
 }
 
@@ -241,16 +272,16 @@ int main() {
     
     srand (static_cast<int>(time(NULL)));
     
-    testSequanceGenerator(5);
-    cout << endl;
+//    testSequanceGenerator(5);
+//    cout << endl;
     
     testResult();
     cout << endl;
     
-    testTime(1000, 10);
+    testTime(1000, 7);
     cout << endl;
     
-    testQuality(1000, 10);
+    testQuality(1000, 7);
     cout << endl;
     
 }

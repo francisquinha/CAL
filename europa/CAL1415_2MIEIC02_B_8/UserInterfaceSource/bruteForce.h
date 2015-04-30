@@ -287,7 +287,7 @@ public:
 			//return "home" solution is good?
 			if(    (node->value > best->value //more valuable
 					|| (node->value==best->value&&node->cost<best->cost) )
-					&& node->cost+getEdgeCost(startIndex,node->index) < maxCost)
+					&& node->cost+getEdgeCost(startIndex,node->index) <= maxCost)
 				best=node;
 
 			if(!optime&&maxValue==best->value) break;
@@ -319,7 +319,7 @@ public:
 				if(node->index!=startIndex)cout<<"..."<< node->index <<"..."<<node->parent->index ;
 						cout<<"\n";)
 
-				if (node->cost+getEdgeCost(node->index,index)+vertices[index].first.cost<maxCost)
+				if (node->cost+getEdgeCost(node->index,index)+vertices[index].first.cost<=maxCost)
 				{
 					BruteForce_node* open = new BruteForce_node(
 				node->cost+getEdgeCost(node->index,index)+vertices[index].first.cost,
@@ -380,7 +380,7 @@ public:
 				//return "home" solution is good?
 				if(    (node->value > best->value //more valuable
 						|| (node->value==best->value&&node->cost<best->cost) )
-						&& node->cost+getEdgeCost(startIndex,node->index) < maxCost)
+						&& node->cost+getEdgeCost(startIndex,node->index) <= maxCost)
 					best=node;
 
 				if(maxValue==best->value) break;
@@ -412,7 +412,7 @@ public:
 					if(node->index!=startIndex)cout<<"..."<< node->index <<"..."<<node->parent->index ;
 							cout<<"\n";)
 
-					if (node->cost+getEdgeCost(node->index,index)+vertices[index].first.cost<maxCost)
+					if (node->cost+getEdgeCost(node->index,index)+vertices[index].first.cost<=maxCost)
 					{
 						BruteForce_node* open = new BruteForce_node(
 					node->cost+getEdgeCost(node->index,index)+vertices[index].first.cost,
