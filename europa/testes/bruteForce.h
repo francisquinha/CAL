@@ -286,7 +286,7 @@ public:
 
 			//return "home" solution is good?
 			if(    (node->value > best->value //more valuable
-					|| (node->value==best->value&&node->cost<best->cost) )
+					|| (node->value==best->value&&node->cost+getEdgeCost(startIndex,node->index) <best->cost+getEdgeCost(startIndex,best->index)) )
 					&& node->cost+getEdgeCost(startIndex,node->index) <= maxCost)
 				best=node;
 

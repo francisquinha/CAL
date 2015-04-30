@@ -377,11 +377,11 @@ public:
 				DEBUG_CODE4(cout<<"ndv"<<node->value<<"---"<<best->value<<"\n";
 				cout<<"ndc"<<node->cost<<"---"<<best->cost<<"\n";)
 
-				//return "home" solution is good?
-				if(    (node->value > best->value //more valuable
-						|| (node->value==best->value&&node->cost<best->cost) )
-						&& node->cost+getEdgeCost(startIndex,node->index) <= maxCost)
-					best=node;
+                //return "home" solution is good?
+                if(    (node->value > best->value //more valuable
+                        || (node->value==best->value&&node->cost+getEdgeCost(startIndex,node->index) <best->cost+getEdgeCost(startIndex,best->index)) )
+                   && node->cost+getEdgeCost(startIndex,node->index) <= maxCost)
+                    best=node;
 
 				if(maxValue==best->value) break;
 
