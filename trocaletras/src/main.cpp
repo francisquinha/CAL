@@ -25,5 +25,16 @@ int main()
 	std::cout << wordNE << std::endl;
 	//while(true);
 
+	std::vector< char > letters;
+	for (int i = 0; i<26 ; i++)	letters.push_back('a'+i);
+	for (int i = 0; i<26 ; i++)	std::cout<<letters[i];
+
+
+	dic.freeWordsWhenBuildingDFA=false;
+	dic.buildDFA();
+	dic.freeHeap();
+	std::cout<<"\n----end";
+	//while(true);
+
 	return 0;
 }
