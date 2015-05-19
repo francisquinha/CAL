@@ -7,7 +7,7 @@
 
 using namespace std;
 
-#define MAX_NUMBER_OF_LETTERS 6
+#define MAX_NUMBER_OF_LETTERS 7
 #define MAX_NUMBER_OF_THREADS 4
 
 char lowerAndRemoveAcentosAndCedilha(char in){
@@ -111,11 +111,28 @@ cout<<"\n"<<words[words.size()-2].length();*/
 }
 
 
-
-void Dictionary::buildDFA()
+void Dictionary::buildDFA(bool viaIndexes)
 {
 	for(int i = 0; i<26;i++) dfa.possibleDestinations[i]=NULL;
-	addNodes(&dfa,0);
+	if(viaIndexes) addNodes(&dfa,0);
+	else for(unsigned int i=0;i<words.size(); )
+	{
+		bool quick=false;//not sure if this actually make it faster
+		Node* node=&dfa;
+		int l=words[i].length();
+		for(int j = 0 ; j<l;j++)
+		{
+			unsigned int charIndex =  (unsigned int) words[i][j]- (unsigned int) 'a';
+			if (quick) node->possibleDestinations[charIndex]=new Node();
+			else if(node->possibleDestinations[charIndex]==NULL) {node->possibleDestinations[charIndex]=new Node(); quick=true;}
+			node=node->possibleDestinations[charIndex];
+		}
+		node->wordDone=true;
+
+		if(freeWordsWhenBuildingDFA) words.erase(words.begin());
+		else i++;
+	}
+
 }
 
 bool Dictionary::isWord(std::string word)

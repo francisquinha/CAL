@@ -31,7 +31,7 @@ public:
 	bool checkIfWordExists(std::string word);
 
 	void addNodes(Node *node,int letterIndex);
-	void buildDFA();
+	void buildDFA(bool viaIndexes);
 	bool isWord(std::string word);
 	void freeNodeHeap(Node* node);
 	void freeHeap();

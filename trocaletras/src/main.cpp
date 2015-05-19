@@ -31,7 +31,7 @@ int main()
 	std::cout << "\n";
 
 	dic.freeWordsWhenBuildingDFA=true;
-	dic.buildDFA();
+	dic.buildDFA(true);
 
 	std::cout << dic.isWord("tudo") << std::endl;
 	std::cout << dic.isWord("nada") << std::endl;
