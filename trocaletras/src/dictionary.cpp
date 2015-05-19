@@ -7,7 +7,7 @@
 
 using namespace std;
 
-#define MAX_NUMBER_OF_LETTERS 8
+#define MAX_NUMBER_OF_LETTERS 6
 #define MAX_NUMBER_OF_THREADS 4
 
 char lowerAndRemoveAcentosAndCedilha(char in){
@@ -116,6 +116,21 @@ void Dictionary::buildDFA()
 {
 	for(int i = 0; i<26;i++) dfa.possibleDestinations[i]=NULL;
 	addNodes(&dfa,0);
+}
+
+bool Dictionary::isWord(std::string word)
+{
+	Node* node;
+	node=&dfa;
+	int wordlenght=word.length();
+	for(int i = 0 ; i<wordlenght ; i++)
+	{
+		if(node==NULL) return false;
+		//if(i>0)cout<< "_" << char(word[i-1]) <<endl ;
+		node=node->possibleDestinations[(unsigned int)word[i]- (unsigned int) 'a'];
+	}
+	if(node==NULL) return false;
+	return node->wordDone;
 }
 
 void Dictionary::freeNodeHeap(Node* node)
