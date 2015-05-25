@@ -12,6 +12,7 @@ public:
 	Node()
 	{
 		for(int i = 0; i<26;i++) possibleDestinations[i]=NULL;
+		wordDone=false;
 	}
 };
 
@@ -30,9 +31,25 @@ public:
 
 	bool checkIfWordExists(std::string word);
 
-	void addNodes(Node *node,int letterIndex);
-	void buildDFA(bool viaIndexes);
+	//void addNodes(Node *node,int letterIndex);
+	void buildDFA();//bool viaIndexes);
 	bool isWord(std::string word);
+	std::vector<int> WordsFromStart(std::string seq);
+	void allWords(std::string seq,std::vector<int> &beginWord, std::vector<int> &endWord);
+	std::vector<char> getCharactersFromSeq(std::string &seq);
+
+/* problem: in "ocavarla"...missing1:cao,lavar,vaca. would not recognize vaca
+	void fromStartMissingLetterPresentInSeq(std::string &oseq, std::vector<char> &charinseq,int startIndex,std::vector<int> &beginWord, std::vector<int> &endWord, std::vector<int> &swap1,std::vector<int> &swap2);
+	void allMissingLetterPresentInSeq(std::string seq,int startIndex,std::vector<int> &beginWord, std::vector<int> &endWord, std::vector<int> &swap1,std::vector<int> &swap2);
+*/
+
+	void allWordsWithSwap(std::string seq,int swapIndex1, int swapIndex2,std::vector<int> &beginWord, std::vector<int> &endWord,std::vector<int> &swap1,std::vector<int> &swap2);
+	void findSwapOnePossibilities(std::string seq, std::vector<int> &beginWord, std::vector<int> &endWord, std::vector<int> &swap1,std::vector<int> &swap2);
+
+	std::string selectRandomWordsAux(Node* node,int index,int numberOfLetters);
+	std::vector<std::string> selectRandomWords(int numberOfWords,int maxNumberOfletter);
+
+
 	void freeNodeHeap(Node* node);
 	void freeHeap();
 };
