@@ -187,6 +187,33 @@ void Dictionary::allWords(std::string seq,std::vector<int> &beginWord, std::vect
 	}
 }
 
+
+bool Dictionary::hasWordsFromStart(std::string seq)
+{
+	Node* node;
+	node=&dfa;
+	int wordlenght=seq.length();
+	int i = 0 ;
+
+	for(; i<wordlenght ; i++)
+	{
+		node=node->possibleDestinations[(unsigned int)seq[i]- (unsigned int) 'a'];
+		if(node==NULL) return false;
+		if (node->wordDone) return true;
+	}
+	return false;
+}
+bool Dictionary::hasAnyWords(std::string seq)
+{
+	unsigned int originalSeqLenght_less1 = seq.length()-1;
+	for(unsigned int i=0; i<originalSeqLenght_less1;++i)//-1 cause there is no need to check a single letter
+	{
+		if( hasWordsFromStart(seq) ) return true;
+		seq = seq.substr(1);
+	}
+	return false;
+}
+
 vector<char> Dictionary::getCharactersFromSeq(string &seq)
 {
 	vector<char> ret;
@@ -326,6 +353,72 @@ vector<string> Dictionary::selectRandomWords(int numberOfWords,int maxNumberOfle
 	return ret;
 }
 
+/*the smartest implementation i could think of... quite happy with it =) */
+//USE THIS ONE TO DEBUG PERMUTATIONS
+void Dictionary::show_permutations_withoutrepetitions(string str ,int last_position,int charIndex,int how_many_done,int filled)
+{
+	//stop when str is filled
+	if(filled==seqLenght)//could also go to last charInex without using an extra var... should be faster this way i suppose? not sure tho
+	{
+		cout<<str<<endl;//debug
+		return;
+	}
+
+	if (how_many_done==ocurrences[charIndex])
+		{
+		show_permutations_withoutrepetitions(str, 0, charIndex+1,0, filled);
+		return;
+		}
+
+	//for(int i=last_position+1; i<seqLenght + how_many_done-ocurrences[charIndex]+1; ++i) if (str[i]==' ')
+	for(int i = seqLenght + how_many_done-ocurrences[charIndex]+1; i>=last_position;  --i) if (str[i]==' ')//less intuitive but faster
+	{
+		//cout<<i<<endl;//debug
+		string newStr=str; newStr[i]=(char) ( (int) 'a' +charIndex);
+		show_permutations_withoutrepetitions(newStr, i, charIndex,how_many_done+1,filled+1);
+	}
+
+}
+
+bool Dictionary::check_permutations_withoutrepetitions(string str ,int last_position,int charIndex,int how_many_done,int filled)
+{
+	//stop when str is filled
+	if(filled==seqLenght)//could also go to last charInex without using an extra var... should be faster this way i suppose? not sure tho
+		return hasAnyWords(str);
+
+	if (how_many_done==ocurrences[charIndex])
+		return check_permutations_withoutrepetitions(str, 0, charIndex+1,0, filled);
+
+
+	//for(int i=last_position+1; i<seqLenght + how_many_done-ocurrences[charIndex]+1; ++i) if (str[i]==' ')
+	for(int i = seqLenght + how_many_done-ocurrences[charIndex]+1; i>=last_position;  --i) if (str[i]==' ')//less intuitive but faster
+	{
+		//cout<<i<<endl;//debug
+		string newStr=str; newStr[i]=(char) ( (int) 'a' +charIndex);
+		if (check_permutations_withoutrepetitions(newStr, i, charIndex,how_many_done+1,filled+1) ) return true;
+	}
+	return false;
+}
+
+void Dictionary::debug_charset_has_possible_words(std::string seq)
+{
+	seqLenght = seq.length();
+	for(int i = 0;i<26;++i) ocurrences[i] = 0;
+	string base;
+	for(int i=seqLenght-1;i>=0;--i ) {base+=" "; ocurrences[ (unsigned int) seq[i]- (unsigned int) 'a' ]++;   }
+	//cout<<"..."<<ocurrences[0]<<endl;//debug
+	//cout<<base.length() <<"|"<<seqLenght<<endl;//debug
+	show_permutations_withoutrepetitions(base,0,0,0,0);
+}
+
+bool Dictionary::charset_has_possible_words(std::string seq)
+{
+	seqLenght = seq.length();
+	for(int i = 0;i<26;++i) ocurrences[i] = 0;
+	string base;
+	for(int i=seqLenght-1;i>=0;--i ) {base+=" "; ocurrences[ (unsigned int) seq[i]- (unsigned int) 'a' ]++;   }
+	return check_permutations_withoutrepetitions(base,0,0,0,0);
+}
 
 void Dictionary::freeNodeHeap(Node* node)
 {

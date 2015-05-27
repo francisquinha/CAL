@@ -20,7 +20,18 @@ int main()
 	cout<< (aasd + (char)('a'+2)) << endl;
 	return 0;
 	*/
+
 	Dictionary dic;
+
+	dic.debug_charset_has_possible_words("aa");
+	cout<<"----"<<endl;
+	dic.debug_charset_has_possible_words("aba");
+	cout<<"----"<<endl;
+	dic.debug_charset_has_possible_words("abab");
+	cout<<"----"<<endl;
+	dic.debug_charset_has_possible_words("naazaz");
+	cout<<"----"<<endl;
+	return 0;
 	dic.readDICfile("portugues.dic");
 
 	std::cout<<"All words have been loaded"<<std::endl;
