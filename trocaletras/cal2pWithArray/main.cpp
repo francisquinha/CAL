@@ -32,9 +32,9 @@ int main()
 	dic.debug_charset_has_possible_words("naazaz");
 	cout<<"----"<<endl;
 	return 0;*/
-	dic.readDICfile("US.dic");
+	//dic.readDICfile("US.dic");
 
-	std::cout<<"All words have been loaded"<<std::endl;
+
 
 	//bool wordE = dic.checkIfWordExists("tudo");
 	//bool wordNE = dic.checkIfWordExists("uwwoyfwih");
@@ -53,6 +53,7 @@ int main()
 	//return 0;
 
 	dic.buildDFA_fromBinaryFile("US.dicnodes");
+	std::cout<<"All nodes have been loaded"<<std::endl;
 	cout<<"dfa done"<<endl;
 
 	vector<string> sss = dic.selectRandomWords(5,7);

@@ -92,6 +92,7 @@ void Dictionary::buildDFA_fromWords()//bool viaIndexes)
 				node->possibleDestinations[charIndex]=dfaSize;
 				//dfa = (Node*) realloc(dfa,sizeof(struct Node)*(dfaSize+1));
 				for(int k = 0; k<26;k++) dfa[dfaSize].possibleDestinations[k]=0;
+				dfa[dfaSize].wordDone=false;
 				dfaSize++;
 			}
 			else if(node->possibleDestinations[charIndex]==0)
@@ -99,6 +100,7 @@ void Dictionary::buildDFA_fromWords()//bool viaIndexes)
 				node->possibleDestinations[charIndex]=dfaSize;
 				//dfa = (Node*) realloc(dfa,sizeof(struct Node)*(dfaSize+1));
 				for(int k = 0; k<26;k++) dfa[dfaSize].possibleDestinations[k]=0;
+				dfa[dfaSize].wordDone=false;
 				dfaSize++;
 				quick=true;
 			}

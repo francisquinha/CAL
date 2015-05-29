@@ -9,11 +9,11 @@ public:
 	 *  these connections are made implicit. NULL means that can't form any word with the letter*/
 	unsigned int possibleDestinations[26];///<instead of using pointers this variable indicates the index in an array
 
-	Node()
+	/*Node()
 	{
-		for(int i = 0; i<26;i++) possibleDestinations[i]=NULL;
+		for(int i = 0; i<26;i++) possibleDestinations[i]=0;
 		wordDone=false;
-	}
+	}*/
 };
 
 class Dictionary
