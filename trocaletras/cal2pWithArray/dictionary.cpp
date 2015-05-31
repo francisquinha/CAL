@@ -130,16 +130,16 @@ void Dictionary::saveDFA_toBinaryFile(std::string filename)
 
 bool Dictionary::isWord(std::string word)
 {
-	Node* node;
-	node=dfa;
+	int node;
+	node=0;
 	int wordlenght=word.length();
 	for(int i = 0 ; i<wordlenght ; i++)
 	{
-		node=&dfa[node->possibleDestinations[(unsigned int)word[i]- (unsigned int) 'a']];
+		node=dfa[node].possibleDestinations[(unsigned int)word[i]- (unsigned int) 'a'];
 		if(node==0) return false;
 	}
 
-	return node->wordDone;
+	return dfa[node].wordDone;
 }
 
 /*
@@ -150,16 +150,16 @@ bool Dictionary::isWord(std::string word)
 std::vector<int> Dictionary::WordsFromStart(std::string seq)
 {
 	vector<int> indexes;
-	Node* node;
-	node=dfa;
+	int node;
+	node=0;
 	int wordlenght=seq.length();
 	int i = 0 ;
 
 	for(; i<wordlenght ; i++)
 	{
-		node=&dfa[node->possibleDestinations[(unsigned int)seq[i]- (unsigned int) 'a']];
+		node=dfa[node].possibleDestinations[(unsigned int)seq[i]- (unsigned int) 'a'];
 		if(node==0) return indexes;
-		if (node->wordDone) indexes.push_back(i);
+		if (dfa[node].wordDone) indexes.push_back(i);
 	}
 	return indexes;
 }
@@ -180,16 +180,16 @@ void Dictionary::allWords(std::string seq,std::vector<int> &beginWord, std::vect
 
 bool Dictionary::hasWordsFromStart(std::string seq)
 {
-	Node* node;
-	node=dfa;
+	int node;
+	node=0;
 	int wordlenght=seq.length();
 	int i = 0 ;
 
 	for(; i<wordlenght ; i++)
 	{
-		node=&dfa[node->possibleDestinations[(unsigned int)seq[i]- (unsigned int) 'a']];
+		node=dfa[node].possibleDestinations[(unsigned int)seq[i]- (unsigned int) 'a'];
 		if(node==0) return false;
-		if (node->wordDone) return true;
+		if (dfa[node].wordDone) return true;
 	}
 	return false;
 }
@@ -245,7 +245,7 @@ void Dictionary::findSwapOnePossibilities(std::string seq, std::vector<int> &beg
 }
 
 //vector<int> possibleIndexesO = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25};
-string Dictionary::selectRandomWordsAux(Node* node,int index,int numberOfLetters)//backtracking solution
+string Dictionary::selectRandomWordsAux(int node,int index,int numberOfLetters)//backtracking solution
 {
 	vector<int> possibleIndexes; //= {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25};
 	for (int i =0;i<26;++i) possibleIndexes.push_back(i);
@@ -253,15 +253,15 @@ string Dictionary::selectRandomWordsAux(Node* node,int index,int numberOfLetters
 	 int choosenIndex;
 	 for(int i=0;i<26;++i){
 	 choosenIndex = rand() % possibleIndexes.size();
-	 if (node->possibleDestinations[choosenIndex]==NULL)possibleIndexes.erase(possibleIndexes.begin()+choosenIndex);
+	 if (dfa[node].possibleDestinations[choosenIndex]==0) possibleIndexes.erase(possibleIndexes.begin()+choosenIndex);
 	 else
 		{
 		 if(index+1==numberOfLetters)
 		 {
-			 if (dfa[node->possibleDestinations[choosenIndex]].wordDone) return ( (char)('a' + choosenIndex) + rest );//ok, word was found
+			 if (dfa[dfa[node].possibleDestinations[choosenIndex]].wordDone) return ( (char)('a' + choosenIndex) + rest );//ok, word was found
 			 else possibleIndexes.erase(possibleIndexes.begin()+choosenIndex);
 		 }
-		 else if (  (rest=selectRandomWordsAux(&dfa[node->possibleDestinations[choosenIndex]],index+1,numberOfLetters))!="?" ) return ( (char)('a' + choosenIndex) + rest );
+		 else if (  (rest=selectRandomWordsAux(dfa[node].possibleDestinations[choosenIndex],index+1,numberOfLetters))!="?" ) return ( (char)('a' + choosenIndex) + rest );
 		 else possibleIndexes.erase(possibleIndexes.begin()+choosenIndex);
 		 }
 	 }
@@ -277,7 +277,7 @@ vector<string> Dictionary::selectRandomWords(int numberOfWords,int maxNumberOfle
 
 		 int number_of_letters = rand() % (maxNumberOfletter-1) + 2;
 
-			string newS = selectRandomWordsAux(dfa,0,number_of_letters);
+			string newS = selectRandomWordsAux(0,0,number_of_letters);
 
 			if (newS!="?") ret.push_back(newS);
 			else cout<<"warning on selectRandomWords: no word of given length found"<<endl;

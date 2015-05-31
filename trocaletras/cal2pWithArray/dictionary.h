@@ -46,7 +46,7 @@ public:
 	void allWordsWithSwap(std::string seq,int swapIndex1, int swapIndex2,std::vector<int> &beginWord, std::vector<int> &endWord,std::vector<int> &swap1,std::vector<int> &swap2);
 	void findSwapOnePossibilities(std::string seq, std::vector<int> &beginWord, std::vector<int> &endWord, std::vector<int> &swap1,std::vector<int> &swap2);
 
-	std::string selectRandomWordsAux(Node* node,int index,int numberOfLetters);
+	std::string selectRandomWordsAux(int node,int index,int numberOfLetters);
 	std::vector<std::string> selectRandomWords(int numberOfWords,int maxNumberOfletter);
 
 	int seqLenght; int ocurrences[26];//aux vars to be used by the methods below
