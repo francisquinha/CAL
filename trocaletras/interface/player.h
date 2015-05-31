@@ -33,6 +33,8 @@ public:
 
     void printChain(std::vector<char> chain);
 
+    void printReverseChain(std::vector<char> chain);
+
     bool removeLetters(std::vector<char> &chain, int index1, int index2, std::string &word, Dictionary *dictionary);
 
     std::vector<char> &humanTurn(std::vector<char> &chain, Dictionary *dictionary);
@@ -48,6 +50,8 @@ public:
     int getScore();
 
     std::string getName();
+
+    long getBest(const std::vector<int> &indexes1, const std::vector<int> &indexes2) const;
 };
 
 #endif //TROCALETRAS_PLAYER_H
