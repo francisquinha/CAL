@@ -97,6 +97,7 @@ bool Game::checkFinish() {
     		string seq="";  for (unsigned int i = 0; i < chain.size(); ++i)  seq += chain[i];
     		if(!dictionary->charset_has_possible_words(seq))
     		{
+    			cout <<"________________________________________________________________________________"<<endl;
     			cout<<endl<<endl<< "- Game ended because no more words can be done -" <<endl;
     			return true;
     		}
@@ -104,7 +105,9 @@ bool Game::checkFinish() {
 
     if( player1->getSkip() && player2->getSkip() )
     {
-      	 cout<<endl<<endl<< "- Game ended because both players skipped their turn -" <<endl;
+    	cout <<"________________________________________________________________________________"<<endl;
+    	cout <<"________________________________________________________________________________"<<endl;
+      	 cout<<endl<< "- Game ended because both players skipped their turn -" <<endl;
       	 return true;
     }
 
