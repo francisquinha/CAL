@@ -83,7 +83,7 @@ vector<char> &Player::diff1Turn(vector<char> &chain, Dictionary *dictionary) {
             int index2 = indexes2[wordIndex];
             cout << endl;
             printChain(chain);
-            cout << name << ": Swap "<< swapIndex1 << " " << swapIndex2 <<"." << endl << endl;
+            cout << name << ": Swap "<< swapIndex2 << " " << swapIndex1 <<"." << endl << endl;
             swapLetters(chain, swapIndex1, swapIndex2);
             printChain(chain);
             string word{};
@@ -124,7 +124,7 @@ vector<char> &Player::diff2Turn(vector<char> &chain, Dictionary *dictionary) {
             cout << endl;
             printChain(chain);
             swapLetters(chain, swapIndex1, swapIndex2);
-            cout << name << ": Swap "<< swapIndex1 << " " << swapIndex2 <<"." << endl << endl;
+            cout << name << ": Swap "<< swapIndex2 << " " << swapIndex1 <<"." << endl << endl;
             printChain(chain);
             string word{};
             removeLetters(chain, index1, index2, word, dictionary);
@@ -151,7 +151,7 @@ vector<char> &Player::diff3Turn(vector<char> &chain, Dictionary *dictionary) {
         cout << endl;
         printChain(chain);
         swapLetters(chain, swapIndex1, swapIndex2);
-        cout << name << ": Swap "<< swapIndex1 << " " << swapIndex2 <<"." << endl << endl;
+        cout << name << ": Swap "<< swapIndex2 << " " << swapIndex1 <<"." << endl << endl;
         printChain(chain);
         string word{};
         removeLetters(chain, index1, index2, word, dictionary);
@@ -183,7 +183,7 @@ vector<char> &Player::diff3Turn(vector<char> &chain, Dictionary *dictionary) {
                 cout << endl;
                 printReverseChain(chain);
                 swapLetters(chain, swapIndex1, swapIndex2);
-                cout << name << ": Swap "<< swapIndex1 << " " << swapIndex2 <<"." << endl << endl;
+                cout << name << ": Swap "<< swapIndex2 << " " << swapIndex1 <<"." << endl << endl;
                 printReverseChain(chain);
                 string word{};
                 removeLetters(chain, index1, index2, word, dictionary);
