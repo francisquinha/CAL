@@ -31,8 +31,6 @@ public:
 
     void swapLetters(std::vector<char> &chain, int index1, int index2);
 
-    void printReverseChain(std::vector<char> chain);
-
     bool removeLetters(std::vector<char> &chain, int index1, int index2, std::string &word, Dictionary *dictionary);
 
     std::vector<char> &humanTurn(std::vector<char> &chain, Dictionary *dictionary);

@@ -18,16 +18,21 @@ int main()
 
 	bool play=true;
 	while(play) {
-		system("cls");
+		#if defined(__APPLE__) || defined(__unix__)
+			printf("\033c");
+		#else
+       		else system("cls");
+    	#endif
 
-		//cout << " _      ______ _______ _______ ______ _____     _______          __     _____  "<<endl;
+		cout << " _      ______ _______ _______ ______ _____     _______          __     _____  "<<endl;
 		cout << "| |    |  ____|__   __|__   __|  ____|  __ \\   / ____\\ \\        / /\\   |  __ \\ "<<endl;
 		cout << "| |    | |__     | |     | |  | |__  | |__) | | (___  \\ \\  /\\  / /  \\  | |__) |"<<endl;
 		cout << "| |    |  __|    | |     | |  |  __| |  _  /   \\___ \\  \\ \\/  \\/ / /\\ \\ |  ___/ "<<endl;
 		cout << "| |____| |____   | |     | |  | |____| | \\ \\   ____) |  \\  /\\  / ____ \\| |     "<<endl;
-		//cout << "|______|______|  |_|     |_|  |______|_|  \\_\\ |_____/    \\/  \\/_/    \\_\\_|     "<<endl;
+		cout << "|______|______|  |_|     |_|  |______|_|  \\_\\ |_____/    \\/  \\/_/    \\_\\_|     "<<endl;
 
 	    //print rules
+		cout << endl << endl;
 		 cout << "__________ Objective __________________________________________________________"<<endl;
 		 cout<<"1 - Select words present in the sequence to win points"<<endl;
 		 cout<<"2 - The number of points given by selecting a word is equal to it's length"<<endl;

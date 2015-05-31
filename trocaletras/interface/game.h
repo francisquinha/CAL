@@ -32,6 +32,8 @@ public:
 
     static void printChain(std::vector<char> chain);
 
+    static void printReverseChain(std::vector<char> chain);
+
     void play();
 
     bool checkFinish();

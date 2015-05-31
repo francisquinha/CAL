@@ -57,17 +57,17 @@ void Game::play() {
 
         chain = firstPlayer->turn(chain, dictionary, difficulty);
         if (checkFinish()) 	 break;
-        else{
-        cout<<endl<<endl<<endl<<endl<<endl<<endl<<endl;
-    	cout<<secondPlayer->getName()<<" score = "<< secondPlayer->getScore()  <<endl;
-        }
+//        else{
+//        cout<<endl<<endl<<endl<<endl<<endl<<endl<<endl;
+//    	cout<<secondPlayer->getName()<<". Score = "<< secondPlayer->getScore()  <<endl;
+//        }
 
         chain = secondPlayer->turn(chain, dictionary, difficulty);
         if (checkFinish()) 	 break;
-        else{
-    	cout<<endl<<endl<<endl<<endl<<endl<<endl<<endl;
-        cout<<firstPlayer->getName()<<" score = "<<firstPlayer->getScore()  <<endl;
-        }
+//        else{
+//    	cout<<endl<<endl<<endl<<endl<<endl<<endl<<endl;
+//        cout<<firstPlayer->getName()<<". Score = "<<firstPlayer->getScore()  <<endl;
+//        }
 
     }
     while (true);
@@ -89,6 +89,13 @@ void Game::printChain(vector<char> chain) {
     cout << endl << endl;
 }
 
+
+void Game::printReverseChain(vector<char> chain) {
+    for (int i = 0; i < chain.size(); i++) cout << setw(2) << i << " ";
+    cout << endl;
+    for (int i = (int) (chain.size() - 1); i >= 0; i--) cout << setw(2) << chain[i] << " ";
+    cout << endl << endl;
+}
 
 bool Game::checkFinish() {
 

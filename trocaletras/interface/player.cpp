@@ -2,7 +2,7 @@
 // Created by Angie on 30/05/15.
 //
 
-//#include <iomanip>
+#include <iomanip>
 #include "player.h"
 #include "game.h"
 
@@ -31,9 +31,9 @@ vector<char> &Player::humanTurn(vector<char> &chain, Dictionary *dictionary) {
     int index2 {};
     cout << endl << name << ": it's your turn." << endl << endl;
     Game::printChain(chain);
-    cout << "Switch letters (y-yes/other-no)? ";
+    cout << "Switch letters (y/n)? ";
     getline(cin, answer);
-    if (answer == "y"||answer == "Y") {
+    if (answer == "y") {
         skip = false;
         getIndex(chain.size(), index1, "First");
         getIndex(chain.size(), index2, "Second");
@@ -41,9 +41,9 @@ vector<char> &Player::humanTurn(vector<char> &chain, Dictionary *dictionary) {
         cout << endl;
         Game::printChain(chain);
     }
-    cout << "Choose word (y-yes/other-no)? ";
+    cout << "Choose word (y/n)? ";
     getline(cin, answer);
-    if (answer == "y"||answer == "Y") {
+    if (answer == "y") {
         skip = false;
         getIndex(chain.size(), index1, "First");
         getIndex(chain.size(), index2, "Last");
@@ -84,7 +84,7 @@ vector<char> &Player::diff1Turn(vector<char> &chain, Dictionary *dictionary) {
             int index2 = indexes2[wordIndex];
             cout << endl;
             Game::printChain(chain);
-            cout << name << ": Swap "<< index1 << " " << index2 <<"." << endl << endl;
+            cout << name << ": Swap "<< swapIndex2 << " " << swapIndex1 <<"." << endl << endl;
             swapLetters(chain, swapIndex1, swapIndex2);
             Game::printChain(chain);
             string word{};
@@ -102,14 +102,7 @@ vector<char> &Player::diff2Turn(vector<char> &chain, Dictionary *dictionary) {
     dictionary->allWords(string(chain.begin(), chain.end()), indexes1, indexes2);
     if (indexes1.size() > 0) {
         skip = false;
-        long wordIndex = 0;
-        int wordSize = indexes2[0] - indexes1[0];
-        for (int i = 1; i < indexes1.size(); i++) {
-            if (indexes2[i] - indexes1[i] > wordSize) {
-                wordIndex = i;
-                wordSize = indexes2[i] - indexes1[i];
-            }
-        }
+        long wordIndex = getBest(indexes1, indexes2);
         int index1 = indexes1[wordIndex];
         int index2 = indexes2[wordIndex];
         string word{};
@@ -132,7 +125,7 @@ vector<char> &Player::diff2Turn(vector<char> &chain, Dictionary *dictionary) {
             cout << endl;
             Game::printChain(chain);
             swapLetters(chain, swapIndex1, swapIndex2);
-            cout << name << ": Swap "<< index1 << " " << index2 <<"." << endl << endl;
+            cout << name << ": Swap "<< swapIndex2 << " " << swapIndex1 <<"." << endl << endl;
             Game::printChain(chain);
             string word{};
             removeLetters(chain, index1, index2, word, dictionary);
@@ -151,14 +144,7 @@ vector<char> &Player::diff3Turn(vector<char> &chain, Dictionary *dictionary) {
     dictionary->findSwapOnePossibilities(string(chain.begin(), chain.end()), indexes1, indexes2, swapIndexes1, swapIndexes2);
     if (swapIndexes1.size() > 0) {
         skip = false;
-        long wordIndex = 0;
-        int wordSize = indexes2[0] - indexes1[0];
-        for (int i = 1; i < indexes1.size(); i++) {
-            if (indexes2[i] - indexes1[i] > wordSize) {
-                wordIndex = i;
-                wordSize = indexes2[i] - indexes1[i];
-            }
-        }
+        long wordIndex = getBest(indexes1, indexes2);
         int swapIndex1 = swapIndexes1[wordIndex];
         int swapIndex2 = swapIndexes2[wordIndex];
         int index1 = indexes1[wordIndex];
@@ -166,7 +152,7 @@ vector<char> &Player::diff3Turn(vector<char> &chain, Dictionary *dictionary) {
         cout << endl;
         Game::printChain(chain);
         swapLetters(chain, swapIndex1, swapIndex2);
-        cout << name << ": Swap "<< index1 << " " << index2 <<"." << endl << endl;
+        cout << name << ": Swap "<< swapIndex2 << " " << swapIndex1 <<"." << endl << endl;
         Game::printChain(chain);
         string word{};
         removeLetters(chain, index1, index2, word, dictionary);
@@ -176,14 +162,7 @@ vector<char> &Player::diff3Turn(vector<char> &chain, Dictionary *dictionary) {
         dictionary->allWords(string(chain.begin(), chain.end()), indexes1, indexes2);
         if (indexes1.size() > 0) {
             skip = false;
-            long wordIndex = 0;
-            int wordSize = indexes2[0] - indexes1[0];
-            for (int i = 1; i < indexes1.size(); i++) {
-                if (indexes2[i] - indexes1[i] > wordSize) {
-                    wordIndex = i;
-                    wordSize = indexes2[i] - indexes1[i];
-                }
-            }
+            long wordIndex = getBest(indexes1, indexes2);
             int index1 = indexes1[wordIndex];
             int index2 = indexes2[wordIndex];
             string word{};
@@ -192,8 +171,55 @@ vector<char> &Player::diff3Turn(vector<char> &chain, Dictionary *dictionary) {
             removeLetters(chain, index1, index2, word, dictionary);
             cout << name << ": '" << word << "'. Score = " << score << "." << endl;
         }
+        else {*/
+            reverse(chain.begin(), chain.end());
+            dictionary->findSwapOnePossibilities(string(chain.begin(), chain.end()), indexes1, indexes2, swapIndexes1, swapIndexes2);
+            if (swapIndexes1.size() > 0) {
+                skip = false;
+                long wordIndex = getBest(indexes1, indexes2);
+                int swapIndex1 = swapIndexes1[wordIndex];
+                int swapIndex2 = swapIndexes2[wordIndex];
+                int index1 = indexes1[wordIndex];
+                int index2 = indexes2[wordIndex];
+                cout << endl;
+                Game::printReverseChain(chain);
+                swapLetters(chain, swapIndex1, swapIndex2);
+                cout << name << ": Swap "<< chain.size() - swapIndex1 - 1 << " " << chain.size() - swapIndex2 - 1 <<"." << endl << endl;
+                Game::printReverseChain(chain);
+                string word{};
+                removeLetters(chain, index1, index2, word, dictionary);
+                cout << name << ": '" << word << "'. Score = " << score << "." << endl;
+            }
+            else {
+                dictionary->allWords(string(chain.begin(), chain.end()), indexes1, indexes2);
+                if (indexes1.size() > 0) {
+                    skip = false;
+                    long wordIndex = getBest(indexes1, indexes2);
+                    int index1 = indexes1[wordIndex];
+                    int index2 = indexes2[wordIndex];
+                    string word{};
+                    cout << endl;
+                    Game::printReverseChain(chain);
+                    removeLetters(chain, index1, index2, word, dictionary);
+                    cout << name << ": '" << word << "'. Score = " << score << "." << endl;
+                }
+            }
+            reverse(chain.begin(), chain.end());
+        }
     }
     return chain;
+}
+
+long Player::getBest(const vector<int> &indexes1, const vector<int> &indexes2) const {
+    long wordIndex = 0;
+    int wordSize = indexes2[0] - indexes1[0];
+    for (int i = 1; i < indexes1.size(); i++) {
+        if (indexes2[i] - indexes1[i] > wordSize) {
+            wordIndex = i;
+            wordSize = indexes2[i] - indexes1[i];
+        }
+    }
+    return wordIndex;
 }
 
 void Player::getIndex(unsigned long chainSize, int &index, string which) {
@@ -223,7 +249,6 @@ void Player::swapLetters(vector<char> &chain, int index1, int index2) {
     chain[index1] = chain[index2];
     chain[index2] = letter;
 }
-
 
 bool Player::removeLetters(vector<char> &chain, int index1, int index2, string &word, Dictionary *dictionary) {
     if (index1 <= index2) {
