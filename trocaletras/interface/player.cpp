@@ -243,7 +243,7 @@ bool Player::removeLetters(vector<char> &chain, int index1, int index2, string &
         }
     }
     else {
-        for (int i = index2; i >= index1; i--) {
+        for (int i = index1; i >= index2; i--) {
             word += chain[i];
         }
         if (dictionary->isWord(word)) {
