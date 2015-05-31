@@ -33,6 +33,8 @@ public:
     void play();
 
     bool checkFinish();
+
+    void freeHeap();
 };
 
 #endif //TROCALETRAS_GAME_H

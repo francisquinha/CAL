@@ -54,7 +54,11 @@ void Game::play() {
         secondPlayer = player1;
     }
     do {
+    	cout<<endl<<endl<<endl<<endl<<endl<<endl<<endl<<endl<<endl<<endl<<endl<<endl<<endl<<endl;
+        cout<<firstPlayer->getName()<<" score = "<<firstPlayer->getScore()  <<endl;
         chain = firstPlayer->turn(chain, dictionary, difficulty);
+        cout<<endl<<endl<<endl<<endl<<endl<<endl<<endl<<endl<<endl<<endl<<endl<<endl<<endl<<endl;
+    	cout<<secondPlayer->getName()<<" score = "<< secondPlayer->getScore()  <<endl;
         chain = secondPlayer->turn(chain, dictionary, difficulty);
     }
     while (!checkFinish());
@@ -70,4 +74,9 @@ void Game::play() {
 
 bool Game::checkFinish() {
     return player1->getSkip() && player2->getSkip();
+}
+
+void Game::freeHeap()
+{
+delete player1; delete player2;
 }
