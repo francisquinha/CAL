@@ -1,4 +1,4 @@
-
+#include <iomanip>
 #include "game.h"
 
 using namespace std;
@@ -54,14 +54,24 @@ void Game::play() {
         secondPlayer = player1;
     }
     do {
-    	cout<<endl<<endl<<endl<<endl<<endl<<endl<<endl<<endl<<endl<<endl<<endl<<endl<<endl<<endl;
-        cout<<firstPlayer->getName()<<" score = "<<firstPlayer->getScore()  <<endl;
+
         chain = firstPlayer->turn(chain, dictionary, difficulty);
-        cout<<endl<<endl<<endl<<endl<<endl<<endl<<endl<<endl<<endl<<endl<<endl<<endl<<endl<<endl;
+        if (checkFinish()) 	 break;
+        else{
+        cout<<endl<<endl<<endl<<endl<<endl<<endl<<endl;
     	cout<<secondPlayer->getName()<<" score = "<< secondPlayer->getScore()  <<endl;
+        }
+
         chain = secondPlayer->turn(chain, dictionary, difficulty);
+        if (checkFinish()) 	 break;
+        else{
+    	cout<<endl<<endl<<endl<<endl<<endl<<endl<<endl;
+        cout<<firstPlayer->getName()<<" score = "<<firstPlayer->getScore()  <<endl;
+        }
+
     }
-    while (!checkFinish());
+    while (true);
+    printChain(chain);
     if (player1->getScore() == player2->getScore())
         cout << endl << "The game ends with a tie at " << player1->getScore() << " points." << endl;
     else if (player1->getScore() > player2->getScore())
@@ -72,8 +82,34 @@ void Game::play() {
             << player1->getScore() << " points from " << player1->getName() << "." << endl;
 }
 
+void Game::printChain(vector<char> chain) {
+    for (int i = 0; i < chain.size(); i++) cout << setw(2) << i << " ";
+    cout << endl;
+    for (int i = 0; i < chain.size(); i++) cout << setw(2) << chain[i] << " ";
+    cout << endl << endl;
+}
+
+
 bool Game::checkFinish() {
-    return player1->getSkip() && player2->getSkip();
+
+    if(chain.size()<=10)
+    	{
+    		string seq="";  for (unsigned int i = 0; i < chain.size(); ++i)  seq += chain[i];
+    		if(!dictionary->charset_has_possible_words(seq))
+    		{
+    			cout<<endl<<endl<< "- Game ended because no more words can be done -" <<endl;
+    			return true;
+    		}
+    	}
+
+    if( player1->getSkip() && player2->getSkip() )
+    {
+      	 cout<<endl<<endl<< "- Game ended because both players skipped their turn -" <<endl;
+      	 return true;
+    }
+
+    return false;
+
 }
 
 void Game::freeHeap()

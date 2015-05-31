@@ -64,6 +64,7 @@ int main()
 	}//end while(play)
 
 	dic->freeHeap();
+	delete dic;
 
     return 0;
 }

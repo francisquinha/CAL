@@ -30,6 +30,8 @@ public:
 
     void randomWordsChain();
 
+    static void printChain(std::vector<char> chain);
+
     void play();
 
     bool checkFinish();

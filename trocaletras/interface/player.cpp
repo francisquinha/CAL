@@ -2,8 +2,9 @@
 // Created by Angie on 30/05/15.
 //
 
-#include <iomanip>
+//#include <iomanip>
 #include "player.h"
+#include "game.h"
 
 using namespace std;
 
@@ -29,7 +30,7 @@ vector<char> &Player::humanTurn(vector<char> &chain, Dictionary *dictionary) {
     int index1 {};
     int index2 {};
     cout << endl << name << ": it's your turn." << endl << endl;
-    printChain(chain);
+    Game::printChain(chain);
     cout << "Switch letters (y-yes/other-no)? ";
     getline(cin, answer);
     if (answer == "y"||answer == "Y") {
@@ -38,7 +39,7 @@ vector<char> &Player::humanTurn(vector<char> &chain, Dictionary *dictionary) {
         getIndex(chain.size(), index2, "Second");
         swapLetters(chain, index1, index2);
         cout << endl;
-        printChain(chain);
+        Game::printChain(chain);
     }
     cout << "Choose word (y-yes/other-no)? ";
     getline(cin, answer);
@@ -67,7 +68,7 @@ vector<char> &Player::diff1Turn(vector<char> &chain, Dictionary *dictionary) {
         string word{};
         removeLetters(chain, index1, index2, word, dictionary);
         cout << endl;
-        printChain(chain);
+        Game::printChain(chain);
         cout << name << ": '" << word << "'. Score = " << score << "." << endl;
     }
     else {
@@ -82,10 +83,10 @@ vector<char> &Player::diff1Turn(vector<char> &chain, Dictionary *dictionary) {
             int index1 = indexes1[wordIndex];
             int index2 = indexes2[wordIndex];
             cout << endl;
-            printChain(chain);
+            Game::printChain(chain);
             cout << name << ": Swap "<< index1 << " " << index2 <<"." << endl << endl;
             swapLetters(chain, swapIndex1, swapIndex2);
-            printChain(chain);
+            Game::printChain(chain);
             string word{};
             removeLetters(chain, index1, index2, word, dictionary);
             cout << name << ": '" << word << "'. Score = " << score << "." << endl;
@@ -114,7 +115,7 @@ vector<char> &Player::diff2Turn(vector<char> &chain, Dictionary *dictionary) {
         string word{};
         removeLetters(chain, index1, index2, word, dictionary);
         cout << endl;
-        printChain(chain);
+        Game::printChain(chain);
         cout << name << ": '" << word << "'. Score = " << score << "." << endl;
     }
     else {
@@ -129,10 +130,10 @@ vector<char> &Player::diff2Turn(vector<char> &chain, Dictionary *dictionary) {
             int index1 = indexes1[wordIndex];
             int index2 = indexes2[wordIndex];
             cout << endl;
-            printChain(chain);
+            Game::printChain(chain);
             swapLetters(chain, swapIndex1, swapIndex2);
             cout << name << ": Swap "<< index1 << " " << index2 <<"." << endl << endl;
-            printChain(chain);
+            Game::printChain(chain);
             string word{};
             removeLetters(chain, index1, index2, word, dictionary);
             cout << name << ": '" << word << "'. Score = " << score << "." << endl;
@@ -163,10 +164,10 @@ vector<char> &Player::diff3Turn(vector<char> &chain, Dictionary *dictionary) {
         int index1 = indexes1[wordIndex];
         int index2 = indexes2[wordIndex];
         cout << endl;
-        printChain(chain);
+        Game::printChain(chain);
         swapLetters(chain, swapIndex1, swapIndex2);
         cout << name << ": Swap "<< index1 << " " << index2 <<"." << endl << endl;
-        printChain(chain);
+        Game::printChain(chain);
         string word{};
         removeLetters(chain, index1, index2, word, dictionary);
         cout << name << ": '" << word << "'. Score = " << score << "." << endl;
@@ -187,7 +188,7 @@ vector<char> &Player::diff3Turn(vector<char> &chain, Dictionary *dictionary) {
             int index2 = indexes2[wordIndex];
             string word{};
             cout << endl;
-            printChain(chain);
+            Game::printChain(chain);
             removeLetters(chain, index1, index2, word, dictionary);
             cout << name << ": '" << word << "'. Score = " << score << "." << endl;
         }
@@ -223,12 +224,6 @@ void Player::swapLetters(vector<char> &chain, int index1, int index2) {
     chain[index2] = letter;
 }
 
-void Player::printChain(vector<char> chain) {
-    for (int i = 0; i < chain.size(); i++) cout << setw(2) << i << " ";
-    cout << endl;
-    for (int i = 0; i < chain.size(); i++) cout << setw(2) << chain[i] << " ";
-    cout << endl << endl;
-}
 
 bool Player::removeLetters(vector<char> &chain, int index1, int index2, string &word, Dictionary *dictionary) {
     if (index1 <= index2) {
