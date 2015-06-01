@@ -1,5 +1,6 @@
 
 #include <iostream>
+#include <unistd.h>
 
 #include "game.h"
 
@@ -88,7 +89,7 @@ int main()
 #endif
 for (int i = 0; i<8;++i){
 #if defined(__APPLE__) || defined(__unix__)
-	//???system("sleep 0.5f");
+	sleep(1);
 	printf("\033c");
 #else
 	system("sleep 1");
