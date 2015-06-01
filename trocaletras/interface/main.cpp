@@ -3,9 +3,6 @@
 
 #include "game.h"
 
-#include <stdio.h>
-#include <time.h>
-
 using namespace std;
 
 void printLogo(int state)
@@ -83,8 +80,13 @@ int main()
 	//    dic->saveDFA_toBinaryFile("US.dicnodes");//portugues_dictionary_nodes.data");
 	dic->buildDFA_fromBinaryFile("US.dicnodes");
 
+
+#if defined(__APPLE__) || defined(__unix__)
+	printf("\033c");
+#else
 	system("cls");
-for (int i = 0; i<7;++i){
+#endif
+for (int i = 0; i<8;++i){
 #if defined(__APPLE__) || defined(__unix__)
 	//???system("sleep 0.5f");
 	printf("\033c");
@@ -94,7 +96,7 @@ for (int i = 0; i<7;++i){
 #endif
 	if (i>0) printLogo(i);
 }
-system("sleep 1");
+
 
 	//RUN THE GAME =================
 
@@ -105,7 +107,7 @@ system("sleep 1");
 #else
 	system("cls");
 #endif
-	//printLogo(0);
+	printLogo(0);
 	    //print rules
 		cout << endl << endl;
 		 cout << "__________ Objective __________________________________________________________"<<endl;
@@ -123,7 +125,7 @@ system("sleep 1");
 		 cout<<"7 - A player may skip the turn by not swapping a letter and not selecting a"<<endl<< "valid word"<<endl;
 		 cout<<"8 - Swapping equal letters is not considered a valid swap"<<endl;
 	    cout << "__________ THE GAME WILL END WHEN ______________________________________________"<<endl;
-	    cout<< "1 - Both players skip their turn by not swapping or trying to guess a word"<<endl;
+	    cout<< "1 - Both players skip their turn by not swapping and not guessing a word"<<endl;
 	    cout<< "2 - When the character sequence has less than 11 characters and it's not"<<endl<<"possible to form any word"<<endl;
 	    cout <<"________________________________________________________________________________"<<endl;
 
