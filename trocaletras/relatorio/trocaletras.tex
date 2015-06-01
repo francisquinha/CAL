@@ -109,6 +109,8 @@ Ainda que não fosse implementada qualquer inteligência artificial, para que o 
 
 Uma vez que apenas possuímos um ficheiro com a lista das palavras aceitáveis, a abordagem ingénua a este problema seria bastante lenta. De facto, sempre que fosse selecionada uma não palavra, um algoritmo de força bruta, percorreria toda a lista até determinar que não funciona. Neste caso, tratando-se de uma lista ordenada por tamanho, o algoritmo poderia parar assim que ultrapassasse o tamanho da não palavra. Mas ainda assim, para não palavras grandes seria um processo moroso. Em inglês, por exemplo, existem quase dez mil palavras com comprimento até cinco.
 
+Outra alternativa seria tirar partido da ordenação do dicionário para fazer pesquisa binária, tendo em conta primeiro o tamanho da sequência e depois a sua ordem alfabética. Isso reduziria a pesquisa a um tempo logarítmico no número de palavras do dicionário. Claro que para comparar palavras do mesmo tamanho seria necessário comparar cada uma das letras, o que é linear no comprimento da sequência. Ou seja, teríamos um algoritmo de ordem~$n\log(N)$, onde~$n$ é o número de letras da sequência e~$N$ é o número de palavras do dicionário. Para dicionários grandes, este processo ainda é relativamente demorado, o ideal seria obter um algoritmo que dependesse apenas do número de letras da sequência.
+
 Por forma a acelerar este processo, decidimos construir uma árvore de prefixos para representar o dicionário. Basicamente, cada nó da árvore possui 26 filhos, correspondentes às 26 letras do alfabeto, ordenadas da forma convencional. Se não existe nenhuma palavra que comece com a sequência de letras obtidas percorrendo a árvore desde a raiz até um nó, então esse nó é nulo e não tem filhos. Por exemplo, começando com a letra `a' existem várias palavras, então o nó `a', filho da raiz, terá 26 filhos. Um desses filhos é também `a'. Mas não existem palavras começadas por `aa', logo este nó `a' filho do primeiro `a' é nulo e não tem filhos.
 
 Percorrendo a árvore desde a raiz até uma folha, obtém-se uma palavra. No entanto, algumas palavras são prefixos de outras. Logo, cada nó tem também um Booleano que indica se nesse nó termina alguma palavra ou não. Também podemos ver a árvore de prefixos como um autómato finito e determinístico, em que a raiz é o estado inicial e todos os nós em que podemos terminar uma palavra são estados finais.  
@@ -135,8 +137,35 @@ Com estes dois algoritmos, já é possível criar um programa capaz de jogar o j
 %%%%%%%%%%%%%%%%%
 \chapter{Inteligências Artificiais}
 
+De forma a criar uma experiência mais rica de jogo, decidimos criar várias inteligências artificiais, como diferentes níveis de dificuldades. De seguida descreve-se a lógica por detrás de cada um destes jogadores virtuais.
 
+\section{Nível Fácil}
 
+O jogador mais básico que criamos determina a cada momento uma palavra à sorte, sem efetuar qualquer troca. Apenas faz trocas se não encontrar nenhuma palavra desta forma. Nesse caso, também escolhe uma palavra à sorte de entre as possíveis com uma troca. A forma mais eficiente de fazer isto seria parar a busca assim que é encontrada uma palavra. No entanto, uma vez que os algoritmos que encontram todas as palavras são instantâneos (e necessários para jogadores mais inteligentes), não criamos funções específicas para este efeito.
+
+Na prática, esta inteligência artificial escolhe frequentemente palavras pequenas, dado que estas são mais abundantes. Além disso, dado que quase não efetua trocas, também nesse aspeto encontra geralmente palavras mais pequenas. Isto faz com que seja, de facto, um nível fácil de vencer.
+
+\section {Nível Médio}
+
+O segundo jogador em termos de dificuldade escolhe a cada momento a melhor palavra da cadeia, mas ainda sem efetuar trocas. Mais uma vez, as trocas são reservadas para situações de recurso. Além disso, se efetuar uma troca, este jogador escolhe uma palavra aleatoriamente de entre aquelas que se conseguem formar com uma troca de letras.
+
+Embora escolha a melhor palavra sem trocas, geralmente trocar duas letras permite obter palavras maiores, logo o jogador humano ainda tem alguma vantagem sobre esta inteligência. Claro que, à partida, é muito mais fácil detectar palavras já formadas, do que procurar palavras com troca, por isso, de certa forma, a lógica deste jogador virtual se aproxima da lógica de um jogador humano de nível médio alto.
+
+Na prática, este jogador já é relativamente difícil de vencer. Especialmente se tivermos em conta que o ser humano comum não conhece o dicionário na sua totalidade, ao contrário do computador, logo vai ignorar uma série de palavras.
+
+\section {Nível Difícil}
+
+Este jogador escolhe sempre a melhor palavra com uma troca. Se não existir, procura a melhor palavra sem trocas. Se ainda assim não encontrar nada, repete o processo com a cadeia invertida, de forma a encontrar palavras em sentido inverso.
+
+Dado que palavras com uma troca tendem a ser maiores, este jogador já é praticamente impossível de vencer por um humano. Mesmo que o humano possa consultar o dicionário e até fazer pesquisas eficientes. A não ser que esteja disposto a fazer ``manualmente'' aquilo que o computador faz automaticamente, à partida será muito difícil vencer o computador. De qualquer forma, se tiver a sorte de ser o primeiro a jogar, poderá retirar daí alguma vantagem.
+
+\section {Nível Máximo}
+
+O último nível de dificuldade é de facto uma inteligência artificial quase perfeita e para todos os efeitos invencível. A cada momento, este jogador escolhe a melhor palavra de entre todas as possibilidades: com ou sem troca, em sentido direto ou inverso. A única coisa que não faz é planear jogadas com antecedência, por exemplo fazendo uma troca que o ajude a obter uma ótima palavra mais adiante e retirando uma boa palavra agora que não use a troca. De qualquer forma, dada a interação com o outro jogador, não há qualquer garantia que esse tipo de planeamento funcione, podia simplesmente ajudar o adversário a forma a tal palavra ótima.
+
+Além da escolha da melhor palavra, este jogador usa dois pequenos truques no final do jogo. Se tiver mais pontos que o adversário e o adversário tiver passado a vez, então passa também a sua vez, garantindo assim que o jogo termina com a sua vitória, dado que duas passagens é uma das condições de término. Se tiver menos pontos, ainda que não encontre nenhuma palavra, faz uma troca aleatória, para que o jogo não termine por passagens. Sendo assim, o jogo só termina quando o computador determinar que não há mais palavras.
+
+Apesar de ser invencível, a experiência de jogar este nível de dificuldade, pode ser bastante interessante e utilizada para enriquecer o vocabulário e melhorar as técnicas de detecção de palavras.
 
 %%%%%%%%%%%%%%%%
 % DIFICULDADES %
@@ -154,5 +183,6 @@ Com estes dois algoritmos, já é possível criar um programa capaz de jogar o j
 %%%%%%%%%%%%%
 \chapter{Conclusão}
 
+Em contraste com o primeiro projecto, a ``simplicidade'' do problema permitiu uma abordagem mais intuitiva e consequentemente pudemos pensar, discutir e conceber algoritmos necessários à implementação sem dificuldades. A fácil segmentação do projecto em subproblemas concisos, permitiu um desenvolvimento linear e progressivo. Adicionalmente ainda foram polidos alguns elementos do jogo. Dada a sua completude, estamos satisfeitos com o resultado final.
 
 \end{document}
