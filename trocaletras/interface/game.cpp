@@ -9,9 +9,10 @@ Game::Game(int nPlayers, std::string p1Name, std::string p2Name, int difficult, 
     chainSize = size;
     player1 = new Player(p1Name, true);
     if (numberPlayers == 2) player2 = new Player(p2Name, true);
-    else if (difficulty == 1) player2 = new Player("Dumbo", false);
+    else if (difficulty == 4) player2 = new Player("Merciless Hermit", false);
     else if (difficulty == 2) player2 = new Player("Smarto", false);
-    else player2 = new Player("Deep Thought", false);
+    else if (difficulty == 3) player2 = new Player("Deep Thought", false);
+    else player2 = new Player("Dumbo", false);
     letters = {};
     for (int i = 0; i < 26 ; i++) letters.push_back((const char &) ('a' + i));
     chain = {};
@@ -55,14 +56,14 @@ void Game::play() {
     }
     do {
 
-        chain = firstPlayer->turn(chain, dictionary, difficulty);
+        chain = firstPlayer->turn(chain, dictionary, difficulty,secondPlayer);
         if (checkFinish()) 	 break;
 //        else{
 //        cout<<endl<<endl<<endl<<endl<<endl<<endl<<endl;
 //    	cout<<secondPlayer->getName()<<". Score = "<< secondPlayer->getScore()  <<endl;
 //        }
 
-        chain = secondPlayer->turn(chain, dictionary, difficulty);
+        chain = secondPlayer->turn(chain, dictionary, difficulty,firstPlayer);
         if (checkFinish()) 	 break;
 //        else{
 //    	cout<<endl<<endl<<endl<<endl<<endl<<endl<<endl;

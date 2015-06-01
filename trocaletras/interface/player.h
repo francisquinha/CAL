@@ -23,7 +23,7 @@ class Player {
 public:
     Player(std::string newName, bool newType);
 
-    std::vector<char> turn(std::vector<char> chain, Dictionary *dictionary, int difficulty);
+    std::vector<char> turn(std::vector<char> chain, Dictionary *dictionary, int difficulty, Player* p);
 
     void getIndex(unsigned long chainSize, int &index, std::string which);
 
@@ -40,6 +40,8 @@ public:
     std::vector<char> &diff2Turn(std::vector<char> &chain, Dictionary *dictionary);
 
     std::vector<char> &diff3Turn(std::vector<char> &chain, Dictionary *dictionary);
+
+    std::vector<char> &diff4Turn(std::vector<char> &chain, Dictionary *dictionary,Player *p);
 
     bool getSkip();
 
