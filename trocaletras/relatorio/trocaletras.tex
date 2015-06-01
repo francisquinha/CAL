@@ -163,7 +163,7 @@ Dado que palavras com uma troca tendem a ser maiores, este jogador já é pratic
 
 O último nível de dificuldade é de facto uma inteligência artificial quase perfeita e para todos os efeitos invencível. A cada momento, este jogador escolhe a melhor palavra de entre todas as possibilidades: com ou sem troca, em sentido direto ou inverso. A única coisa que não faz é planear jogadas com antecedência, por exemplo fazendo uma troca que o ajude a obter uma ótima palavra mais adiante e retirando uma boa palavra agora que não use a troca. De qualquer forma, dada a interação com o outro jogador, não há qualquer garantia que esse tipo de planeamento funcione, podia simplesmente ajudar o adversário a forma a tal palavra ótima.
 
-Além da escolha da melhor palavra, este jogador usa dois pequenos truques no final do jogo. Se tiver mais pontos que o adversário e o adversário tiver passado a vez, então passa também a sua vez, garantindo assim que o jogo termina com a sua vitória, dado que duas passagens é uma das condições de término. Se tiver menos pontos, ainda que não encontre nenhuma palavra, faz uma troca aleatória, para que o jogo não termine por passagens. Sendo assim, o jogo só termina quando o computador determinar que não há mais palavras.
+Além da escolha da melhor palavra, este jogador usa dois pequenos truques no final do jogo. Se tiver mais pontos que o adversário e o adversário tiver passado a vez, então passa também a sua vez, garantindo assim que o jogo termina com a sua vitória, dado que duas passagens é uma das condições de término. Se tiver menos pontos, ainda que não encontre nenhuma palavra, pode realizar um troca aleatória, para que o jogo não termine por passagens. Sendo assim, o jogo só termina quando o computador determinar que não há mais palavras.
 
 Apesar de ser invencível, a experiência de jogar este nível de dificuldade, pode ser bastante interessante e utilizada para enriquecer o vocabulário e melhorar as técnicas de detecção de palavras.
 
@@ -172,16 +172,21 @@ Apesar de ser invencível, a experiência de jogar este nível de dificuldade, p
 %%%%%%%%%%%%%%%%
 \chapter{Principais Dificuldades}
 
+Ao contrário do projeto anterior, em que pretendíamos planear uma viagem pela Europa usando gráficos, desta vez não foi muito difícil encontrar bons algoritmos para resolver o problema proposto. De facto, rapidamente começaram a surgir várias ideias de como prosseguir. O único ponto em que demoramos um pouco mais foi a encontrar uma forma de guardar a árvore com o dicionário, de forma a que não seja necessário voltar a construi-la sempre que se inicia a aplicação.
 
 %%%%%%%%%%%%%%%%
 % DISTRIBUICAO %
 %%%%%%%%%%%%%%%%
 \chapter{Distribuição do Trabalho}
 
+Embora o trabalho não tenha sido distribuído pelos elementos de forma completamente igual, conseguimos alcançar um equilíbrio razoável. Além disso, todo o processo foi discutido em grupo e acompanhado por ambos os elementos. Em termos de implementação, o Bruno realizou toda a parte relacionada com o dicionário, desde a sua construção, até aos algoritmos de detecção de palavras e a forma de guardar a árvore final. A Ângela elaborou a maior parte do interface de jogo e das inteligências artificiais. Finalmente, o presente documento foi realizado essencialmente pela Ângela.
+
 %%%%%%%%%%%%%
 % CONCLUSAO %
 %%%%%%%%%%%%%
 \chapter{Conclusão}
+
+Apesar de relativamente pequeno, este projeto revelou-se bastante interessante, permitindo-nos explorar uma série de ideias e algoritmos relacionados com sequências de caracteres. Foi particularmente gratificante verificar, ao longo do projeto, que com algoritmos mais eficientes íamos o processo de tornava bastante mais rápido, obtendo-se no final uma solução completamente instantânea em todos os momentos.
 
 Em contraste com o primeiro projecto, a ``simplicidade'' do problema permitiu uma abordagem mais intuitiva e consequentemente pudemos pensar, discutir e conceber algoritmos necessários à implementação sem dificuldades. A fácil segmentação do projecto em subproblemas concisos, permitiu um desenvolvimento linear e progressivo. Adicionalmente ainda foram polidos alguns elementos do jogo. Dada a sua completude, estamos satisfeitos com o resultado final.
 
