@@ -1,1 +1,7 @@
+<<<<<<< HEAD
 random edit
+=======
+credentials checked not ok
+right commit
+some random eddit, retesting
+>>>>>>> master
