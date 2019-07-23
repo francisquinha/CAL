@@ -1,7 +1,3 @@
-# CAL-1
-Viagem Pela Europa
-muahahahaaadadasda 
+# CAL
 
-spam
-
-my alteration 2
+Algorithm for graph traversal with time constraints optimizing a trip to European cities.
